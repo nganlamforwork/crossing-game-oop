@@ -6,8 +6,8 @@ Menu::Menu()
 	_optionsSize = 4;
 	_curSubOption = 0;
 	_subOptionsSize = 3;
-	_xMenu = 50;
-	_yMenu = 17;
+	_xMenu = 60;
+	_yMenu = 21;
 }
 Menu::~Menu()
 {
@@ -16,76 +16,16 @@ Menu::~Menu()
 ////////////////////////////////////////////////////////////////////////////
 void Menu::startApp()
 {
-	renderLoadingScreen();
-	renderMainScreen();
-}
-
-void Menu::renderLoadingScreen()
-{
-	Common::playSound(BACKGROUND_SOUND);
+	std::thread title(&Menu::renderGameTitle, this);
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	Common::clearConsole();
-
-	renderGameTitle();
-
-	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
-
-	std::ifstream bg;
-	bg.open("images\\flowers.txt");
-
-	int i = 0;
-	std::string line;
-	while (!bg.eof()) {
-		Common::gotoXY(18, 24 + i);
-		getline(bg, line);
-		cout << line << '\n';
-		i++;
-	}
-	bg.close();
-
-	//Common::setConsoleColor(BRIGHT_WHITE, GRAY);
-	//Common::gotoXY(40, 19);
-	//cout << "LOADING...";
-
-	//int level = 13;
-
-	////2 horizontal lines
-	//for (int x = 55; x < 85; x++) {
-	//	Common::gotoXY(x, 18);
-	//	cout << char(205);
-	//	Common::gotoXY(x, 20);
-	//	cout << char(205);
-	//}
-
-	////2 vertical lines
-	//for (int y = 19; y < 20; y++) { //2 vertical lines
-	//	Common::gotoXY(55, y);
-	//	cout << char(186);
-	//	Common::gotoXY(85, y);
-	//	cout << char(186);
-	//}
-
-	////top left
-	//Common::gotoXY(55, 18);
-	//cout << (char)201;
-	////top right
-	//Common::gotoXY(85, 18);
-	//cout << (char)187;
-	////bottom left
-	//Common::gotoXY(55, 20);
-	//cout << (char)200;
-	////bottom right
-	//Common::gotoXY(85, 20);
-	//cout << (char)188;
-
-	Sleep(300);
+	renderMainScreen();
+	title.join();
+	Sleep(50000);
 }
 
 void Menu::renderMainScreen()
 {
-	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	Common::clearConsole();
-	renderGameTitle();
 	renderFlowers();
 	renderOptionsMenu();
 	renderOptionsText(_options, _optionsSize, _curOption);
@@ -127,6 +67,8 @@ void Menu::renderMainScreen()
 
 void Menu::renderGameTitle()
 {
+	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
+	Common::clearConsole();
 	unsigned char M[] = {
 						' ', '_', '_', ' ',' ', ' ',' ','_','_', ' ', ' ', ' ',
 						'/', '\\',' ', '"','-', '.','/',' ',' ', '\\',' ', ' ',
@@ -220,31 +162,31 @@ void Menu::renderGameTitle()
 	};
 
 	Common::setConsoleColor(BRIGHT_WHITE, AQUA);
-	Common::gotoXY(56, 1);
+	Common::gotoXY(_left, _top);
 	std::cout << "Group 8 - 21CLC08 - HCMUS";
-	//crossing
+
 	unsigned char* word[] = { C, R, O, S, S, I, N, G, G, A, M, E };
 	int sizeOfWord = (sizeof(word) / sizeof(word[0]));
 	int wide[] = { 10, 10, 11, 10, 10, 6, 11, 10, 10, 10, 12, 10 };
 	int color[] = { LIGHT_AQUA, AQUA, LIGHT_BLUE, BLUE, LIGHT_PURPLE, PURPLE };
 
-	int loop = 1, colorCount = 0, left = 0;
+	int loop = 1000, colorCount = 0, left = 0;
 	while (loop--) {
 		Common::setConsoleColor(BRIGHT_WHITE, color[colorCount % 6]);
 
-		left = 26;
+		left = _left - 26;
 		for (int i = 0; i < sizeOfWord; i++) {
 			for (int j = 0; j < 5; j++) {
-				if (i > 7) Common::gotoXY(left, 9 + j);
-				else Common::gotoXY(left, 3 + j);
+				if (i > 7) Common::gotoXY(left, _top + 9 + j);
+				else Common::gotoXY(left, _top + 3 + j);
 
 				for (int k = 0; k < wide[i]; k++)
 					putchar(word[i][j * wide[i] + k]);
 			}
 			left += wide[i] + 1;
-			if (i == 7) left = 45;
+			if (i == 7) left = _left - 8;
 		}
-
+		Sleep(200);
 		colorCount++;
 	}
 }

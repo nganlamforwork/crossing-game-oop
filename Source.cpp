@@ -4,7 +4,7 @@
 
 int main()
 {
-	Common::setUpConsole(18);
+	Common::setUpConsole(16);
 
 	Menu menu;
 	menu.startApp();

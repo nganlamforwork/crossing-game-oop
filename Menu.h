@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <fstream>
 #include <vector>
+#include <thread>
 
 #include "Common.h"
 #include "CGAME.h"
@@ -24,13 +25,12 @@ struct Menu
 	int _optionsSize, _curOption;
 	int _subOptionsSize, _curSubOption;
 	int _xMenu, _yMenu;
-	int _left, _top;
+	int _left = 60, _top = 1;
 
 	Menu();
 	~Menu();
 
 	void startApp();
-	void renderLoadingScreen();
 	void renderMainScreen();
 	void renderGameTitle();
 	void renderOptionsMenu();
