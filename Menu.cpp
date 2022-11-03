@@ -18,6 +18,8 @@ void Menu::startApp()
 {
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	Common::clearConsole();
+	renderFlowers();
+	renderOptionsMenu();
 	std::thread title(&Menu::renderGameTitle, this);
 	renderMainScreen();
 	title.join();
@@ -26,8 +28,6 @@ void Menu::startApp()
 
 void Menu::renderMainScreen()
 {
-	renderFlowers();
-	renderOptionsMenu();
 	renderOptionsText(_options, _optionsSize, _curOption);
 
 	bool loadMenu = 1;
@@ -67,8 +67,6 @@ void Menu::renderMainScreen()
 
 void Menu::renderGameTitle()
 {
-	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	Common::clearConsole();
 	unsigned char M[] = {
 						' ', '_', '_', ' ',' ', ' ',' ','_','_', ' ', ' ', ' ',
 						'/', '\\',' ', '"','-', '.','/',' ',' ', '\\',' ', ' ',
@@ -161,8 +159,8 @@ void Menu::renderGameTitle()
 						' ',' ',' ',' '
 	};
 
-	Common::setConsoleColor(BRIGHT_WHITE, AQUA);
 	Common::gotoXY(_left, _top);
+	Common::setConsoleColor(BRIGHT_WHITE, AQUA);
 	std::cout << "Group 8 - 21CLC08 - HCMUS";
 
 	unsigned char* word[] = { C, R, O, S, S, I, N, G, G, A, M, E };
@@ -170,7 +168,7 @@ void Menu::renderGameTitle()
 	int wide[] = { 10, 10, 11, 10, 10, 6, 11, 10, 10, 10, 12, 10 };
 	int color[] = { LIGHT_AQUA, AQUA, LIGHT_BLUE, BLUE, LIGHT_PURPLE, PURPLE };
 
-	int loop = 5, colorCount = 0, left = 0;
+	int loop = 5000, colorCount = 0, left = 0;
 	while (loop--) {
 
 		left = _left - 26;
@@ -198,7 +196,6 @@ void Menu::renderGameTitle()
 
 void Menu::renderOptionsMenu()
 {
-	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	int left = _xMenu, top = _yMenu;
 	int length = 35, height = _optionsSize * 2;
 
@@ -210,6 +207,7 @@ void Menu::renderOptionsMenu()
 	while (!bg.eof()) {
 		getline(bg, line);
 		Common::gotoXY(left, top + i);
+		Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 		cout << line << '\n';
 		i++;
 	}
@@ -258,17 +256,17 @@ void Menu::renderFlowers()
 	std::ifstream bg;
 	bg.open("images\\flower.txt");
 
-	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
-
 	int i = 0;
 	std::string line;
 	while (!bg.eof()) {
 		getline(bg, line);
 
 		Common::gotoXY(_xMenu - 38, _yMenu + 7 + i);
+		Common::setConsoleColor(BRIGHT_WHITE, GREEN);
 		cout << line << '\n';
 
 		Common::gotoXY(_xMenu + 40, _yMenu + 7 + i);
+		Common::setConsoleColor(BRIGHT_WHITE, GREEN);
 		cout << line << '\n';
 
 		i++;
