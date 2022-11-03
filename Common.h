@@ -7,6 +7,8 @@
 #include <fstream>
 #pragma comment(lib, "Winmm.lib")
 
+#define LANE_LENGTH  100
+#define LANE_HEIGHT  6
 #define BLACK 0
 #define BLUE 1
 #define GREEN 2

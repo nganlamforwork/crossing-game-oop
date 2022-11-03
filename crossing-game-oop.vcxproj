@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CANIMAL.cpp" />
     <ClCompile Include="CGAME.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="Menu.cpp" />

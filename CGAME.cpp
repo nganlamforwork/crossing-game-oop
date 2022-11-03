@@ -3,15 +3,13 @@
 CGAME::CGAME(int)
 {
 	drawGame();
+	kl = new CDINAUSOR(1, 1, _left, _top);
+	kl->renderDinausor();
+	Sleep(5000);
 }
 void CGAME::drawGame() 
 {
 	Common::clearConsole();
-
-	int _left = 1, _top = 1;
-	int LANE_LENGTH = 100;
-	int LANE_HEIGHT = 6;
-	int NUM_LANE = 6;
 
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	//Vẽ biên trên
@@ -58,7 +56,6 @@ void CGAME::drawGame()
 		//Sleep(2);
 	}
 
-	Sleep(5000);
 }
 CGAME::~CGAME() 
 {
