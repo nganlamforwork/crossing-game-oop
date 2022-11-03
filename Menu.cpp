@@ -16,9 +16,9 @@ Menu::~Menu()
 ////////////////////////////////////////////////////////////////////////////
 void Menu::startApp()
 {
-	std::thread title(&Menu::renderGameTitle, this);
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	Common::clearConsole();
+	std::thread title(&Menu::renderGameTitle, this);
 	renderMainScreen();
 	title.join();
 	Sleep(50000);
@@ -170,9 +170,8 @@ void Menu::renderGameTitle()
 	int wide[] = { 10, 10, 11, 10, 10, 6, 11, 10, 10, 10, 12, 10 };
 	int color[] = { LIGHT_AQUA, AQUA, LIGHT_BLUE, BLUE, LIGHT_PURPLE, PURPLE };
 
-	int loop = 1000, colorCount = 0, left = 0;
+	int loop = 5, colorCount = 0, left = 0;
 	while (loop--) {
-		Common::setConsoleColor(BRIGHT_WHITE, color[colorCount % 6]);
 
 		left = _left - 26;
 		for (int i = 0; i < sizeOfWord; i++) {
@@ -180,8 +179,14 @@ void Menu::renderGameTitle()
 				if (i > 7) Common::gotoXY(left, _top + 9 + j);
 				else Common::gotoXY(left, _top + 3 + j);
 
-				for (int k = 0; k < wide[i]; k++)
+				for (int k = 0; k < wide[i]; k++) {
+
+					if (i > 7) Common::gotoXY(left + k, _top + 9 + j);
+					else Common::gotoXY(left + k, _top + 3 + j);
+
+					Common::setConsoleColor(BRIGHT_WHITE, color[colorCount % 6]);
 					putchar(word[i][j * wide[i] + k]);
+				}
 			}
 			left += wide[i] + 1;
 			if (i == 7) left = _left - 8;
