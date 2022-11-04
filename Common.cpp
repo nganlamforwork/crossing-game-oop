@@ -12,6 +12,7 @@ void Common::setUpConsole(int fontSize)
 	hideScrollBars();
 	showCursor(false);
 	disableMouseInput();
+	system("color F0");
 }
 
 void Common::gotoXY(int pX, int pY)

@@ -1,5 +1,7 @@
 #include "Menu.h"
 
+mutex mtx;
+
 Menu::Menu()
 {
 	_curOption = 0;
@@ -16,20 +18,16 @@ Menu::~Menu()
 ////////////////////////////////////////////////////////////////////////////
 void Menu::startApp()
 {
-	std::thread title(&Menu::renderGameTitle, this);
-	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	Common::clearConsole();
-	renderMainScreen();
-	title.join();
-	Sleep(50000);
-}
-
-void Menu::renderMainScreen()
-{
 	renderFlowers();
 	renderOptionsMenu();
 	renderOptionsText(_options, _optionsSize, _curOption);
+	std::thread title(&Menu::renderGameTitle, this);
+	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
+	processMainInput();
+}
 
+void Menu::processMainInput()
+{
 	bool loadMenu = 1;
 	while (true) {
 		if (!loadMenu) break;
@@ -68,7 +66,6 @@ void Menu::renderMainScreen()
 void Menu::renderGameTitle()
 {
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	Common::clearConsole();
 	unsigned char M[] = {
 						' ', '_', '_', ' ',' ', ' ',' ','_','_', ' ', ' ', ' ',
 						'/', '\\',' ', '"','-', '.','/',' ',' ', '\\',' ', ' ',
@@ -177,11 +174,13 @@ void Menu::renderGameTitle()
 		left = _left - 26;
 		for (int i = 0; i < sizeOfWord; i++) {
 			for (int j = 0; j < 5; j++) {
+				mtx.lock();
 				if (i > 7) Common::gotoXY(left, _top + 9 + j);
 				else Common::gotoXY(left, _top + 3 + j);
 
 				for (int k = 0; k < wide[i]; k++)
 					putchar(word[i][j * wide[i] + k]);
+				mtx.unlock();
 			}
 			left += wide[i] + 1;
 			if (i == 7) left = _left - 8;
@@ -238,6 +237,7 @@ void Menu::renderCurrentOption(const std::string optionsArr[], const int& size, 
 	int left = _xMenu + 12, top = _yMenu + 2;
 	Common::setConsoleColor(BRIGHT_WHITE, RED);
 
+	mtx.lock();
 	Common::gotoXY(left, top + optionId * 2);
 	cout << optionsArr[optionId];
 
@@ -245,7 +245,7 @@ void Menu::renderCurrentOption(const std::string optionsArr[], const int& size, 
 	putchar(175);
 	Common::gotoXY(left + 13, top + optionId * 2);
 	putchar(174);
-
+	mtx.unlock();
 }
 
 void Menu::renderFlowers()
@@ -288,6 +288,7 @@ void Menu::offCurrentOption(const std::string optionsArr[], const int& size, con
 	int left = _xMenu + 12, top = _yMenu + 2;
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 
+	mtx.lock();
 	Common::gotoXY(left, top + optionId * 2);
 	cout << optionsArr[optionId];
 
@@ -295,7 +296,7 @@ void Menu::offCurrentOption(const std::string optionsArr[], const int& size, con
 	putchar(' ');
 	Common::gotoXY(left + 13, top + optionId * 2);
 	putchar(' ');
-
+	mtx.unlock();
 }
 
 void Menu::changeOption(int direction, const std::string optionsArr[], int& option, const int& size) //-1: Up - 1: Down
@@ -343,7 +344,7 @@ void Menu::play()
 		loadGame();
 		break;
 	case 2:
-		renderMainScreen();
+		processMainInput();
 		break;
 	}
 	std::cout << "PLAY";
@@ -418,7 +419,7 @@ void Menu::showTutorial()
 			Common::playSound(ERROR_SOUND);
 		}
 	}
-	renderMainScreen();
+	processMainInput();
 }
 
 void Menu::showLeaderboard()
@@ -562,7 +563,7 @@ void Menu::showLeaderboard()
 			Common::playSound(ERROR_SOUND);
 		}
 	}
-	renderMainScreen();
+	processMainInput();
 }
 
 void Menu::exitGame()
