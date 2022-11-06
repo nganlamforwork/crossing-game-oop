@@ -17,17 +17,17 @@
 #define NEW_GAME 0
 #define LOAD_GAME 1
 
-struct Menu
+class Menu
 {
-	const std::string _options[4] = {
-		"Play","Tutorial","Leaderboard","Exit" };
-	const std::string _subOptions[3] = {
-		"New Game","Load Game", "Back"};
+	//bool loadEffectTitle = 1;
+	const std::string _options[4] = { "Play","Tutorial","Leaderboard","Exit" };
+	const std::string _subOptions[3] = { "New Game","Load Game", "Back" };
 	int _optionsSize, _curOption;
 	int _subOptionsSize, _curSubOption;
 	int _xMenu, _yMenu;
 	int _left = 60, _top = 1;
 
+public:
 	Menu();
 	~Menu();
 

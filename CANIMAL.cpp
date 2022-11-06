@@ -26,7 +26,7 @@ void CDINAUSOR::renderDinausor()
 		for (int i = 0; i < 5; i++) {
 			int befX = curX;
 			for (int j = 0; j < 16; j++) {
-				Common::setConsoleColor(YELLOW, BRIGHT_WHITE);
+				Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 				Common::gotoXY(curX, curY);
 				if (!isInLane(curX))
 					curX = _left + 2;

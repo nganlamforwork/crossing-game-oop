@@ -21,7 +21,8 @@ void Menu::startApp()
 	renderFlowers();
 	renderOptionsMenu();
 	renderOptionsText(_options, _optionsSize, _curOption);
-	std::thread title(&Menu::renderGameTitle, this);
+	//std::thread title(&Menu::renderGameTitle, this);
+	renderGameTitle();
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	processMainInput();
 }
@@ -159,6 +160,7 @@ void Menu::renderGameTitle()
 	};
 
 	Common::setConsoleColor(BRIGHT_WHITE, AQUA);
+	Common::gotoXY(_left, _top);
 	std::cout << "Group 8 - 21CLC08 - HCMUS";
 
 	unsigned char* word[] = { C, R, O, S, S, I, N, G, G, A, M, E };
@@ -166,7 +168,8 @@ void Menu::renderGameTitle()
 	int wide[] = { 10, 10, 11, 10, 10, 6, 11, 10, 10, 10, 12, 10 };
 	int color[] = { LIGHT_AQUA, AQUA, LIGHT_BLUE, BLUE, LIGHT_PURPLE, PURPLE };
 
-	int loop = 1000, colorCount = 0, left = 0;
+	int colorCount = 0, left = 0;
+	int loop = 1;
 	while (loop--) {
 		Common::setConsoleColor(BRIGHT_WHITE, color[colorCount % 6]);
 
@@ -202,6 +205,7 @@ void Menu::renderOptionsMenu()
 	while (!bg.eof()) {
 		getline(bg, line);
 		Common::gotoXY(left, top + i);
+		Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 		cout << line << '\n';
 		i++;
 	}
@@ -248,6 +252,7 @@ void Menu::renderCurrentOption(const std::string optionsArr[], const int& size, 
 
 void Menu::renderFlowers()
 {
+	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
 	std::ifstream bg;
 	bg.open("images\\flower.txt");
 
@@ -334,13 +339,15 @@ void Menu::play()
 
 	switch (_curSubOption) {
 	case 0:
+		//loadEffectTitle = 0;
 		newGame();
 		break;
 	case 1:
+		//loadEffectTitle = 0;
 		loadGame();
 		break;
 	case 2:
-		processMainInput();
+		startApp();
 		break;
 	}
 	std::cout << "PLAY";
@@ -510,30 +517,6 @@ void Menu::showLeaderboard()
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	string level1 = " Easy ";
 	string level2 = "Medium";
-
-	/*int n = 15;
-	if (playerList.size() < n) n = playerList.size();
-	for (int i = 0; i < n; i++) {
-		Common::gotoXY(left + 8 - playerList[i]._name.length() / 2, top + 3 + i);
-		cout << playerList[i]._name;
-
-		Common::gotoXY(left + 22 - (playerList[i]._display_time.length() + 1) / 2, top + 3 + i);
-		cout << playerList[i]._display_time << 's';
-
-		Common::gotoXY(left + 31, top + 3 + i);
-		if (playerList[i]._level == 4) cout << level1;
-		else cout << level2;
-
-		Common::gotoXY(left + 43, top + 3 + i);
-		if (playerList[i]._mode == 1) cout << "Standard";
-		else cout << "Difficult";
-
-		stringstream ss;
-		ss << playerList[i]._score;
-		string str = ss.str();
-		Common::gotoXY(left + 59 - str.length() / 2, top + 3 + i);
-		cout << playerList[i]._score;
-	}*/
 
 	left = 3, top = 12;
 
