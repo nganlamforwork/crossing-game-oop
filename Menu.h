@@ -5,6 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <thread>
+#include <mutex>
 
 #include "Common.h"
 #include "CGAME.h"
@@ -31,7 +32,7 @@ struct Menu
 	~Menu();
 
 	void startApp();
-	void renderMainScreen();
+	void processMainInput();
 	void renderGameTitle();
 	void renderOptionsMenu();
 	void renderOptionsText(const std::string[], const int&, const int&);

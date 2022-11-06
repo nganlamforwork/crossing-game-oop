@@ -1,5 +1,7 @@
 #include "Menu.h"
 
+mutex mtx;
+
 Menu::Menu()
 {
 	_curOption = 0;
@@ -16,19 +18,16 @@ Menu::~Menu()
 ////////////////////////////////////////////////////////////////////////////
 void Menu::startApp()
 {
-	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	Common::clearConsole();
-	renderMainScreen();
-	Sleep(50000);
-}
-
-void Menu::renderMainScreen()
-{
 	renderFlowers();
 	renderOptionsMenu();
-	renderGameTitle();
 	renderOptionsText(_options, _optionsSize, _curOption);
+	std::thread title(&Menu::renderGameTitle, this);
+	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
+	processMainInput();
+}
 
+void Menu::processMainInput()
+{
 	bool loadMenu = 1;
 	while (true) {
 		if (!loadMenu) break;
@@ -66,6 +65,7 @@ void Menu::renderMainScreen()
 
 void Menu::renderGameTitle()
 {
+	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	unsigned char M[] = {
 						' ', '_', '_', ' ',' ', ' ',' ','_','_', ' ', ' ', ' ',
 						'/', '\\',' ', '"','-', '.','/',' ',' ', '\\',' ', ' ',
@@ -158,7 +158,6 @@ void Menu::renderGameTitle()
 						' ',' ',' ',' '
 	};
 
-	Common::gotoXY(_left, _top);
 	Common::setConsoleColor(BRIGHT_WHITE, AQUA);
 	std::cout << "Group 8 - 21CLC08 - HCMUS";
 
@@ -167,23 +166,20 @@ void Menu::renderGameTitle()
 	int wide[] = { 10, 10, 11, 10, 10, 6, 11, 10, 10, 10, 12, 10 };
 	int color[] = { LIGHT_AQUA, AQUA, LIGHT_BLUE, BLUE, LIGHT_PURPLE, PURPLE };
 
-	int loop = 1, colorCount = 0, left = 0;
+	int loop = 1000, colorCount = 0, left = 0;
 	while (loop--) {
+		Common::setConsoleColor(BRIGHT_WHITE, color[colorCount % 6]);
 
 		left = _left - 26;
 		for (int i = 0; i < sizeOfWord; i++) {
 			for (int j = 0; j < 5; j++) {
+				mtx.lock();
 				if (i > 7) Common::gotoXY(left, _top + 9 + j);
 				else Common::gotoXY(left, _top + 3 + j);
 
-				for (int k = 0; k < wide[i]; k++) {
-
-					if (i > 7) Common::gotoXY(left + k, _top + 9 + j);
-					else Common::gotoXY(left + k, _top + 3 + j);
-
-					Common::setConsoleColor(BRIGHT_WHITE, color[colorCount % 6]);
+				for (int k = 0; k < wide[i]; k++)
 					putchar(word[i][j * wide[i] + k]);
-				}
+				mtx.unlock();
 			}
 			left += wide[i] + 1;
 			if (i == 7) left = _left - 8;
@@ -206,7 +202,6 @@ void Menu::renderOptionsMenu()
 	while (!bg.eof()) {
 		getline(bg, line);
 		Common::gotoXY(left, top + i);
-		Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 		cout << line << '\n';
 		i++;
 	}
@@ -240,6 +235,7 @@ void Menu::renderCurrentOption(const std::string optionsArr[], const int& size, 
 	int left = _xMenu + 12, top = _yMenu + 2;
 	Common::setConsoleColor(BRIGHT_WHITE, RED);
 
+	mtx.lock();
 	Common::gotoXY(left, top + optionId * 2);
 	cout << optionsArr[optionId];
 
@@ -247,7 +243,7 @@ void Menu::renderCurrentOption(const std::string optionsArr[], const int& size, 
 	putchar(175);
 	Common::gotoXY(left + 13, top + optionId * 2);
 	putchar(174);
-
+	mtx.unlock();
 }
 
 void Menu::renderFlowers()
@@ -261,11 +257,9 @@ void Menu::renderFlowers()
 		getline(bg, line);
 
 		Common::gotoXY(_xMenu - 38, _yMenu + 7 + i);
-		Common::setConsoleColor(BRIGHT_WHITE, GREEN);
 		cout << line << '\n';
 
 		Common::gotoXY(_xMenu + 40, _yMenu + 7 + i);
-		Common::setConsoleColor(BRIGHT_WHITE, GREEN);
 		cout << line << '\n';
 
 		i++;
@@ -290,6 +284,7 @@ void Menu::offCurrentOption(const std::string optionsArr[], const int& size, con
 	int left = _xMenu + 12, top = _yMenu + 2;
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 
+	mtx.lock();
 	Common::gotoXY(left, top + optionId * 2);
 	cout << optionsArr[optionId];
 
@@ -297,7 +292,7 @@ void Menu::offCurrentOption(const std::string optionsArr[], const int& size, con
 	putchar(' ');
 	Common::gotoXY(left + 13, top + optionId * 2);
 	putchar(' ');
-
+	mtx.unlock();
 }
 
 void Menu::changeOption(int direction, const std::string optionsArr[], int& option, const int& size) //-1: Up - 1: Down
@@ -345,7 +340,7 @@ void Menu::play()
 		loadGame();
 		break;
 	case 2:
-		renderMainScreen();
+		processMainInput();
 		break;
 	}
 	std::cout << "PLAY";
@@ -420,7 +415,7 @@ void Menu::showTutorial()
 			Common::playSound(ERROR_SOUND);
 		}
 	}
-	renderMainScreen();
+	processMainInput();
 }
 
 void Menu::showLeaderboard()
@@ -564,7 +559,7 @@ void Menu::showLeaderboard()
 			Common::playSound(ERROR_SOUND);
 		}
 	}
-	renderMainScreen();
+	processMainInput();
 }
 
 void Menu::exitGame()
