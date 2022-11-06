@@ -18,16 +18,15 @@ void Menu::startApp()
 {
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	Common::clearConsole();
-	renderFlowers();
-	renderOptionsMenu();
-	std::thread title(&Menu::renderGameTitle, this);
 	renderMainScreen();
-	title.join();
 	Sleep(50000);
 }
 
 void Menu::renderMainScreen()
 {
+	renderFlowers();
+	renderOptionsMenu();
+	renderGameTitle();
 	renderOptionsText(_options, _optionsSize, _curOption);
 
 	bool loadMenu = 1;
@@ -168,7 +167,7 @@ void Menu::renderGameTitle()
 	int wide[] = { 10, 10, 11, 10, 10, 6, 11, 10, 10, 10, 12, 10 };
 	int color[] = { LIGHT_AQUA, AQUA, LIGHT_BLUE, BLUE, LIGHT_PURPLE, PURPLE };
 
-	int loop = 5000, colorCount = 0, left = 0;
+	int loop = 1, colorCount = 0, left = 0;
 	while (loop--) {
 
 		left = _left - 26;
