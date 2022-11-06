@@ -159,7 +159,6 @@ void Menu::renderGameTitle()
 	};
 
 	Common::setConsoleColor(BRIGHT_WHITE, AQUA);
-	Common::gotoXY(_left, _top);
 	std::cout << "Group 8 - 21CLC08 - HCMUS";
 
 	unsigned char* word[] = { C, R, O, S, S, I, N, G, G, A, M, E };
@@ -192,7 +191,6 @@ void Menu::renderGameTitle()
 
 void Menu::renderOptionsMenu()
 {
-	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	int left = _xMenu, top = _yMenu;
 	int length = 35, height = _optionsSize * 2;
 
@@ -252,8 +250,6 @@ void Menu::renderFlowers()
 {
 	std::ifstream bg;
 	bg.open("images\\flower.txt");
-
-	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
 
 	int i = 0;
 	std::string line;
