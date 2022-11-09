@@ -3,7 +3,7 @@
 CGAME::CGAME(int)
 {
 	drawGame();
-	kl = new CDINAUSOR(1, 1, _left, _top);
+	kl = new CDINAUSOR(3, 1, _left, _top);
 	kl->renderDinausor();
 	Sleep(5000);
 }
