@@ -19,7 +19,7 @@ class CDINAUSOR : public CANIMAL {
 								{' ','_','_','/',' ',' ',' ',' ',' ',' ',' ',' ',' ','/',' ',' '},
 								{'/','_','_','.','\'','|','_','|','-','-','|','_','|',' ',' ',' '} };
 
-private: 
+private:
 	bool isInLane(int);
 
 public:
@@ -29,6 +29,16 @@ public:
 };
 
 class CBIRD : public CANIMAL {
+	int _numLane, _direction, _numBird, _spaceBird, _left, _top;
+	const char data[1][5] = { {'/','^','V','^','\\'} };
+
+
+private:
+	bool isInLane(int);
+
 public:
+	CBIRD(int, int, int, int);
+	~CBIRD();
+	void renderBird();
 
 };
