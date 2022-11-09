@@ -11,6 +11,8 @@
 class CGAME {
 	CDINAUSOR* kl;
 	CCAR* xe;
+	CBIRD* bird;
+	CTRUCK* truck;
 	int _left = 1, _top = 1;
 	int NUM_LANE = 6;
 public:

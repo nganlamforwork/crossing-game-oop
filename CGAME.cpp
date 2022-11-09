@@ -5,11 +5,15 @@ CGAME::CGAME(int)
 	drawGame();
 	/*kl = new CDINAUSOR(3, 1, _left, _top);
 	kl->renderDinausor();*/
-	xe = new CCAR(2, 1, _left, _top);
-	xe->renderCar();
+	/*xe = new CCAR(2, 1, _left, _top);
+	xe->renderCar();*/
+	/*bird = new CBIRD(2, 1, _left, _top);
+	bird->renderBird();*/
+	truck = new CTRUCK(2, 1, _left, _top);
+	truck->renderTruck();
 	Sleep(5000);
 }
-void CGAME::drawGame() 
+void CGAME::drawGame()
 {
 	Common::clearConsole();
 
@@ -59,7 +63,7 @@ void CGAME::drawGame()
 	}
 
 }
-CGAME::~CGAME() 
+CGAME::~CGAME()
 {
 
 }

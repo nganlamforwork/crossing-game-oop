@@ -12,8 +12,21 @@ public:
 };
 
 class CTRUCK : public CVEHICLE {
+	int _numLane, _direction, _numTruck, _spaceTruck, _left, _top;
+	const char data[4][17] = { {' ',' ',' ','_','_',' ',' ',' ','_','_','_','_','_','_','_','_'},
+								{' ','_','/','/',']','|',' ','|',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+								{'|','_','_','_','_','|','-','|','_','_','_','_','_','_','_','_','|'},
+								{' ',' ','O',' ',' ',' ',' ',' ',' ','O',' ',' ',' ',' ','O'},
+							};
+private:
+	bool isInLane(int);
+
 public:
-	//…
+	CTRUCK(int, int, int, int);
+	~CTRUCK();
+	void renderTruck();
+
+
 };
 
 class CCAR : public CVEHICLE {
