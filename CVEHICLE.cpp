@@ -1,23 +1,23 @@
-#include "CANIMAL.h"
+#include "CVEHICLE.h"
 
-CDINAUSOR::CDINAUSOR(int numLane, int direction, int left, int top)
+CCAR::CCAR(int numLane, int direction, int left, int top)
 {
 	_numLane = numLane;
 	_direction = direction;
-	_numDino = 2;
-	_spaceDino = 10;
+	_numCar = 4;
+	_spaceCar = 10;
 	mX = _left = left;
 	mY = _top = top + (_numLane - 1) * 6;
 	_borderLeft = _left + 1;
 	_borderRight = LANE_LENGTH + _left + 1;
 }
 
-bool CDINAUSOR::isInLane(int x)
+bool CCAR::isInLane(int x)
 {
 	return (x > _borderLeft && x < _borderRight - 1);
 }
 
-void CDINAUSOR::renderDinausor()
+void CCAR::renderCar()
 {
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	vector<int> curX;
@@ -25,18 +25,18 @@ void CDINAUSOR::renderDinausor()
 	int startPos = _left + 3;
 	curX.push_back(startPos);
 	curY.push_back(mY + 1);
-	for (int i = 1; i < _numDino; i++) {
+	for (int i = 1; i < _numCar; i++) {
 		int tmp = curX[i - 1];
-		curX.push_back(tmp + 16 + _spaceDino);
+		curX.push_back(tmp + 16 + _spaceCar);
 		curY.push_back(mY + 1);
 	}
 	int prevX;
 	while (true) {
 		Sleep(100);
-		for (int cnt = 0; cnt < _numDino; cnt++) {
+		for (int cnt = 0; cnt < _numCar; cnt++) {
 			prevX = curX[cnt];
 			for (int i = 0; i < 5; i++) {
-				for (int j = 0; j < 16; j++) {
+				for (int j = 0; j < 6; j++) {
 					Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 					if (!isInLane(curX[cnt]))
 						curX[cnt] = startPos;

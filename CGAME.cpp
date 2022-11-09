@@ -3,8 +3,10 @@
 CGAME::CGAME(int)
 {
 	drawGame();
-	kl = new CDINAUSOR(3, 1, _left, _top);
-	kl->renderDinausor();
+	/*kl = new CDINAUSOR(3, 1, _left, _top);
+	kl->renderDinausor();*/
+	xe = new CCAR(2, 1, _left, _top);
+	xe->renderCar();
 	Sleep(5000);
 }
 void CGAME::drawGame() 
