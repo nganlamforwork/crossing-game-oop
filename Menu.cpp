@@ -1,6 +1,6 @@
 #include "Menu.h"
 
-mutex mtx;
+//mutex mtx;
 
 Menu::Menu()
 {

@@ -3,7 +3,7 @@
 #include "Menu.h"
 #include <mutex>
 
-mutex mmm;
+mutex mtx;
 
 int main()
 {

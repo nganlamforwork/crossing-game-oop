@@ -1,7 +1,5 @@
 #include "CANIMAL.h"
 
-mutex mAnimal;
-
 CDINAUSOR::CDINAUSOR(int numLane, int direction, int left, int top)
 {
 	_numLane = numLane;
@@ -36,7 +34,6 @@ void CDINAUSOR::renderDinausor()
 	}
 	int prevX;
 	while (true) {
-		Sleep(100);
 		for (int cnt = 0; cnt < _numDino; cnt++) {
 			prevX = curX[cnt];
 			for (int i = 0; i < sizeY; i++) {
@@ -44,23 +41,22 @@ void CDINAUSOR::renderDinausor()
 					Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 					if (!isInLane(curX[cnt]))
 						curX[cnt] = startPos;
-					mmm.lock();
+					mtx.lock();
 					Common::gotoXY(curX[cnt], curY[cnt]);
 					std::cout << data[i][j];
-					mmm.unlock();
+					mtx.unlock();
 					curX[cnt] = curX[cnt] + 1;
 				}
 				curX[cnt] = prevX;
 				curY[cnt] = curY[cnt] + 1;
 			}
 			for (int i = 0; i < sizeY; i++) {
-			mmm.lock();
+				mtx.lock();
 				Common::gotoXY(prevX - 1, (int)curY[cnt] - i - 1);
 				putchar(32);
 				Common::gotoXY(_borderRight - 2, (int)curY[cnt] - i - 1);
 				putchar(32);
-
-			mmm.unlock();
+				mtx.unlock();
 			}
 			curX[cnt] = prevX + 1;
 			if (!isInLane(prevX + 1))
@@ -104,7 +100,6 @@ void CBIRD::renderBird()
 	}
 	int prevX;
 	while (true) {
-		Sleep(100);
 		for (int cnt = 0; cnt < _numBird; cnt++) {
 			prevX = curX[cnt];
 			for (int i = 0; i < sizeY; i++) {
@@ -112,18 +107,22 @@ void CBIRD::renderBird()
 					Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 					if (!isInLane(curX[cnt]))
 						curX[cnt] = startPos;
+					mtx.lock();
 					Common::gotoXY(curX[cnt], curY[cnt]);
 					std::cout << data[i][j];
+					mtx.unlock();
 					curX[cnt] = curX[cnt] + 1;
 				}
 				curX[cnt] = prevX;
 				curY[cnt] = curY[cnt] + 1;
 			}
 			for (int i = 0; i < sizeY; i++) {
+				mtx.lock();
 				Common::gotoXY(prevX - 1, (int)curY[cnt] - i - 1);
 				putchar(32);
 				Common::gotoXY(_borderRight - 2, (int)curY[cnt] - i - 1);
 				putchar(32);
+				mtx.unlock();
 			}
 			curX[cnt] = prevX + 1;
 			if (!isInLane(prevX + 1))

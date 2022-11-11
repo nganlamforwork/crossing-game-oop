@@ -36,7 +36,7 @@
 
 using namespace std;
 
-extern mutex mmm;
+extern mutex mtx;
 
 struct Common
 {

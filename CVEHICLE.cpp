@@ -1,7 +1,5 @@
 #include "CVEHICLE.h"
 
-mutex mVehicle;
-
 CCAR::CCAR(int numLane, int direction, int left, int top)
 {
 	_numLane = numLane;
@@ -36,7 +34,6 @@ void CCAR::renderCar()
 	}
 	int prevX;
 	while (true) {
-		Sleep(100);
 		for (int cnt = 0; cnt < _numCar; cnt++) {
 			prevX = curX[cnt];
 			for (int i = 0; i < sizeY; i++) {
@@ -44,22 +41,22 @@ void CCAR::renderCar()
 					Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 					if (!isInLane(curX[cnt]))
 						curX[cnt] = startPos;
-					mmm.lock();
+					mtx.lock();
 					Common::gotoXY(curX[cnt], curY[cnt]);
 					std::cout << data[i][j];
-					mmm.unlock();
+					mtx.unlock();
 					curX[cnt] = curX[cnt] + 1;
 				}
 				curX[cnt] = prevX;
 				curY[cnt] = curY[cnt] + 1;
 			}
 			for (int i = 0; i < sizeY; i++) {
-				mmm.lock();
+				mtx.lock();
 				Common::gotoXY(prevX - 1, (int)curY[cnt] - i - 1);
 				putchar(32);
 				Common::gotoXY(_borderRight - 2, (int)curY[cnt] - i - 1);
 				putchar(32);
-				mmm.unlock();
+				mtx.unlock();
 			}
 			curX[cnt] = prevX + 1;
 			if (!isInLane(prevX + 1))
@@ -103,7 +100,6 @@ void CTRUCK::renderTruck()
 	}
 	int prevX;
 	while (true) {
-		Sleep(100);
 		for (int cnt = _numTruck - 1; cnt >= 0; cnt--) {
 			prevX = curX[cnt];
 			for (int i = 0; i < sizeY; i++) {
@@ -111,10 +107,10 @@ void CTRUCK::renderTruck()
 					Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 					if (!isInLane(curX[cnt]))
 						curX[cnt] = startPos;
-					mmm.lock();
+					mtx.lock();
 					Common::gotoXY(curX[cnt], curY[cnt]);
 					std::cout << data[i][j];
-					mmm.unlock();
+					mtx.unlock();
 
 					curX[cnt] = curX[cnt] - 1;
 				}
@@ -122,13 +118,13 @@ void CTRUCK::renderTruck()
 				curY[cnt] = curY[cnt] + 1;
 			}
 			for (int i = 0; i < sizeY; i++) {
-				mmm.lock();
+				mtx.lock();
 
 				Common::gotoXY(prevX + 1, (int)curY[cnt] - i - 1);
 				putchar(32);
 				Common::gotoXY(_borderRight - 2, (int)curY[cnt] - i - 1);
 				putchar(32);
-				mmm.unlock();
+				mtx.unlock();
 			}
 
 			curX[cnt] = prevX - 1;
