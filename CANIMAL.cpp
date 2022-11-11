@@ -1,5 +1,7 @@
 #include "CANIMAL.h"
 
+mutex mAnimal;
+
 CDINAUSOR::CDINAUSOR(int numLane, int direction, int left, int top)
 {
 	_numLane = numLane;
@@ -42,18 +44,23 @@ void CDINAUSOR::renderDinausor()
 					Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 					if (!isInLane(curX[cnt]))
 						curX[cnt] = startPos;
+					mmm.lock();
 					Common::gotoXY(curX[cnt], curY[cnt]);
 					std::cout << data[i][j];
+					mmm.unlock();
 					curX[cnt] = curX[cnt] + 1;
 				}
 				curX[cnt] = prevX;
 				curY[cnt] = curY[cnt] + 1;
 			}
 			for (int i = 0; i < sizeY; i++) {
+			mmm.lock();
 				Common::gotoXY(prevX - 1, (int)curY[cnt] - i - 1);
 				putchar(32);
 				Common::gotoXY(_borderRight - 2, (int)curY[cnt] - i - 1);
 				putchar(32);
+
+			mmm.unlock();
 			}
 			curX[cnt] = prevX + 1;
 			if (!isInLane(prevX + 1))

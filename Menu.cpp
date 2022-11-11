@@ -21,7 +21,7 @@ void Menu::startApp()
 	renderFlowers();
 	renderOptionsMenu();
 	renderOptionsText(_options, _optionsSize, _curOption);
-	//std::thread title(&Menu::renderGameTitle, this);
+	std::thread title(&Menu::renderGameTitle, this);
 	renderGameTitle();
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	processMainInput();

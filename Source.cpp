@@ -1,6 +1,9 @@
 #include <iostream>
 #include "Common.h"
 #include "Menu.h"
+#include <mutex>
+
+mutex mmm;
 
 int main()
 {

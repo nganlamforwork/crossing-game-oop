@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "Common.h"
+#include <mutex>
 
 class CANIMAL {
 protected:
