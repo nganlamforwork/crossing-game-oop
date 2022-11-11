@@ -29,12 +29,11 @@ void CCAR::renderCar()
 	curY.push_back(mY + 1);
 	for (int i = 1; i < _numCar; i++) {
 		int tmp = curX[i - 1];
-		curX.push_back(tmp + 16 + _spaceCar);
+		curX.push_back(tmp + 6 + _spaceCar);
 		curY.push_back(mY + 1);
 	}
 	int prevX;
 	while (true) {
-		Sleep(100);
 		for (int cnt = 0; cnt < _numCar; cnt++) {
 			prevX = curX[cnt];
 			for (int i = 0; i < sizeY; i++) {
@@ -42,18 +41,22 @@ void CCAR::renderCar()
 					Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 					if (!isInLane(curX[cnt]))
 						curX[cnt] = startPos;
+					mtx.lock();
 					Common::gotoXY(curX[cnt], curY[cnt]);
 					std::cout << data[i][j];
+					mtx.unlock();
 					curX[cnt] = curX[cnt] + 1;
 				}
 				curX[cnt] = prevX;
 				curY[cnt] = curY[cnt] + 1;
 			}
 			for (int i = 0; i < sizeY; i++) {
+				mtx.lock();
 				Common::gotoXY(prevX - 1, (int)curY[cnt] - i - 1);
 				putchar(32);
 				Common::gotoXY(_borderRight - 2, (int)curY[cnt] - i - 1);
 				putchar(32);
+				mtx.unlock();
 			}
 			curX[cnt] = prevX + 1;
 			if (!isInLane(prevX + 1))
@@ -87,39 +90,45 @@ void CTRUCK::renderTruck()
 	vector<int> curY;
 	int sizeX = 17;
 	int sizeY = 4;
-	int startPos = _left + 3;
+	int startPos = _borderRight - 3;
 	curX.push_back(startPos);
 	curY.push_back(mY + 1);
 	for (int i = 1; i < _numTruck; i++) {
 		int tmp = curX[i - 1];
-		curX.push_back(tmp + 16 + _spaceTruck);
+		curX.push_back(tmp - 17 - _spaceTruck);
 		curY.push_back(mY + 1);
 	}
 	int prevX;
 	while (true) {
-		Sleep(100);
-		for (int cnt = 0; cnt < _numTruck; cnt++) {
+		for (int cnt = _numTruck - 1; cnt >= 0; cnt--) {
 			prevX = curX[cnt];
 			for (int i = 0; i < sizeY; i++) {
-				for (int j = 0; j < sizeX; j++) {
+				for (int j = sizeX - 1; j >= 0; j--) {
 					Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 					if (!isInLane(curX[cnt]))
 						curX[cnt] = startPos;
+					mtx.lock();
 					Common::gotoXY(curX[cnt], curY[cnt]);
 					std::cout << data[i][j];
-					curX[cnt] = curX[cnt] + 1;
+					mtx.unlock();
+
+					curX[cnt] = curX[cnt] - 1;
 				}
 				curX[cnt] = prevX;
 				curY[cnt] = curY[cnt] + 1;
 			}
 			for (int i = 0; i < sizeY; i++) {
-				Common::gotoXY(prevX - 1, (int)curY[cnt] - i - 1);
+				mtx.lock();
+
+				Common::gotoXY(prevX + 1, (int)curY[cnt] - i - 1);
 				putchar(32);
 				Common::gotoXY(_borderRight - 2, (int)curY[cnt] - i - 1);
 				putchar(32);
+				mtx.unlock();
 			}
-			curX[cnt] = prevX + 1;
-			if (!isInLane(prevX + 1))
+
+			curX[cnt] = prevX - 1;
+			if (!isInLane(prevX - 1))
 				curX[cnt] = startPos;
 			curY[cnt] = mY + 1;
 		}

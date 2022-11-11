@@ -1,17 +1,36 @@
 ﻿#include "CGAME.h"
 
+void renderTruck(int _left, int _top, int lane, CTRUCK* truck) {
+	truck = new CTRUCK(lane, 1, _left, _top);
+	truck->renderTruck();
+}
+
+void renderDino(int _left, int _top, int lane, CDINAUSOR* kl) {
+	kl = new CDINAUSOR(lane, 1, _left, _top);
+	kl->renderDinausor();
+}
+
+void renderCar(int _left, int _top, int lane, CCAR* xe) {
+	xe = new CCAR(lane, 1, _left, _top);
+	xe->renderCar();
+}
+
+void renderBird(int _left, int _top, int lane, CBIRD* bird) {
+	bird = new CBIRD(lane, 1, _left, _top);
+	bird->renderBird();
+}
+
 CGAME::CGAME(int)
 {
 	drawGame();
-	/*kl = new CDINAUSOR(3, 1, _left, _top);
-	kl->renderDinausor();*/
-	/*xe = new CCAR(2, 1, _left, _top);
-	xe->renderCar();*/
-	/*bird = new CBIRD(2, 1, _left, _top);
-	bird->renderBird();*/
-	truck = new CTRUCK(2, 1, _left, _top);
-	truck->renderTruck();
-	Sleep(5000);
+	thread t1(renderTruck, _left, _top, 2, truck);
+	thread t2(renderCar, _left, _top, 3, xe);
+	thread t3(renderBird, _left, _top, 4, bird);
+	thread t4(renderDino, _left, _top, 5, kl);
+	t1.join();
+	t2.join();
+	t3.join();
+	t4.join();
 }
 void CGAME::drawGame()
 {

@@ -5,6 +5,7 @@
 #include <conio.h>
 #include <Random>
 #include <fstream>
+#include <mutex>
 #pragma comment(lib, "Winmm.lib")
 
 #define LANE_LENGTH  112
@@ -34,6 +35,8 @@
 #define BACKGROUND_SOUND 5
 
 using namespace std;
+
+extern mutex mtx;
 
 struct Common
 {

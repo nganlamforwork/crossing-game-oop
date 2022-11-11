@@ -7,6 +7,7 @@
 #include "Common.h"
 #include "CANIMAL.h"
 #include "CVEHICLE.h"
+#include <thread>
 
 class CGAME {
 	CDINAUSOR* kl;
