@@ -29,7 +29,7 @@ void CCAR::renderCar()
 	curY.push_back(mY + 1);
 	for (int i = 1; i < _numCar; i++) {
 		int tmp = curX[i - 1];
-		curX.push_back(tmp + 16 + _spaceCar);
+		curX.push_back(tmp + 6 + _spaceCar);
 		curY.push_back(mY + 1);
 	}
 	int prevX;

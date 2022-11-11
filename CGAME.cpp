@@ -23,31 +23,14 @@ void renderBird(int _left, int _top, int lane, CBIRD* bird) {
 CGAME::CGAME(int)
 {
 	drawGame();
-	/*kl = new CDINAUSOR(3, 1, _left, _top);
-	kl->renderDinausor();*/
-	/*xe = new CCAR(2, 1, _left, _top);
-	xe->renderCar();*/
-	/*bird = new CBIRD(2, 1, _left, _top);
-	bird->renderBird();
-	truck = new CTRUCK(3, 1, _left, _top);
-	truck->renderTruck();*/
-	thread t1(renderTruck, _left, _top, 1, truck);
-	thread t2(renderDino, _left, _top, 2, kl);
-	thread t3(renderCar, _left, _top, 3, xe);
-	thread t4(renderBird, _left, _top, 4, bird);
-	thread t5(renderDino, _left, _top, 5, kl);
-	thread t6(renderCar, _left, _top, 6, xe);
+	thread t1(renderTruck, _left, _top, 2, truck);
+	thread t2(renderCar, _left, _top, 3, xe);
+	thread t3(renderBird, _left, _top, 4, bird);
+	thread t4(renderDino, _left, _top, 5, kl);
 	t1.join();
 	t2.join();
 	t3.join();
 	t4.join();
-	t5.join();
-	t6.join();
-	//thread t1([this] { renderTruck(_left, _top, truck); });
-	//Sleep(50);
-	//thread t2([this] { renderDino(_left, _top, kl); });
-
-	//Sleep(10000);
 }
 void CGAME::drawGame()
 {
