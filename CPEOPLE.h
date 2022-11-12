@@ -6,6 +6,12 @@
 class CPEOPLE {
 	int mX, mY;
 	bool mState; //Trạng thái sống chết
+	const char people[5][5] = {
+		{' ',' ','O',' ',' '},
+		{'|','[',' ',']','|'},
+		{'\'',' ','|',' ','\''},
+		{' ','/',' ','\\',' '}
+	}
 public:
 	CPEOPLE();
 	void Up(int);
