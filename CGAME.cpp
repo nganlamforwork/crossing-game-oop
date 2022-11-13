@@ -20,6 +20,14 @@ void renderBird(int _left, int _top, int lane, CBIRD* bird) {
 	bird->renderBird();
 }
 
+void renderPeople(int _left, int _top, int lane, CPEOPLE* people) {
+	people = new CPEOPLE(lane, 1, _left, _top);
+	people->RenderPeople(_left + 50, _top + (6 - 1) * 6 + 1);
+	while (true) {
+		people->Move();
+	}
+}
+
 CGAME::CGAME(int)
 {
 	drawGame();
@@ -27,10 +35,12 @@ CGAME::CGAME(int)
 	thread t2(renderCar, _left, _top, 3, xe);
 	thread t3(renderBird, _left, _top, 4, bird);
 	thread t4(renderDino, _left, _top, 5, kl);
+	thread t5(renderPeople, _left, _top, 6, people);
 	t1.join();
 	t2.join();
 	t3.join();
 	t4.join();
+	t5.join();
 }
 void CGAME::drawGame()
 {

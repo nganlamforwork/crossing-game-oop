@@ -4,21 +4,28 @@
 #include "CANIMAL.h"
 
 class CPEOPLE {
+	int _numLane, _direction, _left, _top;
 	int mX, mY;
+	int _borderLeft, _borderRight;
 	bool mState; //Trạng thái sống chết
-	const char people[5][5] = {
+	const char data[4][5] = {
 		{' ',' ','O',' ',' '},
 		{'|','[',' ',']','|'},
 		{'\'',' ','|',' ','\''},
 		{' ','/',' ','\\',' '}
-	}
+	};
 public:
 	CPEOPLE();
-	void Up(int);
-	void Left(int);
-	void Right(int);
-	void Down(int);
+	CPEOPLE(int, int, int, int);
+	void Up();
+	void Left();
+	void Right();
+	void Down();
+	bool IsInBoard(int, int);
+	void RenderPeople(int, int);
+	void DeletePeople(int, int);
+	void Move();
 	bool isImpact(const CVEHICLE*&);
 	bool isImpact(const CANIMAL*&);
 	bool isFinish();
-}
+};
