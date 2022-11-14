@@ -18,6 +18,9 @@ Menu::~Menu()
 ////////////////////////////////////////////////////////////////////////////
 void Menu::startApp()
 {
+	Common::setConsoleColor(BRIGHT_WHITE, AQUA);
+	Common::gotoXY(_left, _top);
+	std::cout << "Group 8 - 21CLC08 - HCMUS";
 	renderFlowers();
 	renderOptionsMenu();
 	renderOptionsText(_options, _optionsSize, _curOption);
@@ -159,9 +162,6 @@ void Menu::renderGameTitle()
 						' ',' ',' ',' '
 	};
 
-	Common::setConsoleColor(BRIGHT_WHITE, AQUA);
-	Common::gotoXY(_left, _top);
-	std::cout << "Group 8 - 21CLC08 - HCMUS";
 
 	unsigned char* word[] = { C, R, O, S, S, I, N, G, G, A, M, E };
 	int sizeOfWord = (sizeof(word) / sizeof(word[0]));
