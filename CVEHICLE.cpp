@@ -1,43 +1,46 @@
 #include "CVEHICLE.h"
 
+bool CVEHICLE::isInLane(int x)
+{
+	return (x > _borderLeft && x < _borderRight - 1);
+}
+
 CCAR::CCAR(int numLane, int direction, int left, int top)
 {
 	_numLane = numLane;
 	_direction = direction;
-	_numCar = 4;
-	_spaceCar = 10;
+	_sizeX = 6; _sizeY = 5;
+
+	_num = 4;
+	_space = 10;
+
 	mX = _left = left;
 	mY = _top = top + (_numLane - 1) * 6;
 	_borderLeft = _left + 1;
 	_borderRight = LANE_LENGTH + _left + 1;
 }
 
-bool CCAR::isInLane(int x)
-{
-	return (x > _borderLeft && x < _borderRight - 1);
-}
-
-void CCAR::renderCar()
+void CCAR::Move()
 {
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	vector<int> curX;
-	vector<int> curY;
-	int sizeX = 6;
-	int sizeY = 5;
+	vector<int> curX, curY;
+
 	int startPos = _left + 3;
 	curX.push_back(startPos);
 	curY.push_back(mY + 1);
-	for (int i = 1; i < _numCar; i++) {
+
+	for (int i = 1; i < _num; i++) {
 		int tmp = curX[i - 1];
-		curX.push_back(tmp + 6 + _spaceCar);
+		curX.push_back(tmp + 6 + _space);
 		curY.push_back(mY + 1);
 	}
+
 	int prevX;
 	while (true) {
-		for (int cnt = 0; cnt < _numCar; cnt++) {
+		for (int cnt = 0; cnt < _num; cnt++) {
 			prevX = curX[cnt];
-			for (int i = 0; i < sizeY; i++) {
-				for (int j = 0; j < sizeX; j++) {
+			for (int i = 0; i < _sizeY; i++) {
+				for (int j = 0; j < _sizeX; j++) {
 					Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 					if (!isInLane(curX[cnt]))
 						curX[cnt] = startPos;
@@ -50,7 +53,7 @@ void CCAR::renderCar()
 				curX[cnt] = prevX;
 				curY[cnt] = curY[cnt] + 1;
 			}
-			for (int i = 0; i < sizeY; i++) {
+			for (int i = 0; i < _sizeY; i++) {
 				mtx.lock();
 				Common::gotoXY(prevX - 1, (int)curY[cnt] - i - 1);
 				putchar(32);
@@ -70,40 +73,38 @@ CTRUCK::CTRUCK(int numLane, int direction, int left, int top)
 {
 	_numLane = numLane;
 	_direction = direction;
-	_numTruck = 4;
-	_spaceTruck = 10;
+	_sizeX = 17; _sizeY = 4;
+
+	_num = 4;
+	_space = 10;
+	
 	mX = _left = left;
 	mY = _top = top + (_numLane - 1) * 6;
 	_borderLeft = _left + 1;
 	_borderRight = LANE_LENGTH + _left + 1;
 }
 
-bool CTRUCK::isInLane(int x)
-{
-	return (x > _borderLeft && x < _borderRight - 1);
-}
-
-void CTRUCK::renderTruck()
+void CTRUCK::Move()
 {
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	vector<int> curX;
-	vector<int> curY;
-	int sizeX = 17;
-	int sizeY = 4;
+	vector<int> curX, curY;
+
 	int startPos = _borderRight - 3;
 	curX.push_back(startPos);
 	curY.push_back(mY + 1);
-	for (int i = 1; i < _numTruck; i++) {
+
+	for (int i = 1; i < _num; i++) {
 		int tmp = curX[i - 1];
-		curX.push_back(tmp - 17 - _spaceTruck);
+		curX.push_back(tmp - 17 - _space);
 		curY.push_back(mY + 1);
 	}
+
 	int prevX;
 	while (true) {
-		for (int cnt = _numTruck - 1; cnt >= 0; cnt--) {
+		for (int cnt = _num - 1; cnt >= 0; cnt--) {
 			prevX = curX[cnt];
-			for (int i = 0; i < sizeY; i++) {
-				for (int j = sizeX - 1; j >= 0; j--) {
+			for (int i = 0; i < _sizeY; i++) {
+				for (int j = _sizeX - 1; j >= 0; j--) {
 					Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 					if (!isInLane(curX[cnt]))
 						curX[cnt] = startPos;
@@ -117,7 +118,7 @@ void CTRUCK::renderTruck()
 				curX[cnt] = prevX;
 				curY[cnt] = curY[cnt] + 1;
 			}
-			for (int i = 0; i < sizeY; i++) {
+			for (int i = 0; i < _sizeY; i++) {
 				mtx.lock();
 
 				Common::gotoXY(prevX + 1, (int)curY[cnt] - i - 1);

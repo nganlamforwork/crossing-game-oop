@@ -2,22 +2,22 @@
 
 void renderTruck(int _left, int _top, int lane, CTRUCK* truck) {
 	truck = new CTRUCK(lane, 1, _left, _top);
-	truck->renderTruck();
+	truck->Move();
 }
 
 void renderDino(int _left, int _top, int lane, CDINAUSOR* kl) {
 	kl = new CDINAUSOR(lane, 1, _left, _top);
-	kl->renderDinausor();
+	kl->Move();
 }
 
 void renderCar(int _left, int _top, int lane, CCAR* xe) {
 	xe = new CCAR(lane, 1, _left, _top);
-	xe->renderCar();
+	xe->Move();
 }
 
 void renderBird(int _left, int _top, int lane, CBIRD* bird) {
 	bird = new CBIRD(lane, 1, _left, _top);
-	bird->renderBird();
+	bird->Move();
 }
 
 void renderPeople(int _left, int _top, int lane, CPEOPLE* people) {
@@ -31,16 +31,16 @@ void renderPeople(int _left, int _top, int lane, CPEOPLE* people) {
 CGAME::CGAME(int)
 {
 	drawGame();
-	thread t1(renderTruck, _left, _top, 2, truck);
-	thread t2(renderCar, _left, _top, 3, xe);
-	thread t3(renderBird, _left, _top, 4, bird);
-	thread t4(renderDino, _left, _top, 5, kl);
-	thread t5(renderPeople, _left, _top, 6, people);
-	t1.join();
+	thread t2(renderTruck, _left, _top, 2, truck);
+	thread t3(renderCar, _left, _top, 3, xe);
+	thread t4(renderBird, _left, _top, 4, bird);
+	thread t5(renderDino, _left, _top, 5, kl);
+	thread t6(renderPeople, _left, _top, 6, people);
 	t2.join();
 	t3.join();
 	t4.join();
 	t5.join();
+	t6.join();
 }
 void CGAME::drawGame()
 {
@@ -66,7 +66,7 @@ void CGAME::drawGame()
 	putchar(188);
 
 
-	//Ve biên dưới
+	//Vẽ biên dưới
 	for (int i = 1; i < LANE_LENGTH; i++) {
 		Common::gotoXY(LANE_LENGTH + _left - i + 1, NUM_LANE * LANE_HEIGHT + _top);
 		//Sleep(2);
@@ -93,6 +93,5 @@ void CGAME::drawGame()
 
 }
 CGAME::~CGAME()
-{
-
+{ 
 }
