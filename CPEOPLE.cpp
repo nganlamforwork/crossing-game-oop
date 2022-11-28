@@ -10,6 +10,10 @@ CPEOPLE::CPEOPLE(int numLane, int direction, int left, int top)
 	_top = top;
 	_borderLeft = _left + 1;
 	_borderRight = LANE_LENGTH + _left + 1;
+
+	_sizeX = 5, _sizeY = 4;
+
+	mState = 1; //Alive
 }
 
 void CPEOPLE::RenderPeople(int posX, int posY)
@@ -17,12 +21,11 @@ void CPEOPLE::RenderPeople(int posX, int posY)
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	int curX = posX;
 	int curY = posY;
-	int sizeX = 5;
-	int sizeY = 4;
+
 	int prevX;
 	prevX = curX;
-	for (int i = 0; i < sizeY; i++) {
-		for (int j = 0; j < sizeX; j++) {
+	for (int i = 0; i < _sizeY; i++) {
+		for (int j = 0; j < _sizeX; j++) {
 			Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 			mtx.lock();
 			Common::gotoXY(curX, curY);
@@ -41,12 +44,11 @@ void CPEOPLE::DeletePeople(int posX, int posY)
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	int curX = posX;
 	int curY = posY;
-	int sizeX = 5;
-	int sizeY = 4;
+
 	int prevX;
 	prevX = curX;
-	for (int i = 0; i < sizeY; i++) {
-		for (int j = 0; j < sizeX; j++) {
+	for (int i = 0; i < _sizeY; i++) {
+		for (int j = 0; j < _sizeX; j++) {
 			mtx.lock();
 			Common::gotoXY(curX, curY);
 			putchar(32);
@@ -115,8 +117,6 @@ void CPEOPLE::Move() {
 	case 5:
 		Down();
 		break;
-	default:
-		int x = 0;
 	}
 }
 

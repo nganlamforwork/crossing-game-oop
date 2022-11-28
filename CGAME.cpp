@@ -1,26 +1,26 @@
 ﻿#include "CGAME.h"
 
-void renderTruck(int _left, int _top, int lane, CTRUCK* truck) {
+void renderTruck(int _left, int _top, int lane, CTRUCK* &truck) {
 	truck = new CTRUCK(lane, 1, _left, _top);
 	truck->Move();
 }
 
-void renderDino(int _left, int _top, int lane, CDINAUSOR* kl) {
+void renderDino(int _left, int _top, int lane, CDINAUSOR* &kl) {
 	kl = new CDINAUSOR(lane, 1, _left, _top);
 	kl->Move();
 }
 
-void renderCar(int _left, int _top, int lane, CCAR* xe) {
+void renderCar(int _left, int _top, int lane, CCAR* &xe) {
 	xe = new CCAR(lane, 1, _left, _top);
 	xe->Move();
 }
 
-void renderBird(int _left, int _top, int lane, CBIRD* bird) {
+void renderBird(int _left, int _top, int lane, CBIRD* &bird) {
 	bird = new CBIRD(lane, 1, _left, _top);
 	bird->Move();
 }
 
-void renderPeople(int _left, int _top, int lane, CPEOPLE* people) {
+void renderPeople(int _left, int _top, int lane, CPEOPLE* &people) {
 	people = new CPEOPLE(lane, 1, _left, _top);
 	people->RenderPeople(_left + 50, _top + (6 - 1) * 6 + 1);
 	while (true) {
@@ -31,11 +31,12 @@ void renderPeople(int _left, int _top, int lane, CPEOPLE* people) {
 CGAME::CGAME(int)
 {
 	drawGame();
-	thread t2(renderTruck, _left, _top, 2, truck);
-	thread t3(renderCar, _left, _top, 3, xe);
-	thread t4(renderBird, _left, _top, 4, bird);
-	thread t5(renderDino, _left, _top, 5, kl);
-	thread t6(renderPeople, _left, _top, 6, people);
+	thread t2([&] {renderTruck(_left, _top, 2, truck); });
+	thread t3([&] {renderCar(_left, _top, 3, xe); });
+	thread t4([&] {renderBird(_left, _top, 4, bird); });
+	thread t5([&] {renderDino(_left, _top, 5, kl); });
+	thread t6([&] {renderPeople(_left, _top, 6, people);
+});
 	t2.join();
 	t3.join();
 	t4.join();
