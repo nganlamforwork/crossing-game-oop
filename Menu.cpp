@@ -370,7 +370,7 @@ void Menu::showTutorial()
 {
 	Common::clearConsole();
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	int left = 22, top = 2;						//Left and top of title
+	int left = 22, top = 4;						//Left and top of title
 	int height = 15, width = 30;
 
 	ifstream in;
@@ -386,7 +386,7 @@ void Menu::showTutorial()
 	}
 	in.close();
 
-	left = 58, top = 12;
+	left = 59, top = 15;
 
 	in.open("titles\\tutorial.txt");
 	i = 0;
@@ -399,7 +399,7 @@ void Menu::showTutorial()
 	}
 	in.close();
 
-	left = 3, top = 12;
+	left = 4, top = 15;
 
 	in.open("images\\menuMonster.txt");
 	i = 0;
@@ -422,7 +422,8 @@ void Menu::showTutorial()
 			Common::playSound(ERROR_SOUND);
 		}
 	}
-	processMainInput();
+	Common::clearConsole();
+	startApp();
 }
 
 void Menu::showLeaderboard()
