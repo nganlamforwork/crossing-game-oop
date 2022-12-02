@@ -16,7 +16,7 @@ class CGAME {
 	CBIRD* bird;
 	CTRUCK* truck;
 	CPEOPLE* people;
-	int _left = 1, _top = 1;
+	int _left = 3, _top = 2;
 	int NUM_LANE = 6;
 public:
 	CGAME(int);

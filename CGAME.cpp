@@ -35,8 +35,7 @@ CGAME::CGAME(int)
 	thread t3([&] {renderCar(_left, _top, 3, xe); });
 	thread t4([&] {renderBird(_left, _top, 4, bird); });
 	thread t5([&] {renderDino(_left, _top, 5, kl); });
-	thread t6([&] {renderPeople(_left, _top, 6, people);
-});
+	thread t6([&] {renderPeople(_left, _top, 6, people);});
 	t2.join();
 	t3.join();
 	t4.join();
@@ -91,6 +90,9 @@ void CGAME::drawGame()
 		}
 		//Sleep(2);
 	}
+
+	/*truck->RenderLight();
+	xe->RenderLight();*/
 
 }
 CGAME::~CGAME()

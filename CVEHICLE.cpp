@@ -20,10 +20,14 @@ CCAR::CCAR(int numLane, int direction, int left, int top, int wait)
 	_borderRight = LANE_LENGTH + _left + 1;
 
 	_wait = wait;
+
+	_light = new CTRAFFICLIGHT(_numLane, _direction, _left, _top);
+	_light->Render();
 }
 
 void CCAR::Move()
 {
+	_light->Render();
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	vector<int> curX, curY;
 
@@ -87,6 +91,9 @@ CTRUCK::CTRUCK(int numLane, int direction, int left, int top, int wait)
 	_borderRight = LANE_LENGTH + _left + 1;
 
 	_wait = wait;
+
+	_light = new CTRAFFICLIGHT(_numLane, _direction, _left, _top);
+	_light->Render();
 }
 
 void CTRUCK::Move()

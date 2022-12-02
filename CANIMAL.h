@@ -1,8 +1,9 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#include "Common.h"
 #include <mutex>
+#include "Common.h"
+#include "CTRAFFICLIGHT.h"
 
 class CANIMAL {
 protected:
