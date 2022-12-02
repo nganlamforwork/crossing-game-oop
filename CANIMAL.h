@@ -9,6 +9,7 @@ protected:
 	int mX, mY;
 	int _borderLeft, _borderRight;
 	int _sizeX, _sizeY;
+	int _wait;
 
 	bool isInLane(int);
 public:
@@ -25,7 +26,7 @@ class CDINAUSOR : public CANIMAL {
 								{'/','_','_','.','\'','|','_','|','-','-','|','_','|',' ',' ',' '} };
 
 public:
-	CDINAUSOR(int, int, int, int);
+	CDINAUSOR(int, int, int, int, int);
 	~CDINAUSOR();
 	void Move();
 };
@@ -35,7 +36,7 @@ class CBIRD : public CANIMAL {
 	const char data[1][5] = { {'/','^','V','^','\\'} };
 
 public:
-	CBIRD(int, int, int, int);
+	CBIRD(int, int, int, int, int);
 	~CBIRD();
 	void Move();
 

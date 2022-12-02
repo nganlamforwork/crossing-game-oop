@@ -9,6 +9,7 @@ protected:
 	int _borderLeft, _borderRight;
 	int _num, _space;
 	int _sizeX, _sizeY;
+	int _wait;
 
 	bool isInLane(int);
 public:
@@ -24,7 +25,7 @@ class CTRUCK : public CVEHICLE {
 							};
 
 public:
-	CTRUCK(int, int, int, int);
+	CTRUCK(int, int, int, int, int);
 	~CTRUCK();
 	void Move();
 };
@@ -38,7 +39,7 @@ class CCAR : public CVEHICLE {
 								{' ','\"',' ',' ','\"',' '} };
 
 public:
-	CCAR(int, int, int, int);
+	CCAR(int, int, int, int, int);
 	~CCAR();
 	void Move();
 

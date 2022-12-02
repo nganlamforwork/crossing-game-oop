@@ -5,7 +5,7 @@ bool CANIMAL::isInLane(int x)
 	return (x > _borderLeft && x < _borderRight - 1);
 }
 
-CDINAUSOR::CDINAUSOR(int numLane, int direction, int left, int top)
+CDINAUSOR::CDINAUSOR(int numLane, int direction, int left, int top, int wait)
 {
 	_numLane = numLane;
 	_direction = direction;
@@ -18,6 +18,8 @@ CDINAUSOR::CDINAUSOR(int numLane, int direction, int left, int top)
 	mY = _top = top + (_numLane - 1) * 6;
 	_borderLeft = _left + 1;
 	_borderRight = LANE_LENGTH + _left + 1;
+
+	_wait = wait;
 }
 
 void CDINAUSOR::Move()
@@ -66,22 +68,25 @@ void CDINAUSOR::Move()
 				curX[cnt] = startPos;
 			curY[cnt] = mY + 1;
 		}
+		Sleep(_wait);
 	}
 }
 
-CBIRD::CBIRD(int numLane, int direction, int left, int top)
+CBIRD::CBIRD(int numLane, int direction, int left, int top, int wait)
 {
 	_numLane = numLane;
 	_direction = direction;
 	_sizeX = 5; _sizeY = 1;
 
-	_num = 3;
-	_space = 10;
+	_num = 6;
+	_space = 15;
 
 	mX = _left = left;
 	mY = _top = top + (_numLane - 1) * 6;
 	_borderLeft = _left + 1;
 	_borderRight = LANE_LENGTH + _left + 1;
+
+	_wait = wait;
 }
 
 void CBIRD::Move()
@@ -130,5 +135,6 @@ void CBIRD::Move()
 				curX[cnt] = startPos;
 			curY[cnt] = mY + 3;
 		}
+		Sleep(_wait);
 	}
 }

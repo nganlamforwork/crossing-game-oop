@@ -5,7 +5,7 @@ bool CVEHICLE::isInLane(int x)
 	return (x > _borderLeft && x < _borderRight - 1);
 }
 
-CCAR::CCAR(int numLane, int direction, int left, int top)
+CCAR::CCAR(int numLane, int direction, int left, int top, int wait)
 {
 	_numLane = numLane;
 	_direction = direction;
@@ -18,6 +18,8 @@ CCAR::CCAR(int numLane, int direction, int left, int top)
 	mY = _top = top + (_numLane - 1) * 6;
 	_borderLeft = _left + 1;
 	_borderRight = LANE_LENGTH + _left + 1;
+
+	_wait = wait;
 }
 
 void CCAR::Move()
@@ -66,10 +68,11 @@ void CCAR::Move()
 				curX[cnt] = startPos;
 			curY[cnt] = mY + 1;
 		}
+		Sleep(_wait);
 	}
 }
 
-CTRUCK::CTRUCK(int numLane, int direction, int left, int top)
+CTRUCK::CTRUCK(int numLane, int direction, int left, int top, int wait)
 {
 	_numLane = numLane;
 	_direction = direction;
@@ -82,6 +85,8 @@ CTRUCK::CTRUCK(int numLane, int direction, int left, int top)
 	mY = _top = top + (_numLane - 1) * 6;
 	_borderLeft = _left + 1;
 	_borderRight = LANE_LENGTH + _left + 1;
+
+	_wait = wait;
 }
 
 void CTRUCK::Move()
@@ -133,5 +138,6 @@ void CTRUCK::Move()
 				curX[cnt] = startPos;
 			curY[cnt] = mY + 1;
 		}
+		Sleep(_wait);
 	}
 }

@@ -1,22 +1,22 @@
 ﻿#include "CGAME.h"
 
 void renderTruck(int _left, int _top, int lane, CTRUCK* &truck) {
-	truck = new CTRUCK(lane, 1, _left, _top);
+	truck = new CTRUCK(lane, 1, _left, _top, 800);
 	truck->Move();
 }
 
 void renderDino(int _left, int _top, int lane, CDINAUSOR* &kl) {
-	kl = new CDINAUSOR(lane, 1, _left, _top);
+	kl = new CDINAUSOR(lane, 1, _left, _top, 500);
 	kl->Move();
 }
 
 void renderCar(int _left, int _top, int lane, CCAR* &xe) {
-	xe = new CCAR(lane, 1, _left, _top);
+	xe = new CCAR(lane, 1, _left, _top, 600);
 	xe->Move();
 }
 
 void renderBird(int _left, int _top, int lane, CBIRD* &bird) {
-	bird = new CBIRD(lane, 1, _left, _top);
+	bird = new CBIRD(lane, 1, _left, _top, 50);
 	bird->Move();
 }
 
