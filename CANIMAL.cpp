@@ -20,6 +20,9 @@ CDINAUSOR::CDINAUSOR(int numLane, int direction, int left, int top, int wait)
 	_borderRight = LANE_LENGTH + _left + 1;
 
 	_wait = wait;
+
+	_light = new CTRAFFICLIGHT(_numLane, _direction, _left, _top);
+	_light->Render();
 }
 
 void CDINAUSOR::Move()
@@ -87,6 +90,9 @@ CBIRD::CBIRD(int numLane, int direction, int left, int top, int wait)
 	_borderRight = LANE_LENGTH + _left + 1;
 
 	_wait = wait;
+
+	_light = new CTRAFFICLIGHT(_numLane, _direction, _left, _top);
+	_light->Render();
 }
 
 void CBIRD::Move()

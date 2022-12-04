@@ -11,6 +11,7 @@ protected:
 	int _borderLeft, _borderRight;
 	int _sizeX, _sizeY;
 	int _wait;
+	CTRAFFICLIGHT* _light = nullptr;
 
 	bool isInLane(int);
 public:

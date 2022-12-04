@@ -1,24 +1,5 @@
 ﻿#include "CGAME.h"
 
-void renderTruck(int _left, int _top, int lane, CTRUCK* &truck) {
-	truck = new CTRUCK(lane, 1, _left, _top, 800);
-	truck->Move();
-}
-
-void renderDino(int _left, int _top, int lane, CDINAUSOR* &kl) {
-	kl = new CDINAUSOR(lane, 1, _left, _top, 500);
-	kl->Move();
-}
-
-void renderCar(int _left, int _top, int lane, CCAR* &xe) {
-	xe = new CCAR(lane, 1, _left, _top, 600);
-	xe->Move();
-}
-
-void renderBird(int _left, int _top, int lane, CBIRD* &bird) {
-	bird = new CBIRD(lane, 1, _left, _top, 50);
-	bird->Move();
-}
 
 void renderPeople(int _left, int _top, int lane, CPEOPLE* &people) {
 	people = new CPEOPLE(lane, 1, _left, _top);
@@ -31,16 +12,13 @@ void renderPeople(int _left, int _top, int lane, CPEOPLE* &people) {
 CGAME::CGAME(int)
 {
 	drawGame();
-	thread t2([&] {renderTruck(_left, _top, 2, truck); });
-	thread t3([&] {renderCar(_left, _top, 3, xe); });
-	thread t4([&] {renderBird(_left, _top, 4, bird); });
-	thread t5([&] {renderDino(_left, _top, 5, kl); });
-	thread t6([&] {renderPeople(_left, _top, 6, people);});
-	t2.join();
-	t3.join();
-	t4.join();
-	t5.join();
-	t6.join();
+	truck = new CTRUCK(2, 0, _left, _top, 800);
+	xe = new CCAR(3, 1, _left, _top, 600);
+	bird = new CBIRD(4, 0, _left, _top, 50);
+	kl = new CDINAUSOR(5, 1, _left, _top, 500);
+}
+CGAME::~CGAME()
+{
 }
 void CGAME::drawGame()
 {
@@ -95,6 +73,33 @@ void CGAME::drawGame()
 	xe->RenderLight();*/
 
 }
-CGAME::~CGAME()
-{ 
+
+
+void renderTruck(int _left, int _top, CTRUCK*& truck) {
+	truck->Move();
+}
+
+void renderDino(int _left, int _top, CDINAUSOR*& kl) {
+	kl->Move();
+}
+
+void renderCar(int _left, int _top, CCAR*& xe) {
+	xe->Move();
+}
+
+void renderBird(int _left, int _top, CBIRD*& bird) {
+	bird->Move();
+}
+void CGAME::move()
+{
+	thread t2([&] {renderTruck(_left, _top, truck); });
+	thread t3([&] {renderCar(_left, _top, xe); });
+	thread t4([&] {renderBird(_left, _top, bird); });
+	thread t5([&] {renderDino(_left, _top, kl); });
+	thread t6([&] {renderPeople(_left, _top, 6, people); });
+	t2.join();
+	t3.join();
+	t4.join();
+	t5.join();
+	t6.join();
 }

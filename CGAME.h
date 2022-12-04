@@ -20,6 +20,7 @@ class CGAME {
 	int NUM_LANE = 6;
 public:
 	CGAME(int);
-	void drawGame();
 	~CGAME();
+	void drawGame();
+	void move();
 };
