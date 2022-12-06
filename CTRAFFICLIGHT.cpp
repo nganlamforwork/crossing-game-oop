@@ -9,6 +9,7 @@ CTRAFFICLIGHT::CTRAFFICLIGHT(int numLane, int direction, int left, int top)
 	mY = _top = top;
 	_borderLeft = _left + 1;
 	_borderRight = LANE_LENGTH + _left + 1;
+	_state = GREEN_LIGHT;
 }
 
 void CTRAFFICLIGHT::Render()

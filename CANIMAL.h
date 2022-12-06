@@ -7,21 +7,24 @@
 
 class CANIMAL {
 protected:
-	int mX, mY;
+	int mX, mY, _startPos, _numLane;
 	int _borderLeft, _borderRight;
 	int _sizeX, _sizeY;
 	int _wait;
 	CTRAFFICLIGHT* _light = nullptr;
+	vector<int> curX, curY;
 
-	bool isInLane(int);
+	bool IsInLane(int);
 public:
+	int getLane() { return _numLane; };
+	int getSizeX() { return _sizeX; };
+	vector<int> getCurX() { return curX; };
+	virtual void CreateList() {};
 	virtual void Move() {};
-	/*virtual void Move(int, int);
-	virtual void Tell();*/
 };
 
 class CDINAUSOR : public CANIMAL {
-	int _numLane, _direction, _num, _space, _left, _top;
+	int _direction, _num, _space, _left, _top;
 	const char data[5][16] = { {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','_','_',' '},
 								{' ',' ',' ',' ','_','_','.','-','-','-','.','_','/',' ','_',')'},
 								{' ','_','_','/',' ',' ',' ',' ',' ',' ',' ',' ',' ','/',' ',' '},
@@ -29,17 +32,19 @@ class CDINAUSOR : public CANIMAL {
 
 public:
 	CDINAUSOR(int, int, int, int, int);
-	~CDINAUSOR();
+	~CDINAUSOR() {};
+	void CreateList();
 	void Move();
 };
 
 class CBIRD : public CANIMAL {
-	int _numLane, _direction, _num, _space, _left, _top;
+	int _direction, _num, _space, _left, _top;
 	const char data[1][5] = { {'/','^','V','^','\\'} };
 
 public:
 	CBIRD(int, int, int, int, int);
 	~CBIRD();
+	void CreateList();
 	void Move();
 
 };

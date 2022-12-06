@@ -1,17 +1,10 @@
 ﻿#include "CGAME.h"
 
 
-void renderPeople(int _left, int _top, int lane, CPEOPLE* &people) {
-	people = new CPEOPLE(lane, 1, _left, _top);
-	people->RenderPeople(_left + 50, _top + (6 - 1) * 6 + 1);
-	while (true) {
-		people->Move();
-	}
-}
 
 CGAME::CGAME(int)
 {
-	drawGame();
+	DrawGame();
 	truck = new CTRUCK(2, 0, _left, _top, 800);
 	xe = new CCAR(3, 1, _left, _top, 600);
 	bird = new CBIRD(4, 0, _left, _top, 50);
@@ -20,7 +13,7 @@ CGAME::CGAME(int)
 CGAME::~CGAME()
 {
 }
-void CGAME::drawGame()
+void CGAME::DrawGame()
 {
 	Common::clearConsole();
 
@@ -74,32 +67,65 @@ void CGAME::drawGame()
 
 }
 
-
-void renderTruck(int _left, int _top, CTRUCK*& truck) {
-	truck->Move();
+void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck, bool& alive) {
+	while (alive) {
+		truck->Move();
+		if (people->IsImpact(truck)) alive = 0;
+	}
 }
 
-void renderDino(int _left, int _top, CDINAUSOR*& kl) {
-	kl->Move();
+void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& xe, bool& alive) {
+	while (alive) {
+		xe->Move();
+		if (people->IsImpact(xe)) alive = 0;
+	}
 }
 
-void renderCar(int _left, int _top, CCAR*& xe) {
-	xe->Move();
+void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird, bool& alive) {
+	while(alive){
+		bird->Move();
+		if (people->IsImpact(bird)) alive = 0;
+	}
 }
 
-void renderBird(int _left, int _top, CBIRD*& bird) {
-	bird->Move();
+void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& kl, bool& alive) {
+	while (alive) {
+		kl->Move();
+		if (people->IsImpact(kl)) alive = 0;
+	}
 }
-void CGAME::move()
+
+void renderPeople(int _left, int _top, CPEOPLE*& people, bool& alive) {
+	while (alive) {
+		people->Move();
+	}
+}
+
+void CGAME::Move()
 {
-	thread t2([&] {renderTruck(_left, _top, truck); });
-	thread t3([&] {renderCar(_left, _top, xe); });
-	thread t4([&] {renderBird(_left, _top, bird); });
-	thread t5([&] {renderDino(_left, _top, kl); });
-	thread t6([&] {renderPeople(_left, _top, 6, people); });
+	people = new CPEOPLE(6, 1, _left, _top);
+	people->RenderPeople(_left + 50, _top + (6 - 1) * 6 + 1);
+
+	truck->CreateList();
+	xe->CreateList();
+	bird->CreateList();
+	kl->CreateList();
+
+	thread t2([&] {renderTruck(_left, _top, people, truck, _alive); });
+	thread t3([&] {renderCar(_left, _top, people, xe, _alive); });
+	thread t4([&] {renderBird(_left, _top, people, bird, _alive); });
+	thread t5([&] {renderDino(_left, _top, people, kl, _alive); });
+	//thread t6([&] {renderPeople(_left, _top, people, _alive); });
+	while (_alive) {
+		people->Move();
+		/*if (people->IsImpact(truck) || people->IsImpact(xe) || people->IsImpact(bird) || people->IsImpact(kl)) {
+			_alive = 0;
+			break;
+		}*/
+	}
 	t2.join();
 	t3.join();
 	t4.join();
 	t5.join();
-	t6.join();
+	//t6.join();
 }

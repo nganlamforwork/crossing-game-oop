@@ -18,9 +18,11 @@ class CGAME {
 	CPEOPLE* people;
 	int _left = 3, _top = 2;
 	int NUM_LANE = 6;
+
+	bool _alive = 1;
 public:
 	CGAME(int);
 	~CGAME();
-	void drawGame();
-	void move();
+	void DrawGame();
+	void Move();
 };

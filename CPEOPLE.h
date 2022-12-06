@@ -35,8 +35,11 @@ public:
 
 	void Move();
 
-	bool isImpact(const CVEHICLE*&);
-	bool isImpact(const CANIMAL*&);
-	bool isFinish();
-	bool isDead();
+	//bool IsImpact(const CVEHICLE*&);
+	bool IsImpact(CCAR*);
+	bool IsImpact(CTRUCK*);
+	bool IsImpact(CBIRD*);
+	bool IsImpact(CDINAUSOR*);
+	bool IsFinish();
+	bool IsDead();
 };

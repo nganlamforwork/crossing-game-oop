@@ -10,6 +10,8 @@
 
 #define LANE_LENGTH  112
 #define LANE_HEIGHT  6
+#define GREEN_LIGHT 1
+#define RED_LIGHT 0
 #define BLACK 0
 #define BLUE 1
 #define GREEN 2
