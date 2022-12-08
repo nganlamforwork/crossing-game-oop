@@ -12,12 +12,11 @@ protected:
 	int _borderLeft, _borderRight, _left, _top;
 	int _sizeX = 0, _sizeY = 0;
 	int _wait;
-	CTRAFFICLIGHT* _light = nullptr;
 	vector<int> curX, curY;
 
 	bool IsInLane(int);
 public:
-	CVEHICLE(int, int, int, int, int, int);
+	CVEHICLE(int, int, int, int, int);
 	int getLane() { return _numLane; }
 	int getSizeX() { return _sizeX; };
 	vector<int> getCurX() { return curX; };
@@ -33,7 +32,7 @@ class CTRUCK : public CVEHICLE {
 	};
 
 public:
-	CTRUCK(int, int, int, int, int, int);
+	CTRUCK(int, int, int, int, int);
 	~CTRUCK() {};
 	void CreateList();
 	void Move();
@@ -47,7 +46,7 @@ class CCAR : public CVEHICLE {
 								{' ','\"',' ',' ','\"',' '} };
 
 public:
-	CCAR(int, int, int, int, int, int);
+	CCAR(int, int, int, int, int);
 	~CCAR() {};
 	void CreateList();
 	void Move();

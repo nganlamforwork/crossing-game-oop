@@ -1,14 +1,25 @@
 ﻿#include "CGAME.h"
 
-
-
 CGAME::CGAME(int)
 {
 	DrawGame();
-	truck = new CTRUCK(2, 0, _left, _top, 800, 10);
-	xe = new CCAR(3, 1, _left, _top, 600, 20);
-	bird = new CBIRD(4, 0, _left, _top, 50, 30);
-	kl = new CDINAUSOR(5, 1, _left, _top, 500, 40);
+
+	truck = new CTRUCK(2, 0, _left, _top, 100);
+	lightTruck = new CTRAFFICLIGHT(2, 0, _left, _top, 5);
+	lightTruck->Render();
+
+	car = new CCAR(3, 1, _left, _top, 600);
+	lightCar = new CTRAFFICLIGHT(2, 1, _left, _top, 10);
+	lightCar->Render();
+
+	bird = new CBIRD(4, 0, _left, _top, 50);
+	lightBird = new CTRAFFICLIGHT(4, 0, _left, _top, 5);
+	lightBird->Render();
+
+	dino = new CDINAUSOR(5, 1, _left, _top, 500);
+	lightDino = new CTRAFFICLIGHT(5, 1, _left, _top, 10);
+	lightDino->Render();
+
 }
 CGAME::~CGAME()
 {
@@ -67,6 +78,13 @@ void CGAME::DrawGame()
 
 }
 
+void handleTrafficLights(CTRUCK*& truck, CCAR*& car, CDINAUSOR*& dino, CBIRD*& bird, CPEOPLE*& people)
+{
+	while (people->getState()) {
+		Sleep(1000);
+	}
+}
+
 void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck) {
 	while (people->getState()) {
 		truck->Move();
@@ -107,14 +125,14 @@ void CGAME::Move()
 	people->RenderPeople(_left + 50, _top + (6 - 1) * 6 + 1);
 
 	truck->CreateList();
-	xe->CreateList();
+	car->CreateList();
 	bird->CreateList();
-	kl->CreateList();
+	dino->CreateList();
 
 	thread t2([&] {renderTruck(_left, _top, people, truck); });
-	thread t3([&] {renderCar(_left, _top, people, xe); });
+	thread t3([&] {renderCar(_left, _top, people, car); });
 	thread t4([&] {renderBird(_left, _top, people, bird); });
-	thread t5([&] {renderDino(_left, _top, people, kl); });
+	thread t5([&] {renderDino(_left, _top, people, dino); });
 	//thread t6([&] {renderPeople(_left, _top, people, people->getState()); });
 	while (people->getState()) {
 		people->Move();

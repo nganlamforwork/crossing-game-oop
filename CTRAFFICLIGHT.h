@@ -15,6 +15,7 @@ public:
 	~CTRAFFICLIGHT() {};
 
 	bool getState() { return _state; };
-	void toggleState() { _state ^= 1; _countDown = _timing; };
+	void toggleState();
 	void Render();
+	void countDown();
 };

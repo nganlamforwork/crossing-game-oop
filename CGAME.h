@@ -9,12 +9,13 @@
 #include "CANIMAL.h"
 #include "CPEOPLE.h"
 #include "CVEHICLE.h"
+#include "CTRAFFICLIGHT.h"
 
 class CGAME {
-	CDINAUSOR* kl;
-	CCAR* xe;
-	CBIRD* bird;
-	CTRUCK* truck;
+	CDINAUSOR* dino;	CTRAFFICLIGHT* lightDino;
+	CCAR* car;			CTRAFFICLIGHT* lightCar;
+	CBIRD* bird;		CTRAFFICLIGHT* lightBird;
+	CTRUCK* truck;		CTRAFFICLIGHT* lightTruck;
 	CPEOPLE* people;
 	int _left = 3, _top = 2;
 	int NUM_LANE = 6;
