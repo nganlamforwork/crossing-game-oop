@@ -18,6 +18,7 @@ protected:
 	bool IsInLane(int);
 public:
 	CANIMAL(int, int, int, int, int);
+	~CANIMAL() {};
 	int getLane() { return _numLane; };
 	int getSizeX() { return _sizeX; };
 	vector<int> getCurX() { return curX; };
@@ -43,7 +44,7 @@ class CBIRD : public CANIMAL {
 
 public:
 	CBIRD(int, int, int, int, int);
-	~CBIRD();
+	~CBIRD() {};
 	void CreateList();
 	void Move();
 

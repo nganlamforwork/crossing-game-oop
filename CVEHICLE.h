@@ -17,6 +17,7 @@ protected:
 	bool IsInLane(int);
 public:
 	CVEHICLE(int, int, int, int, int);
+	~CVEHICLE() {};
 	int getLane() { return _numLane; }
 	int getSizeX() { return _sizeX; };
 	vector<int> getCurX() { return curX; };

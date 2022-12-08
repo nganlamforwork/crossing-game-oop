@@ -22,6 +22,14 @@ CGAME::CGAME(int)
 }
 CGAME::~CGAME()
 {
+	delete truck;
+	delete lightTruck;
+	delete car;
+	delete lightCar;
+	delete dino;
+	delete lightDino;
+	delete bird;
+	delete lightBird;
 }
 void CGAME::DrawGame()
 {
