@@ -117,7 +117,8 @@ void CTRUCK::Move()
 		}
 		for (int i = 0; i < _sizeY; i++) {
 			mtx.lock();
-
+			Common::gotoXY(_borderLeft + 1, (int)curY[cnt] - i - 1);
+			putchar(32);
 			Common::gotoXY(prevX + 1, (int)curY[cnt] - i - 1);
 			putchar(32);
 			Common::gotoXY(_borderRight - 2, (int)curY[cnt] - i - 1);
