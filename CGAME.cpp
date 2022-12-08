@@ -5,11 +5,11 @@ CGAME::CGAME(int)
 	DrawGame();
 
 	truck = new CTRUCK(2, 0, _left, _top, 100);
-	lightTruck = new CTRAFFICLIGHT(2, 0, _left, _top, 5);
+	lightTruck = new CTRAFFICLIGHT(2, 0, _left, _top, 3);
 	lightTruck->Render();
 
 	car = new CCAR(3, 1, _left, _top, 600);
-	lightCar = new CTRAFFICLIGHT(3, 1, _left, _top, 10);
+	lightCar = new CTRAFFICLIGHT(3, 1, _left, _top, 4);
 	lightCar->Render();
 
 	bird = new CBIRD(4, 0, _left, _top, 50);
@@ -17,7 +17,7 @@ CGAME::CGAME(int)
 	lightBird->Render();
 
 	dino = new CDINAUSOR(5, 1, _left, _top, 500);
-	lightDino = new CTRAFFICLIGHT(5, 1, _left, _top, 10);
+	lightDino = new CTRAFFICLIGHT(5, 1, _left, _top, 6);
 	lightDino->Render();
 }
 CGAME::~CGAME()
