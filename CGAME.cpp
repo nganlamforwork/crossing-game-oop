@@ -9,7 +9,7 @@ CGAME::CGAME(int)
 	lightTruck->Render();
 
 	car = new CCAR(3, 1, _left, _top, 600);
-	lightCar = new CTRAFFICLIGHT(2, 1, _left, _top, 10);
+	lightCar = new CTRAFFICLIGHT(3, 1, _left, _top, 10);
 	lightCar->Render();
 
 	bird = new CBIRD(4, 0, _left, _top, 50);
@@ -19,7 +19,6 @@ CGAME::CGAME(int)
 	dino = new CDINAUSOR(5, 1, _left, _top, 500);
 	lightDino = new CTRAFFICLIGHT(5, 1, _left, _top, 10);
 	lightDino->Render();
-
 }
 CGAME::~CGAME()
 {
@@ -78,38 +77,42 @@ void CGAME::DrawGame()
 
 }
 
-void handleTrafficLights(CTRUCK*& truck, CCAR*& car, CDINAUSOR*& dino, CBIRD*& bird, CPEOPLE*& people)
+void handleTrafficLights(CTRAFFICLIGHT*& truck, CTRAFFICLIGHT*& car, CTRAFFICLIGHT*& dino, CTRAFFICLIGHT*& bird, CPEOPLE*& people)
 {
 	while (people->getState()) {
 		Sleep(1000);
+		truck->countDown();
+		car->countDown();
+		dino->countDown();
+		bird->countDown();
 	}
 }
 
-void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck) {
+void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck, CTRAFFICLIGHT*& light) {
 	while (people->getState()) {
-		truck->Move();
+		if (light->getState() == GREEN_LIGHT) truck->Move();
 		if (people->IsImpact(truck)) people->setState(0);
 	}
 }
 
-void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& xe) {
+void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& car, CTRAFFICLIGHT*& light) {
 	while (people->getState()) {
-		xe->Move();
-		if (people->IsImpact(xe)) people->setState(0);
+		if (light->getState() == GREEN_LIGHT) car->Move();
+		if (people->IsImpact(car)) people->setState(0);
 	}
 }
 
-void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird) {
+void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird, CTRAFFICLIGHT*& light) {
 	while(people->getState()){
-		bird->Move();
+		if (light->getState() == GREEN_LIGHT) bird->Move();
 		if (people->IsImpact(bird)) people->setState(0);
 	}
 }
 
-void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& kl) {
+void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& dino, CTRAFFICLIGHT*& light) {
 	while (people->getState()) {
-		kl->Move();
-		if (people->IsImpact(kl)) people->setState(0);
+		if (light->getState() == GREEN_LIGHT) dino->Move();
+		if (people->IsImpact(dino)) people->setState(0);
 	}
 }
 
@@ -129,11 +132,11 @@ void CGAME::Move()
 	bird->CreateList();
 	dino->CreateList();
 
-	thread t2([&] {renderTruck(_left, _top, people, truck); });
-	thread t3([&] {renderCar(_left, _top, people, car); });
-	thread t4([&] {renderBird(_left, _top, people, bird); });
-	thread t5([&] {renderDino(_left, _top, people, dino); });
-	//thread t6([&] {renderPeople(_left, _top, people, people->getState()); });
+	thread t2([&] {renderTruck(_left, _top, people, truck, lightTruck); });
+	thread t3([&] {renderCar(_left, _top, people, car, lightCar); });
+	thread t4([&] {renderBird(_left, _top, people, bird, lightBird); });
+	thread t5([&] {renderDino(_left, _top, people, dino, lightDino); });
+	thread trafficLight([&] {handleTrafficLights(lightTruck, lightCar, lightBird, lightDino, people); });
 	while (people->getState()) {
 		people->Move();
 		/*if (people->IsImpact(truck) || people->IsImpact(xe) || people->IsImpact(bird) || people->IsImpact(kl)) {
@@ -145,5 +148,5 @@ void CGAME::Move()
 	t3.join();
 	t4.join();
 	t5.join();
-	//t6.join();
+	trafficLight.join();
 }
