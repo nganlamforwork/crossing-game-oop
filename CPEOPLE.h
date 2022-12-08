@@ -25,6 +25,9 @@ public:
 	CPEOPLE();
 	CPEOPLE(int, int, int, int);
 
+	bool getState() { return mState; };
+	void setState(int x) { mState = 0; };
+
 	void Up();
 	void Left();
 	void Right();

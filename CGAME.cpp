@@ -5,10 +5,10 @@
 CGAME::CGAME(int)
 {
 	DrawGame();
-	truck = new CTRUCK(2, 0, _left, _top, 800);
-	xe = new CCAR(3, 1, _left, _top, 600);
-	bird = new CBIRD(4, 0, _left, _top, 50);
-	kl = new CDINAUSOR(5, 1, _left, _top, 500);
+	truck = new CTRUCK(2, 0, _left, _top, 800, 10);
+	xe = new CCAR(3, 1, _left, _top, 600, 20);
+	bird = new CBIRD(4, 0, _left, _top, 50, 30);
+	kl = new CDINAUSOR(5, 1, _left, _top, 500, 40);
 }
 CGAME::~CGAME()
 {
@@ -67,36 +67,36 @@ void CGAME::DrawGame()
 
 }
 
-void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck, bool& alive) {
-	while (alive) {
+void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck) {
+	while (people->getState()) {
 		truck->Move();
-		if (people->IsImpact(truck)) alive = 0;
+		if (people->IsImpact(truck)) people->setState(0);
 	}
 }
 
-void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& xe, bool& alive) {
-	while (alive) {
+void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& xe) {
+	while (people->getState()) {
 		xe->Move();
-		if (people->IsImpact(xe)) alive = 0;
+		if (people->IsImpact(xe)) people->setState(0);
 	}
 }
 
-void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird, bool& alive) {
-	while(alive){
+void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird) {
+	while(people->getState()){
 		bird->Move();
-		if (people->IsImpact(bird)) alive = 0;
+		if (people->IsImpact(bird)) people->setState(0);
 	}
 }
 
-void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& kl, bool& alive) {
-	while (alive) {
+void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& kl) {
+	while (people->getState()) {
 		kl->Move();
-		if (people->IsImpact(kl)) alive = 0;
+		if (people->IsImpact(kl)) people->setState(0);
 	}
 }
 
-void renderPeople(int _left, int _top, CPEOPLE*& people, bool& alive) {
-	while (alive) {
+void renderPeople(int _left, int _top, CPEOPLE*& people) {
+	while (people->getState()) {
 		people->Move();
 	}
 }
@@ -111,15 +111,15 @@ void CGAME::Move()
 	bird->CreateList();
 	kl->CreateList();
 
-	thread t2([&] {renderTruck(_left, _top, people, truck, _alive); });
-	thread t3([&] {renderCar(_left, _top, people, xe, _alive); });
-	thread t4([&] {renderBird(_left, _top, people, bird, _alive); });
-	thread t5([&] {renderDino(_left, _top, people, kl, _alive); });
-	//thread t6([&] {renderPeople(_left, _top, people, _alive); });
-	while (_alive) {
+	thread t2([&] {renderTruck(_left, _top, people, truck); });
+	thread t3([&] {renderCar(_left, _top, people, xe); });
+	thread t4([&] {renderBird(_left, _top, people, bird); });
+	thread t5([&] {renderDino(_left, _top, people, kl); });
+	//thread t6([&] {renderPeople(_left, _top, people, people->getState()); });
+	while (people->getState()) {
 		people->Move();
 		/*if (people->IsImpact(truck) || people->IsImpact(xe) || people->IsImpact(bird) || people->IsImpact(kl)) {
-			_alive = 0;
+			people->getState() = 0;
 			break;
 		}*/
 	}

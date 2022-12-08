@@ -6,17 +6,18 @@
 
 class CVEHICLE {
 protected:
-	int mX, mY, _numLane;
-	int _borderLeft, _borderRight;
-	int _num, _space;
-	int _sizeX, _sizeY;
+	int mX, mY, _startPos = 0;
+	int _numLane, _direction;
+	int _num = 0, _space = 0;
+	int _borderLeft, _borderRight, _left, _top;
+	int _sizeX = 0, _sizeY = 0;
 	int _wait;
-	int _startPos;
 	CTRAFFICLIGHT* _light = nullptr;
 	vector<int> curX, curY;
 
 	bool IsInLane(int);
 public:
+	CVEHICLE(int, int, int, int, int, int);
 	int getLane() { return _numLane; }
 	int getSizeX() { return _sizeX; };
 	vector<int> getCurX() { return curX; };
@@ -25,7 +26,6 @@ public:
 };
 
 class CTRUCK : public CVEHICLE {
-	int _direction, _left, _top;
 	const char data[4][17] = { {' ',' ',' ','_','_',' ',' ',' ','_','_','_','_','_','_','_','_'},
 								{' ','_','/','/',']','|',' ','|',' ',' ',' ',' ',' ',' ',' ',' ','|'},
 								{'|','_','_','_','_','|','-','|','_','_','_','_','_','_','_','_','|'},
@@ -33,14 +33,13 @@ class CTRUCK : public CVEHICLE {
 	};
 
 public:
-	CTRUCK(int, int, int, int, int);
+	CTRUCK(int, int, int, int, int, int);
 	~CTRUCK() {};
 	void CreateList();
 	void Move();
 };
 
 class CCAR : public CVEHICLE {
-	int _direction, _left, _top;
 	const char data[5][6] = { {' ',' ',' ',' ',' ',' '},
 		{' ',' ','_','_',' ',' '},
 								{' ','(',' ','o',')',' '},
@@ -48,7 +47,7 @@ class CCAR : public CVEHICLE {
 								{' ','\"',' ',' ','\"',' '} };
 
 public:
-	CCAR(int, int, int, int, int);
+	CCAR(int, int, int, int, int, int);
 	~CCAR() {};
 	void CreateList();
 	void Move();

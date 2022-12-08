@@ -1,29 +1,31 @@
 #include "CANIMAL.h"
 
+CANIMAL::CANIMAL(int numLane, int direction, int left, int top, int wait, int timing)
+{
+	_numLane = numLane; _direction = direction;
+
+	_borderLeft = left + 1; _borderRight = LANE_LENGTH + left + 1;
+
+	mX = _left = left; mY = _top = top + (_numLane - 1) * 6;
+
+	_wait = wait;
+
+	_light = new CTRAFFICLIGHT(_numLane, _direction, _left, _top, timing);
+	_light->Render();
+}
+
 bool CANIMAL::IsInLane(int x)
 {
 	return (x > _borderLeft && x < _borderRight - 1);
 }
 
-CDINAUSOR::CDINAUSOR(int numLane, int direction, int left, int top, int wait)
+CDINAUSOR::CDINAUSOR(int numLane, int direction, int left, int top, int wait, int timing) : CANIMAL(numLane, direction, left, top, wait, timing)
 {
-	_numLane = numLane;
-	_direction = direction;
 	_sizeX = 16; _sizeY = 5;
 
-	_num = 2;
-	_space = 10;
+	_num = 2; _space = 10;
 
-	mX = _left = left;
-	mY = _top = top + (_numLane - 1) * 6;
-	_borderLeft = _left + 1;
-	_borderRight = LANE_LENGTH + _left + 1;
-
-	_wait = wait;
 	_startPos = _borderLeft + 3;
-
-	_light = new CTRAFFICLIGHT(_numLane, _direction, _left, _top);
-	_light->Render();
 }
 
 void CDINAUSOR::CreateList()
@@ -74,25 +76,13 @@ void CDINAUSOR::Move()
 	Sleep(_wait);
 }
 
-CBIRD::CBIRD(int numLane, int direction, int left, int top, int wait)
+CBIRD::CBIRD(int numLane, int direction, int left, int top, int wait, int timing) : CANIMAL(numLane, direction, left, top, wait, timing)
 {
-	_numLane = numLane;
-	_direction = direction;
 	_sizeX = 5; _sizeY = 1;
 
-	_num = 6;
-	_space = 15;
+	_num = 6; _space = 15;
 
-	mX = _left = left;
-	mY = _top = top + (_numLane - 1) * 6;
-	_borderLeft = _left + 1;
-	_borderRight = LANE_LENGTH + _left + 1;
-
-	_wait = wait;
 	_startPos = _borderRight - 2;
-
-	_light = new CTRAFFICLIGHT(_numLane, _direction, _left, _top);
-	_light->Render();
 }
 
 void CBIRD::CreateList()

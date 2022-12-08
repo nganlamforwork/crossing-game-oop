@@ -1,29 +1,31 @@
 #include "CVEHICLE.h"
 
+CVEHICLE::CVEHICLE(int numLane, int direction, int left, int top, int wait, int timing)
+{
+	_numLane = numLane; _direction = direction;
+
+	_borderLeft = left + 1; _borderRight = LANE_LENGTH + left + 1;
+
+	mX = _left = left; mY = _top = top + (_numLane - 1) * 6;
+
+	_wait = wait;
+
+	_light = new CTRAFFICLIGHT(_numLane, _direction, _left, _top, timing);
+	_light->Render();
+}
+
 bool CVEHICLE::IsInLane(int x)
 {
 	return (x > _borderLeft && x < _borderRight - 1);
 }
 
-CCAR::CCAR(int numLane, int direction, int left, int top, int wait)
+CCAR::CCAR(int numLane, int direction, int left, int top, int wait, int timing) : CVEHICLE(numLane, direction, left, top, wait, timing)
 {
-	_numLane = numLane;
-	_direction = direction;
 	_sizeX = 6; _sizeY = 5;
 
-	_num = 4;
-	_space = 10;
+	_num = 4; _space = 10;
 
-	mX = _left = left;
-	mY = _top = top + (_numLane - 1) * 6;
-	_borderLeft = _left + 1;
-	_borderRight = LANE_LENGTH + _left + 1;
-
-	_wait = wait;
 	_startPos = _borderLeft + 3;
-
-	_light = new CTRAFFICLIGHT(_numLane, _direction, _left, _top);
-	_light->Render();
 }
 
 void CCAR::CreateList()
@@ -74,25 +76,13 @@ void CCAR::Move()
 	Sleep(_wait);
 }
 
-CTRUCK::CTRUCK(int numLane, int direction, int left, int top, int wait)
+CTRUCK::CTRUCK(int numLane, int direction, int left, int top, int wait, int timing) : CVEHICLE(numLane, direction, left, top, wait, timing)
 {
-	_numLane = numLane;
-	_direction = direction;
 	_sizeX = 17; _sizeY = 4;
 
-	_num = 4;
-	_space = 10;
-	
-	mX = _left = left;
-	mY = _top = top + (_numLane - 1) * 6;
-	_borderLeft = _left + 1;
-	_borderRight = LANE_LENGTH + _left + 1;
+	_num = 4; _space = 10;
 
-	_wait = wait;
 	_startPos = _borderRight - 3;
-
-	_light = new CTRAFFICLIGHT(_numLane, _direction, _left, _top);
-	_light->Render();
 }
 
 void CTRUCK::CreateList()
