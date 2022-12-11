@@ -4,23 +4,26 @@ CPEOPLE::CPEOPLE(int numLane, int direction, int left, int top)
 {
 	_numLane = numLane;
 	_direction = direction;
-	mX = left + 50;
-	mY = top + (_numLane - 1) * 6 + 1;
 	_left = left;
 	_top = top;
 	_borderLeft = _left + 1;
 	_borderRight = LANE_LENGTH + _left + 1;
 
 	_sizeX = 5, _sizeY = 4;
+	srand(time(NULL));
+	mX = _borderLeft + (rand() % (LANE_LENGTH - _sizeX - 1) + 1);
+	mY = top + (_numLane - 1) * 6 + 1;
 
 	mState = 1; //Alive
+
+	_level = 1;
 }
 
-void CPEOPLE::RenderPeople(int posX, int posY)
+void CPEOPLE::RenderPeople()
 {
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	int curX = posX;
-	int curY = posY;
+	int curX = mX;
+	int curY = mY;
 
 	int prevX;
 	prevX = curX;
@@ -39,11 +42,11 @@ void CPEOPLE::RenderPeople(int posX, int posY)
 	}
 }
 
-void CPEOPLE::DeletePeople(int posX, int posY)
+void CPEOPLE::DeletePeople()
 {
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	int curX = posX;
-	int curY = posY;
+	int curX = mX;
+	int curY = mY;
 
 	int prevX;
 	prevX = curX;
@@ -64,7 +67,7 @@ void CPEOPLE::DeletePeople(int posX, int posY)
 void CPEOPLE::Left() {
 	if (IsInBoard(mX - 1, mY)) {
 		mX = mX - 1;
-		RenderPeople(mX, mY);
+		RenderPeople();
 		for (int i = 0; i < 4; i++) {
 			mtx.lock();
 			Common::gotoXY(mX + 5, mY + i);
@@ -77,7 +80,7 @@ void CPEOPLE::Left() {
 void CPEOPLE::Right() {
 	if (IsInBoard(mX + 1, mY)) {
 		mX = mX + 1;
-		RenderPeople(mX, mY);
+		RenderPeople();
 		for (int i = 0; i < 4; i++) {
 			mtx.lock();
 			Common::gotoXY(mX - 1, mY + i);
@@ -89,24 +92,24 @@ void CPEOPLE::Right() {
 
 void CPEOPLE::Up() {
 	if (IsInBoard(mX, mY - 6)) {
-		DeletePeople(mX, mY);
+		DeletePeople();
 		mY = mY - 6;
 		_numLane--;
-		RenderPeople(mX, mY);
+		RenderPeople();
 	}
 }
 
 void CPEOPLE::Down() {
 	if (IsInBoard(mX, mY + 6)) {
-		DeletePeople(mX, mY);
+		DeletePeople();
 		mY = mY + 6;
 		_numLane++;
-		RenderPeople(mX, mY);
+		RenderPeople();
 	}
 }
 
-void CPEOPLE::Move() {
-	switch (Common::getConsoleInput()) {
+void CPEOPLE::Move(int type) {
+	switch (type) {
 	case 2:
 		Up();
 		break;
@@ -184,3 +187,12 @@ bool CPEOPLE::IsImpact(CDINAUSOR* dino)
 			return 1;
 	return 0; 
 };
+
+void CPEOPLE::UpLevel()
+{
+	_numLane = 6;
+	mX = _borderLeft + (rand() % (LANE_LENGTH - _sizeX - 1) + 1);
+	mY = _top + (_numLane - 1) * 6 + 1;
+	RenderPeople();
+	++_level;
+}

@@ -349,14 +349,16 @@ void Menu::play()
 		startApp();
 		break;
 	}
-	std::cout << "PLAY";
-	Sleep(1500);
 }
 
 void Menu::newGame()
 {
 	CGAME newGame(NEW_GAME);
 	newGame.Move();
+	if (newGame.isWin())
+		std::cout << "WIN";
+	else
+		std::cout << "LOSE";
 	Sleep(1500);
 }
 

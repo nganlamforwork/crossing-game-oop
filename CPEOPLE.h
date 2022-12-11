@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include <ctime>
 #include "CVEHICLE.h"
 #include "CANIMAL.h"
 
@@ -7,6 +7,7 @@ class CPEOPLE {
 	int _numLane, _direction, _left, _top;
 	int _borderLeft, _borderRight;
 	int _sizeX, _sizeY;
+	int _level;
 
 	int mX, mY;
 	bool mState; //Trạng thái sống chết
@@ -26,19 +27,20 @@ public:
 	CPEOPLE(int, int, int, int);
 	~CPEOPLE() {};
 
+	int getLevel() { return _level; };
 	bool getLane() { return _numLane; };
 	bool getState() { return mState; };
-	void setState(int x) { mState = 0; };
+	void setState(int x) { mState = x; };
 
 	void Up();
 	void Left();
 	void Right();
 	void Down();
 
-	void RenderPeople(int, int);
-	void DeletePeople(int, int);
+	void RenderPeople();
+	void DeletePeople();
 
-	void Move();
+	void Move(int);
 
 	//bool IsImpact(const CVEHICLE*&);
 	bool IsImpact(CCAR*);
@@ -47,4 +49,6 @@ public:
 	bool IsImpact(CDINAUSOR*);
 	bool IsFinish();
 	bool IsDead();
+
+	void UpLevel();
 };

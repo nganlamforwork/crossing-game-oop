@@ -8,6 +8,9 @@
 #include <mutex>
 #pragma comment(lib, "Winmm.lib")
 
+#define PLAYING 0
+#define PAUSING 1
+
 #define LANE_LENGTH  112
 #define LANE_HEIGHT  6
 #define GREEN_LIGHT 1
