@@ -2,7 +2,7 @@
 
 CGAME::CGAME(int)
 {
-	_isPlaying = 1;
+	_state = PLAYING;
 	DrawGame();
 
 	truck = new CTRUCK(2, 0, _left, _top, 600);
@@ -84,10 +84,10 @@ void CGAME::DrawGame()
 
 }
 
-void handleTrafficLights(CTRAFFICLIGHT*& truck, CTRAFFICLIGHT*& car, CTRAFFICLIGHT*& dino, CTRAFFICLIGHT*& bird, CPEOPLE*& people, bool& isPlaying)
+void handleTrafficLights(CTRAFFICLIGHT*& truck, CTRAFFICLIGHT*& car, CTRAFFICLIGHT*& dino, CTRAFFICLIGHT*& bird, CPEOPLE*& people, int& gameState)
 {
-	while (people->getState()) {
-		if (isPlaying) {
+	while (people->getState() && gameState != QUIT_AND_SAVE && gameState != QUIT_NOT_SAVE) {
+		if (gameState == PLAYING) {
 			Sleep(1000);
 			truck->countDown();
 			car->countDown();
@@ -97,10 +97,10 @@ void handleTrafficLights(CTRAFFICLIGHT*& truck, CTRAFFICLIGHT*& car, CTRAFFICLIG
 	}
 }
 
-void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck, CTRAFFICLIGHT*& light, bool& isPlaying) {
+void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck, CTRAFFICLIGHT*& light, int& gameState) {
 	truck->Move();
-	while (people->getState()) {
-		if (isPlaying && light->getState() == GREEN_LIGHT) truck->Move();
+	while (people->getState() && gameState != QUIT_AND_SAVE && gameState != QUIT_NOT_SAVE) {
+		if (gameState == PLAYING && light->getState() == GREEN_LIGHT) truck->Move();
 		if (people->IsImpact(truck)) {
 			ofstream o("result.xt");
 			o << "Car!";
@@ -110,10 +110,10 @@ void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck, CTRAFFIC
 	}
 }
 
-void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& car, CTRAFFICLIGHT*& light, bool& isPlaying) {
+void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& car, CTRAFFICLIGHT*& light, int& gameState) {
 	car->Move();
-	while (people->getState()) {
-		if (isPlaying && light->getState() == GREEN_LIGHT) car->Move();
+	while (people->getState() && gameState != QUIT_AND_SAVE && gameState != QUIT_NOT_SAVE) {
+		if (gameState == PLAYING && light->getState() == GREEN_LIGHT) car->Move();
 		if (people->IsImpact(car)) {
 			ofstream o("result.xt");
 			o << "Car!";
@@ -123,10 +123,10 @@ void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& car, CTRAFFICLIGHT*
 	}
 }
 
-void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird, CTRAFFICLIGHT*& light, bool& isPlaying) {
+void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird, CTRAFFICLIGHT*& light, int& gameState) {
 	bird->Move();
-	while(people->getState()){
-		if (isPlaying && light->getState() == GREEN_LIGHT) bird->Move();
+	while(people->getState() && gameState != QUIT_AND_SAVE && gameState != QUIT_NOT_SAVE){
+		if (gameState == PLAYING && light->getState() == GREEN_LIGHT) bird->Move();
 		if (people->IsImpact(bird)) {
 			ofstream o("result.xt");
 			o << "Bird!";
@@ -136,10 +136,10 @@ void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird, CTRAFFICLIG
 	}
 }
 
-void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& dino, CTRAFFICLIGHT*& light, bool& isPlaying) {
+void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& dino, CTRAFFICLIGHT*& light, int& gameState) {
 	dino->Move();
-	while (people->getState()) {
-		if (isPlaying && light->getState() == GREEN_LIGHT) dino->Move();
+	while (people->getState() && gameState != QUIT_AND_SAVE && gameState != QUIT_NOT_SAVE) {
+		if (gameState == PLAYING && light->getState() == GREEN_LIGHT) dino->Move();
 		if (people->IsImpact(dino)) {
 			ofstream o("result.xt");
 			o << "Dino!";
@@ -159,22 +159,28 @@ void CGAME::Move()
 	bird->CreateList();
 	dino->CreateList();
 
-	thread t2([&] {renderTruck(_left, _top, people, truck, lightTruck, _isPlaying); });
-	thread t3([&] {renderCar(_left, _top, people, car, lightCar, _isPlaying); });
-	thread t4([&] {renderBird(_left, _top, people, bird, lightBird, _isPlaying); });
-	thread t5([&] {renderDino(_left, _top, people, dino, lightDino, _isPlaying); });
-	thread trafficLight([&] {handleTrafficLights(lightTruck, lightCar, lightBird, lightDino, people, _isPlaying); });
-	while (people->getState()) {
+	thread t2([&] {renderTruck(_left, _top, people, truck, lightTruck, _state); });
+	thread t3([&] {renderCar(_left, _top, people, car, lightCar, _state); });
+	thread t4([&] {renderBird(_left, _top, people, bird, lightBird, _state); });
+	thread t5([&] {renderDino(_left, _top, people, dino, lightDino, _state); });
+	thread trafficLight([&] {handleTrafficLights(lightTruck, lightCar, lightBird, lightDino, people, _state); });
+	while (people->getState() && _state != QUIT_AND_SAVE && _state != QUIT_NOT_SAVE) {
 		int tmp;
 		switch (tmp = Common::getConsoleInput()) {
 		case 2:
 		case 3:
 		case 4:
 		case 5:
-			if (_isPlaying) people->Move(tmp);
+			if (_state == PLAYING) people->Move(tmp);
 			break;
-		case 9:
-			_isPlaying ^= 1;
+		case 9:									// toggle pausing - playing
+			_state = 1 - _state;				// because playing is 0 and pausing is 1
+			break;
+		case 10:								// quit without saving
+			_state = QUIT_NOT_SAVE;
+			break;
+		case 11:								// saving and quit game
+			_state = QUIT_AND_SAVE;
 			break;
 		};
 
@@ -183,7 +189,7 @@ void CGAME::Move()
 			if (people->getLevel() == 6)
 				people->setState(0);	//Die
 		}
-	}
+	};
 	t2.join();
 	t3.join();
 	t4.join();

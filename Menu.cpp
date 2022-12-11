@@ -355,10 +355,16 @@ void Menu::newGame()
 {
 	CGAME newGame(NEW_GAME);
 	newGame.Move();
-	if (newGame.isWin())
-		std::cout << "WIN";
+	if (newGame.getState() == QUIT_AND_SAVE)
+		std::cout << "QUIT AND SAVE";
 	else
-		std::cout << "LOSE";
+		if (newGame.getState() == QUIT_NOT_SAVE)
+			std::cout << "QUIT NOT SAVE";
+		else
+			if (newGame.isWin())
+				std::cout << "WIN";
+			else
+				std::cout << "LOSE";
 	Sleep(1500);
 }
 

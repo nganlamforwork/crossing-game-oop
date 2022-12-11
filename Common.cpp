@@ -105,14 +105,6 @@ int Common::getConsoleInput()
 	{
 		if (c == 27)                  //esc
 			return 1;
-		else if (c == 87 || c == 119) //W, w
-			return 2;
-		else if (c == 65 || c == 97)  //A, a
-			return 3;
-		else if (c == 68 || c == 100) //D, d
-			return 4;
-		else if (c == 83 || c == 115) //S, s
-			return 5;
 		else if (c == 13)             //Enter
 			return 6;
 		else if (c == 72 || c == 104) //H, h
@@ -121,6 +113,10 @@ int Common::getConsoleInput()
 			return 8;
 		else if (c == 80 || c == 112) //P, p
 			return 9;
+		else if (c == 81 || c == 113) //Q, q
+			return 10;
+		else if (c == 83 || c == 115) //S, s
+			return 11;
 		else
 			return 0;                 //nút khác
 	}

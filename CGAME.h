@@ -19,11 +19,14 @@ class CGAME {
 	CPEOPLE* people;
 	int _left = 3, _top = 2;
 	int NUM_LANE = 6;
-	bool _isPlaying;
+	int _state;
 
 public:
 	CGAME(int);
 	~CGAME();
+
+	int getState() { return _state; };
+
 	void DrawGame();
 	void Move();
 	bool isWin() { return people->getLevel() == 6; };
