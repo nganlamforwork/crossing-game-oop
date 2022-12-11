@@ -5,19 +5,19 @@ CGAME::CGAME(int)
 	DrawGame();
 
 	truck = new CTRUCK(2, 0, _left, _top, 600);
-	lightTruck = new CTRAFFICLIGHT(2, 0, _left, _top, 4);
+	lightTruck = new CTRAFFICLIGHT(2, 0, _left, _top, 4, GREEN_LIGHT);
 	lightTruck->Render();
 
 	car = new CCAR(3, 1, _left, _top, 600);
-	lightCar = new CTRAFFICLIGHT(3, 1, _left, _top, 4);
+	lightCar = new CTRAFFICLIGHT(3, 1, _left, _top, 4, RED_LIGHT);
 	lightCar->Render();
 
 	bird = new CBIRD(4, 0, _left, _top, 50);
-	lightBird = new CTRAFFICLIGHT(4, 0, _left, _top, 5);
+	lightBird = new CTRAFFICLIGHT(4, 0, _left, _top, 4, GREEN_LIGHT);
 	lightBird->Render();
 
 	dino = new CDINAUSOR(5, 1, _left, _top, 500);
-	lightDino = new CTRAFFICLIGHT(5, 1, _left, _top, 6);
+	lightDino = new CTRAFFICLIGHT(5, 1, _left, _top, 4, RED_LIGHT);
 	lightDino->Render();
 }
 CGAME::~CGAME()
@@ -95,6 +95,7 @@ void handleTrafficLights(CTRAFFICLIGHT*& truck, CTRAFFICLIGHT*& car, CTRAFFICLIG
 }
 
 void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck, CTRAFFICLIGHT*& light) {
+	truck->Move();
 	while (people->getState()) {
 		if (light->getState() == GREEN_LIGHT) truck->Move();
 		if (people->IsImpact(truck)) {
@@ -107,6 +108,7 @@ void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck, CTRAFFIC
 }
 
 void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& car, CTRAFFICLIGHT*& light) {
+	car->Move();
 	while (people->getState()) {
 		if (light->getState() == GREEN_LIGHT) car->Move();
 		if (people->IsImpact(car)) {
@@ -119,6 +121,7 @@ void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& car, CTRAFFICLIGHT*
 }
 
 void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird, CTRAFFICLIGHT*& light) {
+	bird->Move();
 	while(people->getState()){
 		if (light->getState() == GREEN_LIGHT) bird->Move();
 		if (people->IsImpact(bird)) {
@@ -131,6 +134,7 @@ void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird, CTRAFFICLIG
 }
 
 void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& dino, CTRAFFICLIGHT*& light) {
+	dino->Move();
 	while (people->getState()) {
 		if (light->getState() == GREEN_LIGHT) dino->Move();
 		if (people->IsImpact(dino)) {

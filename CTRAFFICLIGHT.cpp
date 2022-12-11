@@ -1,7 +1,7 @@
 #include "CTRAFFICLIGHT.h"
 
 
-CTRAFFICLIGHT::CTRAFFICLIGHT(int numLane, int direction, int left, int top, int timing)
+CTRAFFICLIGHT::CTRAFFICLIGHT(int numLane, int direction, int left, int top, int timing, bool initialState)
 {
 	_numLane = numLane; _direction = direction;
 
@@ -9,7 +9,7 @@ CTRAFFICLIGHT::CTRAFFICLIGHT(int numLane, int direction, int left, int top, int 
 
 	_borderLeft = _left + 1; _borderRight = LANE_LENGTH + _left + 1;
 
-	_state = GREEN_LIGHT;
+	_state = initialState;
 	_timing = _countDown = timing;
 }
 

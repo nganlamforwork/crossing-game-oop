@@ -11,7 +11,7 @@ class CTRAFFICLIGHT {
 	int _numLane, _timing, _countDown;
 	bool _state;
 public:
-	CTRAFFICLIGHT(int, int, int, int, int);
+	CTRAFFICLIGHT(int, int, int, int, int, bool);
 	~CTRAFFICLIGHT() {};
 
 	bool getState() { return _state; };
