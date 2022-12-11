@@ -32,7 +32,7 @@ void CCAR::CreateList()
 
 	for (int i = 1; i < _num; i++) {
 		int tmp = curX[i - 1];
-		curX.push_back(tmp + 6 + _space);
+		curX.push_back(tmp + _sizeX + _space);
 		curY.push_back(mY + 1);
 	}
 }
@@ -77,9 +77,9 @@ CTRUCK::CTRUCK(int numLane, int direction, int left, int top, int wait) : CVEHIC
 {
 	_sizeX = 17; _sizeY = 4;
 
-	_num = 4; _space = 10;
+	_num = 2; _space = 15;
 
-	_startPos = _borderRight - 3;
+	_startPos = _borderRight - 2;
 }
 
 void CTRUCK::CreateList()
@@ -89,7 +89,7 @@ void CTRUCK::CreateList()
 
 	for (int i = 1; i < _num; i++) {
 		int tmp = curX[i - 1];
-		curX.push_back(tmp - 17 - _space);
+		curX.push_back(tmp - _sizeX - _space);
 		curY.push_back(mY + 1);
 	}
 }
@@ -117,15 +117,12 @@ void CTRUCK::Move()
 		}
 		for (int i = 0; i < _sizeY; i++) {
 			mtx.lock();
-			Common::gotoXY(_borderLeft + 1, (int)curY[cnt] - i - 1);
-			putchar(32);
 			Common::gotoXY(prevX + 1, (int)curY[cnt] - i - 1);
 			putchar(32);
-			Common::gotoXY(_borderRight - 2, (int)curY[cnt] - i - 1);
+			Common::gotoXY(_borderLeft + 1, (int)curY[cnt] - i - 1);
 			putchar(32);
 			mtx.unlock();
 		}
-
 		curX[cnt] = prevX - 1;
 		if (!IsInLane(prevX - 1))
 			curX[cnt] = _startPos;

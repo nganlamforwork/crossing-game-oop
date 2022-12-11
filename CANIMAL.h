@@ -7,11 +7,11 @@
 
 class CANIMAL {
 protected:
-	int mX, mY, _startPos;
+	int mX, mY, _startPos = 0;
 	int _numLane, _direction;
-	int _num, _space;
+	int _num = 0, _space = 0;
 	int _borderLeft, _borderRight, _left, _top;
-	int _sizeX, _sizeY;
+	int _sizeX = 0, _sizeY = 0;
 	int _wait;
 	vector<int> curX, curY;
 
@@ -19,7 +19,7 @@ protected:
 public:
 	CANIMAL(int, int, int, int, int);
 	~CANIMAL() {};
-	int getLane() { return _numLane; };
+	int getLane() { return _numLane; }
 	int getSizeX() { return _sizeX; };
 	vector<int> getCurX() { return curX; };
 	virtual void CreateList() {};

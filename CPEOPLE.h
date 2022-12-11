@@ -24,7 +24,9 @@ private:
 public:
 	CPEOPLE();
 	CPEOPLE(int, int, int, int);
+	~CPEOPLE() {};
 
+	bool getLane() { return _numLane; };
 	bool getState() { return mState; };
 	void setState(int x) { mState = 0; };
 

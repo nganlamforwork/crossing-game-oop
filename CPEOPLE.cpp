@@ -123,8 +123,8 @@ void CPEOPLE::Move() {
 }
 
 bool CPEOPLE::IsInBoard(int curX, int curY) {
-	if (!(curX > _borderLeft+1 && curX + 5 < _borderRight)) return false;
-	if (!(curY > _top && curY + 4 < _top + (_numLane - 1) * 6+6)) return false;
+	if (!(curX > _borderLeft + 1 && curX + 5 < _borderRight)) return false;
+	if (!(_numLane >= 1 && _numLane <= 6)) return false;
 	return true;
 }
 
@@ -139,7 +139,7 @@ bool CPEOPLE::IsImpact(CCAR* car)
 	vector<int> curX = car->getCurX();
 	int sizeX = car->getSizeX();
 	for (int i = 0; i < (int)curX.size(); i++)
-		if ((mX + _sizeX - 1 < curX[i] - 1) || (mX > curX[i] + sizeX - 1))
+		if ((mX + _sizeX - 1 < curX[i]) || (mX > curX[i] + sizeX - 1))
 			continue;
 		else
 			return 1;
@@ -152,7 +152,7 @@ bool CPEOPLE::IsImpact(CTRUCK* truck)
 	vector<int> curX = truck->getCurX();
 	int sizeX = truck->getSizeX();
 	for (int i = 0; i < (int)curX.size(); i++)
-		if ((mX + _sizeX - 1 < curX[i] - 1) || (mX > curX[i] + sizeX - 1))
+		if ((mX > curX[i]) || (mX + _sizeX - 1 < curX[i] - sizeX + 1))
 			continue;
 		else
 			return 1;
@@ -165,7 +165,7 @@ bool CPEOPLE::IsImpact(CBIRD* bird)
 	vector<int> curX = bird->getCurX();
 	int sizeX = bird->getSizeX();
 	for (int i = 0; i < (int)curX.size(); i++)
-		if ((mX + _sizeX - 1 < curX[i] - 1) || (mX > curX[i] + sizeX - 1))
+		if ((mX > curX[i]) || (mX + _sizeX - 1 < curX[i] - sizeX + 1))
 			continue;
 		else
 			return 1;
@@ -178,7 +178,7 @@ bool CPEOPLE::IsImpact(CDINAUSOR* dino)
 	vector<int> curX = dino->getCurX();
 	int sizeX = dino->getSizeX();
 	for (int i = 0; i < (int)curX.size(); i++)
-		if ((mX + _sizeX - 1 < curX[i] - 1) || (mX > curX[i] + sizeX - 1))
+		if ((mX + _sizeX - 1 < curX[i]) || (mX > curX[i] + sizeX - 1))
 			continue;
 		else 
 			return 1;

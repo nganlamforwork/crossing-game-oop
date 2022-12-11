@@ -109,6 +109,7 @@ void CBIRD::Move()
 				Common::gotoXY(curX[cnt], curY[cnt]);
 				std::cout << data[i][j];
 				mtx.unlock();
+
 				curX[cnt] = curX[cnt] - 1;
 			}
 			curX[cnt] = prevX;
