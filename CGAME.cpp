@@ -56,6 +56,7 @@ void CGAME::DrawLevelNumber(int x)
 	int i = 1;
 	while (!in.eof()) {
 		mtx.lock();
+		Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 		Common::gotoXY(_left + 35 + 32, _top + i++);
 		string tmp;
 		getline(in, tmp);
@@ -102,15 +103,13 @@ void CGAME::DrawGame()
 	//Vẽ biên dưới
 	for (int i = 1; i < LANE_LENGTH; i++) {
 		Common::gotoXY(LANE_LENGTH + _left - i + 1, NUM_LANE * LANE_HEIGHT + _top);
-		//Sleep(2);
 		putchar(205);
 	}
 	Common::gotoXY(_left + 1, NUM_LANE * LANE_HEIGHT + _top);
 	putchar(200);
 
-	//Ve biên trái
+	//Vẽ biên trái
 	for (int i = 1; i < NUM_LANE * LANE_HEIGHT; i++) {
-		//Sleep(5);
 		Common::gotoXY(_left + 1, NUM_LANE * LANE_HEIGHT + _top - i);
 		putchar(186);
 	}
@@ -121,8 +120,52 @@ void CGAME::DrawGame()
 			Common::gotoXY(i + _left + 1, j + _top);
 			putchar(196);
 		}
-		//Sleep(2);
 	}
+	DrawAsideMenu();
+}
+void CGAME::DrawAsideMenu()
+{
+	int SUB_LANE_LENGTH = 24;
+	//Vẽ biên trên
+	Common::gotoXY(_left + LANE_LENGTH + 10, _top);
+	putchar(201);
+	for (int i = 1; i < SUB_LANE_LENGTH; i++) 
+		putchar(205);
+	putchar(187);
+
+	//Vẽ biên phải
+	for (int i = 1; i < NUM_LANE * LANE_HEIGHT; i++) {
+		Common::gotoXY(LANE_LENGTH + _left + 10 + SUB_LANE_LENGTH, i + _top);
+		putchar(186);
+	}
+	Common::gotoXY(LANE_LENGTH + _left + 10 + SUB_LANE_LENGTH, NUM_LANE * LANE_HEIGHT + _top);
+	putchar(188);
+
+	//Vẽ biên dưới
+	for (int i = 1; i < SUB_LANE_LENGTH; i++) {
+		Common::gotoXY(LANE_LENGTH + _left + i + 10, NUM_LANE * LANE_HEIGHT + _top);
+		putchar(205);
+	}
+	Common::gotoXY(LANE_LENGTH + _left + 10, NUM_LANE * LANE_HEIGHT + _top);
+	putchar(200);
+
+	//Vẽ biên trái
+	for (int i = 1; i < NUM_LANE * LANE_HEIGHT; i++) {
+		Common::gotoXY(_left + LANE_LENGTH + 10, NUM_LANE * LANE_HEIGHT + _top - i);
+		putchar(186);
+	}
+
+	//Ghi nội dung aside menu
+	ifstream in("titles\\AsideMenu.txt");
+	int i = 1;
+	Common::setConsoleColor(BRIGHT_WHITE, BLUE);
+	while (!in.eof()) {
+		Common::gotoXY(_left + LANE_LENGTH + 11, _top + i++);
+		string tmp;
+		getline(in, tmp);
+		cout << tmp;
+	}
+	in.close();
 
 }
 
@@ -198,6 +241,14 @@ void CGAME::Move()
 			break;
 		case 9:									// toggle pausing - playing
 			_state = 1 - _state;				// because playing is 0 and pausing is 1
+			mtx.lock();
+			Common::setConsoleColor(BRIGHT_WHITE, BLUE);
+			Common::gotoXY(_left + LANE_LENGTH + 11 + 8, _top + 13);
+			if (_state != PLAYING)
+				cout << "PLAYING";
+			else
+				cout << "PAUSING";
+			mtx.unlock();
 			break;
 		case 10:								// quit without saving
 			_state = QUIT_NOT_SAVE;

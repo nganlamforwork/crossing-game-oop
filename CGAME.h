@@ -35,6 +35,7 @@ public:
 
 	void DrawLevelNumber(int);
 	void DrawGame();
+	void DrawAsideMenu();
 	void Move();
 	bool isWin() { return people->getLevel() == 6; };
 };

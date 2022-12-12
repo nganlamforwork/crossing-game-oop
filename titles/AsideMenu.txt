@@ -1,0 +1,33 @@
+
+     CROSSING GAME     
+_______________________
+
+   Up-Arrow: move Up
+ Down-Arrow: move Down
+Right-Arrow: move Right
+ Left-Arrow: move Left
+
+_______________________
+
+        Press P: 
+        PAUSING
+_______________________
+
+ Press Q: Quit But Not 
+   Save Current Game
+
+   Press S: Quit And  
+   Save Current Game
+
+  If you lose or win, 
+     the game will 
+  automatically quit.
+
+_______________________
+
+         wWWWw       
+   vVVVv (___) wWWWw 
+   (___)  ~Y~  (___) 
+    ~Y~   \|/   ~Y~  
+    \|/   \|/   \|/  
+   \\|// \\|// \\|// 
