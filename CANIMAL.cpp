@@ -27,16 +27,6 @@ void CANIMAL::SaveList(ofstream& out)
 	out << '\n';
 }
 
-void CANIMAL::LoadList(ifstream& in)
-{
-	in >> _num;
-	int tmp;
-	for (int i = 0; i < _num; i++) {
-		in >> tmp;
-		curX.push_back(tmp);
-	}
-}
-
 CDINAUSOR::CDINAUSOR(int numLane, int direction, int left, int top, int wait) : CANIMAL(numLane, direction, left, top, wait)
 {
 	_sizeX = 16; _sizeY = 5;
@@ -54,6 +44,17 @@ void CDINAUSOR::CreateList()
 	for (int i = 1; i < _num; i++) {
 		int tmp = curX[i - 1];
 		curX.push_back(tmp + _sizeX + _space);
+		curY.push_back(mY + 1);
+	}
+}
+
+void CDINAUSOR::LoadList(ifstream& in)
+{
+	in >> _num;
+	int tmp;
+	for (int i = 0; i < _num; i++) {
+		in >> tmp;
+		curX.push_back(tmp);
 		curY.push_back(mY + 1);
 	}
 }
@@ -111,6 +112,17 @@ void CBIRD::CreateList()
 	for (int i = 1; i < _num; i++) {
 		int tmp = curX[i - 1];
 		curX.push_back(tmp - _sizeX - _space);
+		curY.push_back(mY + 3);
+	}
+}
+
+void CBIRD::LoadList(ifstream& in)
+{
+	in >> _num;
+	int tmp;
+	for (int i = 0; i < _num; i++) {
+		in >> tmp;
+		curX.push_back(tmp);
 		curY.push_back(mY + 3);
 	}
 }

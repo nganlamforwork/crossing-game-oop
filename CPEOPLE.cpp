@@ -95,7 +95,7 @@ void CPEOPLE::Up() {
 		DeletePeople();
 		mY = mY - 6;
 		_numLane--;
-		RenderPeople();
+		if (_numLane > 1) RenderPeople();
 	}
 }
 

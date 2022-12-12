@@ -34,6 +34,7 @@ void CVEHICLE::LoadList(ifstream& in)
 	for (int i = 0; i < _num; i++) {
 		in >> tmp;
 		curX.push_back(tmp);
+		curY.push_back(mY + 1);
 	}
 }
 

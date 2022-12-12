@@ -354,7 +354,6 @@ void Menu::play()
 void Menu::newGame()
 {
 	CGAME newGame(NEW_GAME);
-	//newGame.Load();
 	newGame.Create();
 	newGame.RenderGame();
 	newGame.Move();

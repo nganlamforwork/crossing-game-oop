@@ -45,7 +45,6 @@ void CGAME::RenderGame()
 	lightCar->Render();
 	lightBird->Render();
 	lightDino->Render();
-	people->RenderPeople();
 }
 
 void CGAME::DrawGame()
@@ -166,6 +165,7 @@ void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& dino, CTRAFFI
 
 void CGAME::Move()
 {
+	people->RenderPeople();
 	thread t2([&] {renderTruck(_left, _top, people, truck, lightTruck, _state); });
 	thread t3([&] {renderCar(_left, _top, people, car, lightCar, _state); });
 	thread t4([&] {renderBird(_left, _top, people, bird, lightBird, _state); });

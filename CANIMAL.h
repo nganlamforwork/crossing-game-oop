@@ -26,7 +26,7 @@ public:
 	vector<int> getCurX() { return curX; };
 	virtual void CreateList() {};
 	void SaveList(ofstream&);
-	void LoadList(ifstream&);
+	virtual void LoadList(ifstream&) {};
 	virtual void Move() {};
 };
 
@@ -40,6 +40,7 @@ public:
 	CDINAUSOR(int, int, int, int, int);
 	~CDINAUSOR() {};
 	void CreateList();
+	void LoadList(ifstream&);
 	void Move();
 };
 
@@ -50,6 +51,7 @@ public:
 	CBIRD(int, int, int, int, int);
 	~CBIRD() {};
 	void CreateList();
+	void LoadList(ifstream&);
 	void Move();
 
 };
