@@ -41,17 +41,45 @@ void CGAME::Create()
 void CGAME::RenderGame()
 {
 	DrawGame();
+	DrawLevelNumber(people->getLevel());
 	lightTruck->Render();
 	lightCar->Render();
 	lightBird->Render();
 	lightDino->Render();
 }
 
+void CGAME::DrawLevelNumber(int x)
+{
+	string source = "titles\\" + to_string(x);
+	source += ".txt";
+	ifstream in(source);
+	int i = 1;
+	while (!in.eof()) {
+		mtx.lock();
+		Common::gotoXY(_left + 35 + 32, _top + i++);
+		string tmp;
+		getline(in, tmp);
+		cout << tmp;
+		mtx.unlock();
+	}
+	in.close();
+}
 void CGAME::DrawGame()
 {
 	Common::clearConsole();
 
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
+	//Vẽ tiêu đề level
+	ifstream in("titles\\level.txt");
+	int i = 1;
+	while (!in.eof()) {
+		Common::gotoXY(_left + 35, _top + i++);
+		string tmp;
+		getline(in, tmp);
+		cout << tmp;
+	}
+	in.close();
+
 	//Vẽ biên trên
 	Common::gotoXY(_left + 1, _top);
 	putchar(201);
@@ -116,9 +144,6 @@ void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck, CTRAFFIC
 	while (people->getState() && gameState != QUIT_AND_SAVE && gameState != QUIT_NOT_SAVE) {
 		if (gameState == PLAYING && light->getState() == GREEN_LIGHT) truck->Move();
 		if (people->IsImpact(truck)) {
-			ofstream o("result.xt");
-			o << "Car!";
-			o.close();
 			people->setState(0);
 		};
 	}
@@ -129,9 +154,6 @@ void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& car, CTRAFFICLIGHT*
 	while (people->getState() && gameState != QUIT_AND_SAVE && gameState != QUIT_NOT_SAVE) {
 		if (gameState == PLAYING && light->getState() == GREEN_LIGHT) car->Move();
 		if (people->IsImpact(car)) {
-			ofstream o("result.xt");
-			o << "Car!";
-			o.close();
 			people->setState(0);
 		};
 	}
@@ -142,9 +164,6 @@ void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird, CTRAFFICLIG
 	while(people->getState() && gameState != QUIT_AND_SAVE && gameState != QUIT_NOT_SAVE){
 		if (gameState == PLAYING && light->getState() == GREEN_LIGHT) bird->Move();
 		if (people->IsImpact(bird)) {
-			ofstream o("result.xt");
-			o << "Bird!";
-			o.close();
 			people->setState(0);
 		}
 	}
@@ -155,9 +174,6 @@ void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& dino, CTRAFFI
 	while (people->getState() && gameState != QUIT_AND_SAVE && gameState != QUIT_NOT_SAVE) {
 		if (gameState == PLAYING && light->getState() == GREEN_LIGHT) dino->Move();
 		if (people->IsImpact(dino)) {
-			ofstream o("result.xt");
-			o << "Dino!";
-			o.close();
 			people->setState(0);
 		};
 	}
@@ -195,6 +211,8 @@ void CGAME::Move()
 			people->UpLevel();
 			if (people->getLevel() == 6)
 				people->setState(0);	//Die
+			else
+				DrawLevelNumber(people->getLevel());
 		}
 	};
 	t2.join();

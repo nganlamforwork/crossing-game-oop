@@ -33,6 +33,7 @@ public:
 
 	int getState() { return _state; };
 
+	void DrawLevelNumber(int);
 	void DrawGame();
 	void Move();
 	bool isWin() { return people->getLevel() == 6; };
