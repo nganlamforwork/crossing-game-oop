@@ -1,7 +1,7 @@
 #include "CTRAFFICLIGHT.h"
 
 
-CTRAFFICLIGHT::CTRAFFICLIGHT(int numLane, int direction, int left, int top, int timing, bool initialState)
+CTRAFFICLIGHT::CTRAFFICLIGHT(int numLane, int direction, int left, int top, int timing, bool initialState, int curTime)
 {
 	_numLane = numLane; _direction = direction;
 
@@ -10,7 +10,8 @@ CTRAFFICLIGHT::CTRAFFICLIGHT(int numLane, int direction, int left, int top, int 
 	_borderLeft = _left + 1; _borderRight = LANE_LENGTH + _left + 1;
 
 	_state = initialState;
-	_timing = _countDown = timing;
+	_timing = timing;
+	_countDown = curTime;
 }
 
 void CTRAFFICLIGHT::toggleState()
@@ -66,4 +67,14 @@ void CTRAFFICLIGHT::countDown()
 {
 	_countDown--;
 	if (!_countDown) toggleState();
+}
+
+void CTRAFFICLIGHT::Save(ofstream& out)
+{
+	out << _state << ' ' << _countDown << '\n';
+}
+
+void CTRAFFICLIGHT::Load(ifstream& in)
+{
+	in >> _state >> _countDown;
 }

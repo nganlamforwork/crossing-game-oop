@@ -25,6 +25,12 @@ public:
 	CGAME(int);
 	~CGAME();
 
+	void RenderGame();
+
+	void Create();
+	void Load();
+	void Save();
+
 	int getState() { return _state; };
 
 	void DrawGame();

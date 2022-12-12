@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <ctime>
+#include <fstream>
 #include "CVEHICLE.h"
 #include "CANIMAL.h"
 
@@ -28,6 +29,7 @@ public:
 	~CPEOPLE() {};
 
 	int getLevel() { return _level; };
+	void setLevel(int x) { _level = x; };
 	bool getLane() { return _numLane; };
 	bool getState() { return mState; };
 	void setState(int x) { mState = x; };
@@ -41,6 +43,8 @@ public:
 	void DeletePeople();
 
 	void Move(int);
+	void Save(ofstream&);
+	void Load(ifstream&);
 
 	//bool IsImpact(const CVEHICLE*&);
 	bool IsImpact(CCAR*);

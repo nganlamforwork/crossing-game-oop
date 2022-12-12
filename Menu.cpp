@@ -354,9 +354,14 @@ void Menu::play()
 void Menu::newGame()
 {
 	CGAME newGame(NEW_GAME);
+	//newGame.Load();
+	newGame.Create();
+	newGame.RenderGame();
 	newGame.Move();
-	if (newGame.getState() == QUIT_AND_SAVE)
+	if (newGame.getState() == QUIT_AND_SAVE) {
+		newGame.Save();
 		std::cout << "QUIT AND SAVE";
+	}
 	else
 		if (newGame.getState() == QUIT_NOT_SAVE)
 			std::cout << "QUIT NOT SAVE";
@@ -370,7 +375,22 @@ void Menu::newGame()
 
 void Menu::loadGame()
 {
-	std::cout << "load game";
+	CGAME newGame(NEW_GAME);
+	newGame.Load();
+	newGame.RenderGame();
+	newGame.Move();
+	if (newGame.getState() == QUIT_AND_SAVE) {
+		newGame.Save();
+		std::cout << "QUIT AND SAVE";
+	}
+	else
+		if (newGame.getState() == QUIT_NOT_SAVE)
+			std::cout << "QUIT NOT SAVE";
+		else
+			if (newGame.isWin())
+				std::cout << "WIN";
+			else
+				std::cout << "LOSE";
 	Sleep(1500);
 }
 

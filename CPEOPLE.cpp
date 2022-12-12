@@ -125,6 +125,16 @@ void CPEOPLE::Move(int type) {
 	}
 }
 
+void CPEOPLE::Save(ofstream& out)
+{
+	out << _numLane << ' ' << mX << ' ' << mY << '\n';
+}
+
+void CPEOPLE::Load(ifstream& in)
+{
+	in >> _numLane >> mX >> mY;
+}
+
 bool CPEOPLE::IsInBoard(int curX, int curY) {
 	if (!(curX > _borderLeft + 1 && curX + 5 < _borderRight)) return false;
 	if (!(_numLane >= 1 && _numLane <= 6)) return false;

@@ -3,23 +3,20 @@
 CGAME::CGAME(int)
 {
 	_state = PLAYING;
-	DrawGame();
 
 	truck = new CTRUCK(2, 0, _left, _top, 600);
-	lightTruck = new CTRAFFICLIGHT(2, 0, _left, _top, 4, GREEN_LIGHT);
-	lightTruck->Render();
+	lightTruck = new CTRAFFICLIGHT(2, 0, _left, _top, 4, GREEN_LIGHT, 4);
 
 	car = new CCAR(3, 1, _left, _top, 600);
-	lightCar = new CTRAFFICLIGHT(3, 1, _left, _top, 4, RED_LIGHT);
-	lightCar->Render();
+	lightCar = new CTRAFFICLIGHT(3, 1, _left, _top, 4, RED_LIGHT, 4);
 
 	bird = new CBIRD(4, 0, _left, _top, 50);
-	lightBird = new CTRAFFICLIGHT(4, 0, _left, _top, 4, GREEN_LIGHT);
-	lightBird->Render();
+	lightBird = new CTRAFFICLIGHT(4, 0, _left, _top, 4, GREEN_LIGHT, 4);
 
 	dino = new CDINAUSOR(5, 1, _left, _top, 500);
-	lightDino = new CTRAFFICLIGHT(5, 1, _left, _top, 4, RED_LIGHT);
-	lightDino->Render();
+	lightDino = new CTRAFFICLIGHT(5, 1, _left, _top, 4, RED_LIGHT, 4);
+
+	people = new CPEOPLE(6, 1, _left, _top);
 }
 CGAME::~CGAME()
 {
@@ -33,6 +30,24 @@ CGAME::~CGAME()
 	delete lightBird;
 	delete people;
 }
+
+void CGAME::Create()
+{
+	truck->CreateList();
+	car->CreateList();
+	bird->CreateList();
+	dino->CreateList();
+}
+void CGAME::RenderGame()
+{
+	DrawGame();
+	lightTruck->Render();
+	lightCar->Render();
+	lightBird->Render();
+	lightDino->Render();
+	people->RenderPeople();
+}
+
 void CGAME::DrawGame()
 {
 	Common::clearConsole();
@@ -151,14 +166,6 @@ void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& dino, CTRAFFI
 
 void CGAME::Move()
 {
-	people = new CPEOPLE(6, 1, _left, _top);
-	people->RenderPeople();
-
-	truck->CreateList();
-	car->CreateList();
-	bird->CreateList();
-	dino->CreateList();
-
 	thread t2([&] {renderTruck(_left, _top, people, truck, lightTruck, _state); });
 	thread t3([&] {renderCar(_left, _top, people, car, lightCar, _state); });
 	thread t4([&] {renderBird(_left, _top, people, bird, lightBird, _state); });
@@ -195,4 +202,38 @@ void CGAME::Move()
 	t4.join();
 	t5.join();
 	trafficLight.join();
+}
+
+void CGAME::Save()
+{
+	ofstream out("SaveList.txt");
+	out << people->getLevel() << '\n';
+	people->Save(out);
+	truck->SaveList(out);
+	lightTruck->Save(out);
+	car->SaveList(out);
+	lightCar->Save(out);
+	bird->SaveList(out);
+	lightBird->Save(out);
+	dino->SaveList(out);
+	lightDino->Save(out);
+	out.close();
+}
+
+void CGAME::Load()
+{
+	ifstream in("SaveList.txt");
+	int level;
+	in >> level;
+	people->setLevel(level);
+	people->Load(in);
+	truck->LoadList(in);
+	lightTruck->Load(in);
+	car->LoadList(in);
+	lightCar->Load(in);
+	bird->LoadList(in);
+	lightBird->Load(in);
+	dino->LoadList(in);
+	lightDino->Load(in);
+	in.close();
 }

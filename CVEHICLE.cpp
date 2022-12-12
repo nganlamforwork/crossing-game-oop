@@ -9,6 +9,9 @@ CVEHICLE::CVEHICLE(int numLane, int direction, int left, int top, int wait)
 	mX = _left = left; mY = _top = top + (_numLane - 1) * 6;
 
 	_wait = wait;
+
+	srand(time(NULL));
+	_offset = rand() % (LANE_LENGTH - 3) + 1;
 }
 
 bool CVEHICLE::IsInLane(int x)
@@ -16,13 +19,31 @@ bool CVEHICLE::IsInLane(int x)
 	return (x > _borderLeft && x < _borderRight - 1);
 }
 
+void CVEHICLE::SaveList(ofstream& out)
+{
+	out << _num << ' ';
+	for (int i = 0; i < _num; i++)
+		out << curX[i] << ' ';
+	out << '\n';
+}
+
+void CVEHICLE::LoadList(ifstream& in)
+{
+	in >> _num;
+	int tmp;
+	for (int i = 0; i < _num; i++) {
+		in >> tmp;
+		curX.push_back(tmp);
+	}
+}
+
 CCAR::CCAR(int numLane, int direction, int left, int top, int wait) : CVEHICLE(numLane, direction, left, top, wait)
 {
 	_sizeX = 6; _sizeY = 5;
 
-	_num = 4; _space = 10;
+	_num = 7; _space = 10;
 
-	_startPos = _borderLeft + 3;
+	_startPos = _borderLeft + 2;
 }
 
 void CCAR::CreateList()
@@ -47,7 +68,7 @@ void CCAR::Move()
 			for (int j = 0; j < _sizeX; j++) {
 				Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 				if (!IsInLane(curX[cnt]))
-					curX[cnt] = _startPos;
+					curX[cnt] = _borderLeft + 2;
 				mtx.lock();
 				Common::gotoXY(curX[cnt], curY[cnt]);
 				std::cout << data[i][j];
@@ -67,7 +88,7 @@ void CCAR::Move()
 		}
 		curX[cnt] = prevX + 1;
 		if (!IsInLane(prevX + 1))
-			curX[cnt] = _startPos;
+			curX[cnt] = _borderLeft + 2;
 		curY[cnt] = mY + 1;
 	}
 	Sleep(_wait);
@@ -77,7 +98,7 @@ CTRUCK::CTRUCK(int numLane, int direction, int left, int top, int wait) : CVEHIC
 {
 	_sizeX = 17; _sizeY = 4;
 
-	_num = 2; _space = 15;
+	_num = 4; _space = 10;
 
 	_startPos = _borderRight - 2;
 }
@@ -104,7 +125,7 @@ void CTRUCK::Move()
 			for (int j = _sizeX - 1; j >= 0; j--) {
 				Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 				if (!IsInLane(curX[cnt]))
-					curX[cnt] = _startPos;
+					curX[cnt] = _borderRight - 2;
 				mtx.lock();
 				Common::gotoXY(curX[cnt], curY[cnt]);
 				std::cout << data[i][j];
@@ -125,7 +146,7 @@ void CTRUCK::Move()
 		}
 		curX[cnt] = prevX - 1;
 		if (!IsInLane(prevX - 1))
-			curX[cnt] = _startPos;
+			curX[cnt] = _borderRight - 2;
 		curY[cnt] = mY + 1;
 	}
 	Sleep(_wait);
