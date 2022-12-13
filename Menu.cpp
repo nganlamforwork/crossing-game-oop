@@ -372,7 +372,7 @@ void Menu::play(bool option)
 				newGame.DrawEndGame("titles\\YouWin.txt");
 			else
 				newGame.DrawEndGame("titles\\YouLose.txt");
-	Sleep(15000);
+	Sleep(100);
 }
 
 void Menu::showTutorial()

@@ -230,18 +230,27 @@ void CGAME::DrawEndGame(string fileName)
 	endgame.close();
 
 	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
-	std::ifstream bg;
+	ifstream bg;
 	bg.open("images\\flowers.txt");
 
 	i = 0;
-	std::string line;
+	string line;
 	while (!bg.eof()) {
-		Common::gotoXY(28, 24 + i);
+		Common::gotoXY(left + 26, top + 25 + i);
 		getline(bg, line);
 		cout << line << '\n';
 		i++;
 	}
 	bg.close();
+
+	for (int time = 5; time >= 0; time--) {
+		Common::setConsoleColor(BRIGHT_WHITE, BLUE);
+		Common::gotoXY(left + 46, top + 18);
+		cout << "Goodbye! The game will automatically exit after " << time << " second";
+		if (time > 1) cout << 's';
+		else cout << ' ';
+		Sleep(1000);
+	}
 }
 
 //--------------------------------------------------------------
