@@ -46,11 +46,10 @@ public:
 	void offCurrentOption(const std::string[], const int&, const int&);
 	void changeOption(int direction, const std::string[], int&, const int&);
 
-	void play();
+	void subMenu();
 	void showTutorial();
 	void showLeaderboard();
 	void exitGame();
 
-	void newGame();
-	void loadGame();
+	void play(bool);
 };

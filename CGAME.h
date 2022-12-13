@@ -22,20 +22,22 @@ class CGAME {
 	int _state;
 
 public:
-	CGAME(int);
+	CGAME();
 	~CGAME();
 
-	void RenderGame();
+	int getState() { return _state; };
+	bool isWin() { return people->getLevel() == 6; };
 
 	void Create();
 	void Load();
 	void Save();
 
-	int getState() { return _state; };
-
-	void DrawLevelNumber(int);
 	void DrawGame();
 	void DrawAsideMenu();
+	void DrawLevelNumber(int);
+	void RenderGame();
+
+	void DrawEndGame(string);
+
 	void Move();
-	bool isWin() { return people->getLevel() == 6; };
 };

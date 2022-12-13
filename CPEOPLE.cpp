@@ -100,7 +100,7 @@ void CPEOPLE::Up() {
 }
 
 void CPEOPLE::Down() {
-	if (IsInBoard(mX, mY + 6)) {
+	if (_numLane + 1 <= 6 && IsInBoard(mX, mY + 6)) {
 		DeletePeople();
 		mY = mY + 6;
 		_numLane++;

@@ -1,6 +1,6 @@
 ﻿#include "CGAME.h"
 
-CGAME::CGAME(int)
+CGAME::CGAME()
 {
 	_state = PLAYING;
 
@@ -18,6 +18,7 @@ CGAME::CGAME(int)
 
 	people = new CPEOPLE(6, 1, _left, _top);
 }
+
 CGAME::~CGAME()
 {
 	delete truck;
@@ -31,6 +32,8 @@ CGAME::~CGAME()
 	delete people;
 }
 
+//--------------------------------------------------------------
+
 void CGAME::Create()
 {
 	truck->CreateList();
@@ -38,33 +41,43 @@ void CGAME::Create()
 	bird->CreateList();
 	dino->CreateList();
 }
-void CGAME::RenderGame()
+
+void CGAME::Save()
 {
-	DrawGame();
-	DrawLevelNumber(people->getLevel());
-	lightTruck->Render();
-	lightCar->Render();
-	lightBird->Render();
-	lightDino->Render();
+	ofstream out("SaveList.txt");
+	out << people->getLevel() << '\n';
+	people->Save(out);
+	truck->SaveList(out);
+	lightTruck->Save(out);
+	car->SaveList(out);
+	lightCar->Save(out);
+	bird->SaveList(out);
+	lightBird->Save(out);
+	dino->SaveList(out);
+	lightDino->Save(out);
+	out.close();
 }
 
-void CGAME::DrawLevelNumber(int x)
+void CGAME::Load()
 {
-	string source = "titles\\" + to_string(x);
-	source += ".txt";
-	ifstream in(source);
-	int i = 1;
-	while (!in.eof()) {
-		mtx.lock();
-		Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-		Common::gotoXY(_left + 35 + 32, _top + i++);
-		string tmp;
-		getline(in, tmp);
-		cout << tmp;
-		mtx.unlock();
-	}
+	ifstream in("SaveList.txt");
+	int level;
+	in >> level;
+	people->setLevel(level);
+	people->Load(in);
+	truck->LoadList(in);
+	lightTruck->Load(in);
+	car->LoadList(in);
+	lightCar->Load(in);
+	bird->LoadList(in);
+	lightBird->Load(in);
+	dino->LoadList(in);
+	lightDino->Load(in);
 	in.close();
 }
+
+//--------------------------------------------------------------
+
 void CGAME::DrawGame()
 {
 	Common::clearConsole();
@@ -123,6 +136,7 @@ void CGAME::DrawGame()
 	}
 	DrawAsideMenu();
 }
+
 void CGAME::DrawAsideMenu()
 {
 	int SUB_LANE_LENGTH = 24;
@@ -168,6 +182,69 @@ void CGAME::DrawAsideMenu()
 	in.close();
 
 }
+
+void CGAME::DrawLevelNumber(int x)
+{
+	string source = "titles\\" + to_string(x);
+	source += ".txt";
+	ifstream in(source);
+	int i = 1;
+	while (!in.eof()) {
+		mtx.lock();
+		Common::setConsoleColor(BRIGHT_WHITE, BLACK);
+		Common::gotoXY(_left + 35 + 32, _top + i++);
+		string tmp;
+		getline(in, tmp);
+		cout << tmp;
+		mtx.unlock();
+	}
+	in.close();
+}
+
+void CGAME::RenderGame()
+{
+	DrawGame();
+	DrawLevelNumber(people->getLevel());
+	lightTruck->Render();
+	lightCar->Render();
+	lightBird->Render();
+	lightDino->Render();
+}
+
+//--------------------------------------------------------------
+void CGAME::DrawEndGame(string fileName)
+{
+	int left = 0, top = 0;
+	Common::clearConsole();
+	ifstream endgame(fileName);
+	string s;
+	int i = 0;
+
+	Common::setConsoleColor(BRIGHT_WHITE, RED);
+	while (!endgame.eof()) {
+		Common::gotoXY(left + 40, top + 8 + i);
+		getline(endgame, s);
+		cout << s;
+		i++;
+	}
+	endgame.close();
+
+	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
+	std::ifstream bg;
+	bg.open("images\\flowers.txt");
+
+	i = 0;
+	std::string line;
+	while (!bg.eof()) {
+		Common::gotoXY(28, 24 + i);
+		getline(bg, line);
+		cout << line << '\n';
+		i++;
+	}
+	bg.close();
+}
+
+//--------------------------------------------------------------
 
 void handleTrafficLights(CTRAFFICLIGHT*& truck, CTRAFFICLIGHT*& car, CTRAFFICLIGHT*& dino, CTRAFFICLIGHT*& bird, CPEOPLE*& people, int& gameState)
 {
@@ -222,6 +299,8 @@ void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& dino, CTRAFFI
 	}
 }
 
+//--------------------------------------------------------------
+
 void CGAME::Move()
 {
 	people->RenderPeople();
@@ -271,38 +350,4 @@ void CGAME::Move()
 	t4.join();
 	t5.join();
 	trafficLight.join();
-}
-
-void CGAME::Save()
-{
-	ofstream out("SaveList.txt");
-	out << people->getLevel() << '\n';
-	people->Save(out);
-	truck->SaveList(out);
-	lightTruck->Save(out);
-	car->SaveList(out);
-	lightCar->Save(out);
-	bird->SaveList(out);
-	lightBird->Save(out);
-	dino->SaveList(out);
-	lightDino->Save(out);
-	out.close();
-}
-
-void CGAME::Load()
-{
-	ifstream in("SaveList.txt");
-	int level;
-	in >> level;
-	people->setLevel(level);
-	people->Load(in);
-	truck->LoadList(in);
-	lightTruck->Load(in);
-	car->LoadList(in);
-	lightCar->Load(in);
-	bird->LoadList(in);
-	lightBird->Load(in);
-	dino->LoadList(in);
-	lightDino->Load(in);
-	in.close();
 }

@@ -52,7 +52,7 @@ void Menu::processMainInput()
 	switch (_curOption) {
 	case 0:
 		_curSubOption = 0;
-		play();
+		subMenu();
 		break;
 	case 1:
 		showTutorial();
@@ -313,7 +313,7 @@ void Menu::changeOption(int direction, const std::string optionsArr[], int& opti
 
 ////////////////////////////////////////////////////////////////////////////
 
-void Menu::play()
+void Menu::subMenu()
 {
 	deleteOptionsText();
 	renderOptionsText(_subOptions, _subOptionsSize, _curSubOption);
@@ -338,12 +338,10 @@ void Menu::play()
 
 	switch (_curSubOption) {
 	case 0:
-		//loadEffectTitle = 0;
-		newGame();
+		play(NEW_GAME);
 		break;
 	case 1:
-		//loadEffectTitle = 0;
-		loadGame();
+		play(LOAD_GAME);
 		break;
 	case 2:
 		startApp();
@@ -351,46 +349,30 @@ void Menu::play()
 	}
 }
 
-void Menu::newGame()
+void Menu::play(bool option)
 {
-	CGAME newGame(NEW_GAME);
-	newGame.Create();
-	newGame.RenderGame();
-	newGame.Move();
-	if (newGame.getState() == QUIT_AND_SAVE) {
-		newGame.Save();
-		std::cout << "QUIT AND SAVE";
-	}
-	else
-		if (newGame.getState() == QUIT_NOT_SAVE)
-			std::cout << "QUIT NOT SAVE";
-		else
-			if (newGame.isWin())
-				std::cout << "WIN";
-			else
-				std::cout << "LOSE";
-	Sleep(1500);
-}
+	CGAME newGame;
+	if (option == NEW_GAME)
+		newGame.Create();
+	else if (option == LOAD_GAME)
+		newGame.Load();
 
-void Menu::loadGame()
-{
-	CGAME newGame(NEW_GAME);
-	newGame.Load();
 	newGame.RenderGame();
 	newGame.Move();
+
 	if (newGame.getState() == QUIT_AND_SAVE) {
 		newGame.Save();
-		std::cout << "QUIT AND SAVE";
+		newGame.DrawEndGame("titles\\QuitAndSave.txt");
 	}
 	else
 		if (newGame.getState() == QUIT_NOT_SAVE)
-			std::cout << "QUIT NOT SAVE";
+			newGame.DrawEndGame("titles\\QuitNotSave.txt");
 		else
 			if (newGame.isWin())
-				std::cout << "WIN";
+				newGame.DrawEndGame("titles\\YouWin.txt");
 			else
-				std::cout << "LOSE";
-	Sleep(1500);
+				newGame.DrawEndGame("titles\\YouLose.txt");
+	Sleep(15000);
 }
 
 void Menu::showTutorial()
@@ -472,8 +454,6 @@ void Menu::showLeaderboard()
 	}
 	boardtitle.close();
 
-	//vector<Players> playerList;
-	//Players().readPlayersFile(playerList, "PlayersList.txt");
 
 	left = 60;
 	top = 12;							//left and top of the board
