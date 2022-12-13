@@ -40,6 +40,7 @@
 #define ENTER_SOUND 3
 #define ERROR_SOUND 4
 #define BACKGROUND_SOUND 5
+#define OHOH_SOUND 6
 
 using namespace std;
 

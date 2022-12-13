@@ -19,9 +19,9 @@ CPEOPLE::CPEOPLE(int numLane, int direction, int left, int top)
 	_level = 1;
 }
 
-void CPEOPLE::RenderPeople()
+void CPEOPLE::RenderPeople(int color)
 {
-	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
+	Common::setConsoleColor(BRIGHT_WHITE, color);
 	int curX = mX;
 	int curY = mY;
 
@@ -29,8 +29,8 @@ void CPEOPLE::RenderPeople()
 	prevX = curX;
 	for (int i = 0; i < _sizeY; i++) {
 		for (int j = 0; j < _sizeX; j++) {
-			Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 			mtx.lock();
+			Common::setConsoleColor(BRIGHT_WHITE, color);
 			Common::gotoXY(curX, curY);
 			std::cout << data[i][j];
 			mtx.unlock();
@@ -67,7 +67,7 @@ void CPEOPLE::DeletePeople()
 void CPEOPLE::Left() {
 	if (IsInBoard(mX - 1, mY)) {
 		mX = mX - 1;
-		RenderPeople();
+		RenderPeople(BLACK);
 		for (int i = 0; i < 4; i++) {
 			mtx.lock();
 			Common::gotoXY(mX + 5, mY + i);
@@ -75,12 +75,14 @@ void CPEOPLE::Left() {
 			mtx.unlock();
 		}
 	}
+	else
+		Common::playSound(ERROR_SOUND);
 }
 
 void CPEOPLE::Right() {
 	if (IsInBoard(mX + 1, mY)) {
 		mX = mX + 1;
-		RenderPeople();
+		RenderPeople(BLACK);
 		for (int i = 0; i < 4; i++) {
 			mtx.lock();
 			Common::gotoXY(mX - 1, mY + i);
@@ -88,6 +90,8 @@ void CPEOPLE::Right() {
 			mtx.unlock();
 		}
 	}
+	else
+		Common::playSound(ERROR_SOUND);
 }
 
 void CPEOPLE::Up() {
@@ -95,7 +99,7 @@ void CPEOPLE::Up() {
 		DeletePeople();
 		mY = mY - 6;
 		_numLane--;
-		if (_numLane > 1) RenderPeople();
+		if (_numLane > 1) RenderPeople(BLACK);
 	}
 }
 
@@ -104,8 +108,10 @@ void CPEOPLE::Down() {
 		DeletePeople();
 		mY = mY + 6;
 		_numLane++;
-		RenderPeople();
+		RenderPeople(BLACK);
 	}
+	else
+		Common::playSound(ERROR_SOUND);
 }
 
 void CPEOPLE::Move(int type) {
@@ -154,8 +160,10 @@ bool CPEOPLE::IsImpact(CCAR* car)
 	for (int i = 0; i < (int)curX.size(); i++)
 		if ((mX + _sizeX - 1 < curX[i]) || (mX > curX[i] + sizeX - 1))
 			continue;
-		else
+		else {
+			Common::playSound(OHOH_SOUND);
 			return 1;
+		}
 	return 0;
 };
 
@@ -167,8 +175,10 @@ bool CPEOPLE::IsImpact(CTRUCK* truck)
 	for (int i = 0; i < (int)curX.size(); i++)
 		if ((mX > curX[i]) || (mX + _sizeX - 1 < curX[i] - sizeX + 1))
 			continue;
-		else
+		else {
+			Common::playSound(OHOH_SOUND);
 			return 1;
+		}
 	return 0;
 };
 
@@ -180,8 +190,10 @@ bool CPEOPLE::IsImpact(CBIRD* bird)
 	for (int i = 0; i < (int)curX.size(); i++)
 		if ((mX > curX[i]) || (mX + _sizeX - 1 < curX[i] - sizeX + 1))
 			continue;
-		else
+		else {
+			Common::playSound(OHOH_SOUND);
 			return 1;
+		}
 	return 0;
 };
 
@@ -193,8 +205,10 @@ bool CPEOPLE::IsImpact(CDINAUSOR* dino)
 	for (int i = 0; i < (int)curX.size(); i++)
 		if ((mX + _sizeX - 1 < curX[i]) || (mX > curX[i] + sizeX - 1))
 			continue;
-		else 
+		else {
+			Common::playSound(OHOH_SOUND);
 			return 1;
+		}
 	return 0; 
 };
 
@@ -203,6 +217,6 @@ void CPEOPLE::UpLevel()
 	_numLane = 6;
 	mX = _borderLeft + (rand() % (LANE_LENGTH - _sizeX - 1) + 1);
 	mY = _top + (_numLane - 1) * 6 + 1;
-	RenderPeople();
+	RenderPeople(BLACK);
 	++_level;
 }

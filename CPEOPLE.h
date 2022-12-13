@@ -39,7 +39,7 @@ public:
 	void Right();
 	void Down();
 
-	void RenderPeople();
+	void RenderPeople(int);
 	void DeletePeople();
 
 	void Move(int);

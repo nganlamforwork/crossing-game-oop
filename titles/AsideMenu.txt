@@ -19,9 +19,9 @@ _______________________
    Press S: Quit And  
    Save Current Game
 
-  If you lose or win, 
-     the game will 
-  automatically quit.
+  If you LOSE, please
+     PRESS ANY KEY
+   to quit the game.
 
 _______________________
 
