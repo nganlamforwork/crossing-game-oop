@@ -170,18 +170,18 @@ void Menu::renderGameTitle()
 	int colorCount = 0, left = 0;
 	int loop = 1;
 	while (loop--) {
-		Common::setConsoleColor(BRIGHT_WHITE, color[colorCount % 6]);
 
 		left = _left - 26;
 		for (int i = 0; i < sizeOfWord; i++) {
 			for (int j = 0; j < 5; j++) {
-				mtx.lock();
-				if (i > 7) Common::gotoXY(left, _top + 11 + j);
-				else Common::gotoXY(left, _top + 5 + j);
-
-				for (int k = 0; k < wide[i]; k++)
+				for (int k = 0; k < wide[i]; k++) {
+					mtx.lock();
+					Common::setConsoleColor(BRIGHT_WHITE, color[colorCount % 6]);
+					if (i > 7) Common::gotoXY(left + k, _top + 11 + j);
+					else Common::gotoXY(left + k, _top + 5 + j);
 					putchar(word[i][j * wide[i] + k]);
-				mtx.unlock();
+					mtx.unlock();
+				}
 			}
 			left += wide[i] + 1;
 			if (i == 7) left = _left - 8;
