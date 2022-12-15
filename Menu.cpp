@@ -5,7 +5,7 @@
 Menu::Menu()
 {
 	_curOption = 0;
-	_optionsSize = 4;
+	_optionsSize = 3;
 	_curSubOption = 0;
 	_subOptionsSize = 3;
 	_xMenu = 60;
@@ -165,7 +165,7 @@ void Menu::renderGameTitle()
 	unsigned char* word[] = { C, R, O, S, S, I, N, G, G, A, M, E };
 	int sizeOfWord = (sizeof(word) / sizeof(word[0]));
 	int wide[] = { 10, 10, 11, 10, 10, 6, 11, 10, 10, 10, 12, 10 };
-	int color[] = { LIGHT_AQUA, AQUA, LIGHT_BLUE, BLUE, LIGHT_PURPLE, PURPLE };
+	int color[] = { AQUA, LIGHT_AQUA, LIGHT_BLUE, BLUE, LIGHT_PURPLE, PURPLE };
 
 	int colorCount = 0, left = 0;
 	int loop = 1;
@@ -176,8 +176,8 @@ void Menu::renderGameTitle()
 		for (int i = 0; i < sizeOfWord; i++) {
 			for (int j = 0; j < 5; j++) {
 				mtx.lock();
-				if (i > 7) Common::gotoXY(left, _top + 9 + j);
-				else Common::gotoXY(left, _top + 3 + j);
+				if (i > 7) Common::gotoXY(left, _top + 11 + j);
+				else Common::gotoXY(left, _top + 5 + j);
 
 				for (int k = 0; k < wide[i]; k++)
 					putchar(word[i][j * wide[i] + k]);
@@ -260,10 +260,10 @@ void Menu::renderFlowers()
 	while (!bg.eof()) {
 		getline(bg, line);
 
-		Common::gotoXY(_xMenu - 38, _yMenu + 7 + i);
+		Common::gotoXY(_xMenu - 38, _yMenu + 4 + i);
 		cout << line << '\n';
 
-		Common::gotoXY(_xMenu + 40, _yMenu + 7 + i);
+		Common::gotoXY(_xMenu + 40, _yMenu + 4 + i);
 		cout << line << '\n';
 
 		i++;
@@ -395,7 +395,7 @@ void Menu::showTutorial()
 	}
 	in.close();
 
-	left = 59, top = 15;
+	left = 56, top = 14;
 
 	in.open("titles\\tutorial.txt");
 	i = 0;
@@ -408,7 +408,7 @@ void Menu::showTutorial()
 	}
 	in.close();
 
-	left = 4, top = 15;
+	left = 4, top = 18;
 
 	in.open("images\\menuMonster.txt");
 	i = 0;

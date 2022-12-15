@@ -1,8 +1,23 @@
-The player must avoid all the obstacles. Break through dinosaurs, trucks, cars and birds.
-To pass the level, the player must overcome all obstacles
-How to move:
-         UP			
-LEFT            RIGHT 
-        DOWN                   
+
+The Crossing Game consists of 6 lanes. In which there are 4 lanes for vehicles / animals
+to travel: 2, 3, 4, 5. Types of vehicles and animals include: dinosaur, truck, car and bird.
+
+You will start from lane 6 (the lane is at the bottom of the screen) and use the arrow 
+keys to move as follows:
+
+                 UP			
+        LEFT            RIGHT 
+                DOWN                
+   
+(There are some keys used to pause the game or exit,... find out more when you enter the game!)
+
+Try to use the keys above to move the character so that it passes the lanes to go to 1st lane 
+(the top lane of the screen) without touching any obstacles. 
+
+- If you touch, you lose. 
+
+- If you reach first lane, you will be leveled up. 
+
+Our game has 5 levels, if you pass 5 levels you will win.
 
 Thank you for choosing our game! Wish you have fun!

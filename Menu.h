@@ -20,7 +20,7 @@
 class Menu
 {
 	//bool loadEffectTitle = 1;
-	const std::string _options[4] = { "Play","Tutorial","Leaderboard","Exit" };
+	const std::string _options[3] = { "Play","Tutorial","Exit" };
 	const std::string _subOptions[3] = { "New Game","Load Game", "Back" };
 	int _optionsSize, _curOption;
 	int _subOptionsSize, _curSubOption;
