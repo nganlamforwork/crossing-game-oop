@@ -7,7 +7,7 @@
 #include <thread>
 #include <mutex>
 
-#include "Common.h"
+#include "COMMON.h"
 #include "CGAME.h"
 
 #define EASY 4
@@ -19,8 +19,7 @@
 
 class Menu
 {
-	//bool loadEffectTitle = 1;
-	const std::string _options[3] = { "Play","Tutorial","Exit" };
+	const std::string _options[4] = { "Play","Tutorial", "Settings", "Exit" };
 	const std::string _subOptions[3] = { "New Game","Load Game", "Back" };
 	int _optionsSize, _curOption;
 	int _subOptionsSize, _curSubOption;
@@ -48,8 +47,10 @@ public:
 
 	void subMenu();
 	void showTutorial();
-	void showLeaderboard();
 	void exitGame();
 
+	void loadGameScreen();
+
+	void play(bool, string);
 	void play(bool);
 };

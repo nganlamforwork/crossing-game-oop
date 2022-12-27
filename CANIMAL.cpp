@@ -1,14 +1,12 @@
 #include "CANIMAL.h"
 
-CANIMAL::CANIMAL(int numLane, int direction, int left, int top, int wait)
+CANIMAL::CANIMAL(int numLane, int direction, int left, int top)
 {
 	_numLane = numLane; _direction = direction;
 
 	_borderLeft = left + 1; _borderRight = LANE_LENGTH + left + 1;
 
 	mX = _left = left; mY = _top = top + (_numLane - 1) * 6;
-
-	_wait = wait;
 
 	srand(time(NULL));
 	_offset = rand() % (LANE_LENGTH - 3) + 1;
@@ -27,17 +25,26 @@ void CANIMAL::SaveList(ofstream& out)
 	out << '\n';
 }
 
-CDINAUSOR::CDINAUSOR(int numLane, int direction, int left, int top, int wait) : CANIMAL(numLane, direction, left, top, wait)
+CDINAUSOR::CDINAUSOR(int numLane, int direction, int left, int top) : CANIMAL(numLane, direction, left, top)
 {
 	_sizeX = 16; _sizeY = 5;
 
-	_num = 4; _space = 10;
+	_num = _numLevel[0]; _space = _spaceLevel[0]; _wait = _waitLevel[0];
 
 	_startPos = _borderLeft + 2;
 }
 
+void CDINAUSOR::UpLevel(int newLevel)
+{
+	_wait = _waitLevel[newLevel];
+	_space = _spaceLevel[newLevel];
+	_num = _numLevel[newLevel];
+}
+
 void CDINAUSOR::CreateList()
 {
+	curX.clear();
+	curY.clear();
 	curX.push_back(_startPos);
 	curY.push_back(mY + 1);
 
@@ -95,17 +102,26 @@ void CDINAUSOR::Move()
 	Sleep(_wait);
 }
 
-CBIRD::CBIRD(int numLane, int direction, int left, int top, int wait) : CANIMAL(numLane, direction, left, top, wait)
+CBIRD::CBIRD(int numLane, int direction, int left, int top) : CANIMAL(numLane, direction, left, top)
 {
 	_sizeX = 5; _sizeY = 1;
 
-	_num = 6; _space = 13;
+	_num = _numLevel[0]; _space = _spaceLevel[0]; _wait = _waitLevel[0];
 
 	_startPos = _borderRight - 2;
 }
 
+void CBIRD::UpLevel(int newLevel)
+{
+	_wait = _waitLevel[newLevel];
+	_space = _spaceLevel[newLevel];
+	_num = _numLevel[newLevel];
+}
+
 void CBIRD::CreateList()
 {
+	curX.clear();
+	curY.clear();
 	curX.push_back(_startPos);
 	curY.push_back(mY + 3);
 

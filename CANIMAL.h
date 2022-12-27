@@ -4,7 +4,7 @@
 #include <mutex>
 #include <ctime>
 #include <fstream>
-#include "Common.h"
+#include "COMMON.h"
 #include "CTRAFFICLIGHT.h"
 
 class CANIMAL {
@@ -19,15 +19,16 @@ protected:
 
 	bool IsInLane(int);
 public:
-	CANIMAL(int, int, int, int, int);
+	CANIMAL(int, int, int, int);
 	~CANIMAL() {};
 	int getLane() { return _numLane; }
 	int getSizeX() { return _sizeX; };
 	vector<int> getCurX() { return curX; };
-	virtual void CreateList() {};
+	virtual void UpLevel(int) = 0;
+	virtual void CreateList() = 0;
 	void SaveList(ofstream&);
-	virtual void LoadList(ifstream&) {};
-	virtual void Move() {};
+	virtual void LoadList(ifstream&) = 0;
+	virtual void Move() = 0;
 };
 
 class CDINAUSOR : public CANIMAL {
@@ -35,23 +36,30 @@ class CDINAUSOR : public CANIMAL {
 								{' ',' ',' ',' ','_','_','.','-','-','-','.','_','/',' ','_',')'},
 								{' ','_','_','/',' ',' ',' ',' ',' ',' ',' ',' ',' ','/',' ',' '},
 								{'/','_','_','.','\'','|','_','|','-','-','|','_','|',' ',' ',' '} };
+	const int _numLevel[5] = { 2, 3, 3, 4, 4 };
+	const int _spaceLevel[5] = { 30, 25, 20, 15, 10 };
+	const int _waitLevel[5] = {500, 500, 450, 450, 400};
 
 public:
-	CDINAUSOR(int, int, int, int, int);
+	CDINAUSOR(int, int, int, int);
 	~CDINAUSOR() {};
+	void UpLevel(int);
 	void CreateList();
 	void LoadList(ifstream&);
-	void Move();
+	void Move(); 
 };
 
 class CBIRD : public CANIMAL {
 	const char data[1][5] = { {'/','^','V','^','\\'} };
 
+	const int _numLevel[5] = { 4, 5, 5, 6, 6 };
+	const int _spaceLevel[5] = { 25, 25, 20, 20, 13 };
+	const int _waitLevel[5] = { 200, 200, 150, 150, 100 };
 public:
-	CBIRD(int, int, int, int, int);
+	CBIRD(int, int, int, int);
 	~CBIRD() {};
+	void UpLevel(int);
 	void CreateList();
 	void LoadList(ifstream&);
 	void Move();
-
 };

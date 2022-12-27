@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <fstream>
-#include "Common.h"
+#include "COMMON.h"
 
 using namespace std;
 

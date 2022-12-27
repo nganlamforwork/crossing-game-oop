@@ -2,10 +2,12 @@
      CROSSING GAME     
 _______________________
 
-   Up-Arrow: move Up
- Down-Arrow: move Down
-Right-Arrow: move Right
- Left-Arrow: move Left
+   Press L: Save Game
+
+
+
+
+
 
 _______________________
 
@@ -13,11 +15,7 @@ _______________________
         PAUSING
 _______________________
 
- Press Q: Quit But Not 
-   Save Current Game
-
-   Press S: Quit And  
-   Save Current Game
+  Press Q: Quit Game
 
   If you LOSE, please
      PRESS ANY KEY

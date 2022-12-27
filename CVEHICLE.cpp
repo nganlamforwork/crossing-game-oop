@@ -1,14 +1,12 @@
 #include "CVEHICLE.h"
 
-CVEHICLE::CVEHICLE(int numLane, int direction, int left, int top, int wait)
+CVEHICLE::CVEHICLE(int numLane, int direction, int left, int top)
 {
 	_numLane = numLane; _direction = direction;
 
 	_borderLeft = left + 1; _borderRight = LANE_LENGTH + left + 1;
 
 	mX = _left = left; mY = _top = top + (_numLane - 1) * 6;
-
-	_wait = wait;
 
 	srand(time(NULL));
 	_offset = rand() % (LANE_LENGTH - 3) + 1;
@@ -38,17 +36,26 @@ void CVEHICLE::LoadList(ifstream& in)
 	}
 }
 
-CCAR::CCAR(int numLane, int direction, int left, int top, int wait) : CVEHICLE(numLane, direction, left, top, wait)
+CCAR::CCAR(int numLane, int direction, int left, int top) : CVEHICLE(numLane, direction, left, top)
 {
 	_sizeX = 6; _sizeY = 5;
 
-	_num = 7; _space = 10;
+	_num = _numLevel[0]; _space = _spaceLevel[0]; _wait = _waitLevel[0];
 
 	_startPos = _borderLeft + 2;
 }
 
+void CCAR::UpLevel(int newLevel)
+{
+	_wait = _waitLevel[newLevel];
+	_space = _spaceLevel[newLevel];
+	_num = _numLevel[newLevel];
+}
+
 void CCAR::CreateList()
 {
+	curX.clear();
+	curY.clear();
 	curX.push_back(_startPos);
 	curY.push_back(mY + 1);
 
@@ -95,17 +102,26 @@ void CCAR::Move()
 	Sleep(_wait);
 }
 
-CTRUCK::CTRUCK(int numLane, int direction, int left, int top, int wait) : CVEHICLE(numLane, direction, left, top, wait)
+CTRUCK::CTRUCK(int numLane, int direction, int left, int top) : CVEHICLE(numLane, direction, left, top)
 {
 	_sizeX = 17; _sizeY = 4;
 
-	_num = 4; _space = 10;
+	_num = _numLevel[0]; _space = _spaceLevel[0]; _wait = _waitLevel[0];
 
 	_startPos = _borderRight - 2;
 }
 
+void CTRUCK::UpLevel(int newLevel)
+{
+	_wait = _waitLevel[newLevel];
+	_space = _spaceLevel[newLevel];
+	_num = _numLevel[newLevel];
+}
+
 void CTRUCK::CreateList()
 {
+	curX.clear();
+	curY.clear();
 	curX.push_back(_startPos);
 	curY.push_back(mY + 1);
 

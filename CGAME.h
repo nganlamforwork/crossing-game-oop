@@ -5,21 +5,25 @@
 #include <fstream>
 #include <thread>
 #include <vector>
-#include "Common.h"
+#include "COMMON.h"
 #include "CANIMAL.h"
 #include "CPEOPLE.h"
 #include "CVEHICLE.h"
 #include "CTRAFFICLIGHT.h"
 
 class CGAME {
-	CDINAUSOR* dino;	CTRAFFICLIGHT* lightDino;
+private:
+	CDINAUSOR* dino;
 	CCAR* car;			CTRAFFICLIGHT* lightCar;
-	CBIRD* bird;		CTRAFFICLIGHT* lightBird;
+	CBIRD* bird;
 	CTRUCK* truck;		CTRAFFICLIGHT* lightTruck;
 	CPEOPLE* people;
 	int _left = 3, _top = 2;
 	int NUM_LANE = 6;
 	int _state;
+
+
+	void UpLevel();
 
 public:
 	CGAME();
@@ -29,8 +33,9 @@ public:
 	bool isWin() { return people->getLevel() == 6; };
 
 	void Create();
-	void Load();
+	void Load(string);
 	void Save();
+	void togglePlaying();
 
 	void DrawGame();
 	void DrawAsideMenu();
@@ -39,5 +44,6 @@ public:
 
 	void DrawEndGame(string);
 
+	void Start();
 	void Move();
 };

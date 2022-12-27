@@ -1,11 +1,11 @@
-#include "Menu.h"
+#include "MENU.h"
 
 //mutex mtx;
 
 Menu::Menu()
 {
 	_curOption = 0;
-	_optionsSize = 3;
+	_optionsSize = 4;
 	_curSubOption = 0;
 	_subOptionsSize = 3;
 	_xMenu = 60;
@@ -42,7 +42,9 @@ void Menu::processMainInput()
 			changeOption(1, _options, _curOption, _optionsSize);
 			break;
 		case 6:									//Enter
-			loadMenu = 0;
+			if (_curOption !=2) loadMenu = 0;
+			else
+				Common::playSound(ERROR_SOUND);
 			break;
 		default:
 			Common::playSound(ERROR_SOUND);
@@ -58,7 +60,7 @@ void Menu::processMainInput()
 		showTutorial();
 		break;
 	case 2:
-		showLeaderboard();
+		Common::playSound(ERROR_SOUND);
 		break;
 	case 3:
 		exitGame();
@@ -341,7 +343,7 @@ void Menu::subMenu()
 		play(NEW_GAME);
 		break;
 	case 1:
-		play(LOAD_GAME);
+		loadGameScreen();
 		break;
 	case 2:
 		startApp();
@@ -349,30 +351,95 @@ void Menu::subMenu()
 	}
 }
 
-void Menu::play(bool option)
+void Menu::loadGameScreen()
+{
+	int left = 0, top = 0;
+	Common::clearConsole();
+	ifstream endgame("titles\\LoadGame.txt");
+	string s;
+	int i = 0;
+
+	Common::setConsoleColor(BRIGHT_WHITE, RED);
+	while (!endgame.eof()) {
+		Common::gotoXY(left + 45, top + 8 + i);
+		getline(endgame, s);
+		cout << s;
+		i++;
+	}
+	endgame.close();
+
+	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
+	ifstream bg;
+	bg.open("images\\flowers.txt");
+
+	i = 0;
+	string line;
+	while (!bg.eof()) {
+		Common::gotoXY(left + 26, top + 25 + i);
+		getline(bg, line);
+		cout << line << '\n';
+		i++;
+	}
+	bg.close();
+
+	Common::gotoXY(left + 70, top + 18);
+	cout << "Enter your name: ";
+
+	string name;
+
+	do {
+		Common::gotoXY(left + 46, top + 19);
+		cout << "                                                            ";
+		Common::gotoXY(left + 46, top + 19);
+		Common::setConsoleColor(BRIGHT_WHITE, BLACK);
+		Common::showCursor(1);
+		getline(cin, name, '\n');
+		name = "data\\" + name + ".txt";
+
+		ifstream tmp(name);
+		if (!tmp.fail()) break;
+		else {
+			Common::showCursor(0);
+			Common::setConsoleColor(BRIGHT_WHITE, RED);
+			Common::gotoXY(left + 46, top + 21);
+			cout << "Please re-enter! Your name does not exit in our database!";
+		}
+	} while (1);
+
+	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
+	Common::gotoXY(left + 46, top + 21);
+	Common::showCursor(0);
+	cout << "       Get data successfully! Please wait 1 second!      ";
+	Sleep(1000);
+
+	play(LOAD_GAME, name);
+}
+
+void Menu::play(bool option, string name)
 {
 	CGAME newGame;
 	if (option == NEW_GAME)
 		newGame.Create();
 	else if (option == LOAD_GAME)
-		newGame.Load();
+		newGame.Load(name);
 
-	newGame.RenderGame();
-	newGame.Move();
+	newGame.Start();
 
-	if (newGame.getState() == QUIT_AND_SAVE) {
+	if (newGame.getState() == QUIT) {
 		newGame.Save();
-		newGame.DrawEndGame("titles\\QuitAndSave.txt");
+		newGame.DrawEndGame("titles\\QuitNotSave.txt");
 	}
 	else
-		if (newGame.getState() == QUIT_NOT_SAVE)
-			newGame.DrawEndGame("titles\\QuitNotSave.txt");
+		if (newGame.isWin())
+			newGame.DrawEndGame("titles\\YouWin.txt");
 		else
-			if (newGame.isWin())
-				newGame.DrawEndGame("titles\\YouWin.txt");
-			else
-				newGame.DrawEndGame("titles\\YouLose.txt");
+			newGame.DrawEndGame("titles\\YouLose.txt");
 	Sleep(100);
+}
+
+void Menu::play(bool option)
+{
+	play(option, "");
 }
 
 void Menu::showTutorial()
@@ -433,124 +500,6 @@ void Menu::showTutorial()
 	}
 	Common::clearConsole();
 	startApp();
-}
-
-void Menu::showLeaderboard()
-{
-	Common::clearConsole();
-	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-
-	ifstream boardtitle("titles\\Leaderboard.txt");
-	string s;
-	int i = 0;
-
-	//Left and top of leaderboard title
-	int left = 15, top = 2;
-	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
-	while (getline(boardtitle, s)) {
-		Common::gotoXY(left, top + i);
-		cout << s;
-		i++;
-	}
-	boardtitle.close();
-
-
-	left = 60;
-	top = 12;							//left and top of the board
-	int height = 18, width = 65;		//board size
-
-	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-
-	//Draw horizontal borders
-	for (int i = 1; i < width; i++) {
-		Common::gotoXY(left + i, top);
-		putchar(205);
-		Common::gotoXY(i + left, top + height);
-		putchar(205);
-	}
-	Common::gotoXY(left + width, top);
-	putchar(187);
-	Common::gotoXY(left, top + height);
-	putchar(200);
-
-	//Draw vertical borders
-	for (int i = 1; i < height; i++) {
-		Common::gotoXY(left + width, i + top);
-		putchar(186);
-		Common::gotoXY(left, top + i);
-		putchar(186);
-	}
-	Common::gotoXY(left + width, top + height);
-	putchar(188);
-	Common::gotoXY(left, top);
-	putchar(201);
-
-	//divide row
-	Common::gotoXY(left, top + 2);
-	putchar(204);
-	for (int i = 1; i < width; i++) {
-		Common::gotoXY(left + i, top + 2);
-		putchar(205);
-	}
-	Common::gotoXY(left + width, top + 2);
-	putchar(185);
-
-	int posColumn[4] = { 16,27,40,53 };
-
-	//divid columns
-	for (int i = 0; i < 4; i++) {
-		Common::gotoXY(left + posColumn[i], top);
-		putchar(203);
-		for (int j = 1; j < height; j++) {
-			Common::gotoXY(left + posColumn[i], top + j);
-			putchar(186);
-		}
-		Common::gotoXY(left + posColumn[i], top + height);
-		putchar(202);
-
-		//plus (+) symbol
-		Common::gotoXY(left + posColumn[i], top + 2);
-		putchar(206);
-	}
-
-	string headerNameColumn[5] = { "Player name", "Time", "Level", "Mode", "Score" };
-	int headerPosNameColumn[5] = { 3, 20, 32, 45, 57 };
-
-	Common::setConsoleColor(BRIGHT_WHITE, RED);
-	for (int i = 0; i < 5; i++) {
-		Common::gotoXY(left + headerPosNameColumn[i], top + 1);
-		std::cout << headerNameColumn[i];
-	}
-
-	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	string level1 = " Easy ";
-	string level2 = "Medium";
-
-	left = 3, top = 12;
-
-	ifstream in;
-	in.open("images\\menuMonster.txt");
-	i = 0;
-
-	Common::setConsoleColor(BRIGHT_WHITE, AQUA);
-	while (getline(in, s)) {
-		Common::gotoXY(left, top + i);
-		cout << s;
-		i++;
-	}
-	in.close();
-
-	bool loop = 1;
-	while (loop) {
-		switch (Common::getConsoleInput()) {
-		case 8:
-			loop = 0;
-			break;
-		default:
-			Common::playSound(ERROR_SOUND);
-		}
-	}
-	processMainInput();
 }
 
 void Menu::exitGame()

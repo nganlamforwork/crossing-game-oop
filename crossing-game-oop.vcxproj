@@ -141,21 +141,21 @@
   <ItemGroup>
     <ClCompile Include="CANIMAL.cpp" />
     <ClCompile Include="CGAME.cpp" />
-    <ClCompile Include="Common.cpp" />
+    <ClCompile Include="COMMON.cpp" />
     <ClCompile Include="CPEOPLE.cpp" />
     <ClCompile Include="CTRAFFICLIGHT.cpp" />
     <ClCompile Include="CVEHICLE.cpp" />
-    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="MENU.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CANIMAL.h" />
     <ClInclude Include="CGAME.h" />
-    <ClInclude Include="Common.h" />
+    <ClInclude Include="COMMON.h" />
     <ClInclude Include="CPEOPLE.h" />
     <ClInclude Include="CTRAFFICLIGHT.h" />
     <ClInclude Include="CVEHICLE.h" />
-    <ClInclude Include="Menu.h" />
+    <ClInclude Include="MENU.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

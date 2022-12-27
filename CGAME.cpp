@@ -4,17 +4,15 @@ CGAME::CGAME()
 {
 	_state = PLAYING;
 
-	truck = new CTRUCK(2, 0, _left, _top, 600);
+	truck = new CTRUCK(2, 0, _left, _top);
 	lightTruck = new CTRAFFICLIGHT(2, 0, _left, _top, 4, GREEN_LIGHT, 4);
 
-	car = new CCAR(3, 1, _left, _top, 600);
+	car = new CCAR(3, 1, _left, _top);
 	lightCar = new CTRAFFICLIGHT(3, 1, _left, _top, 4, RED_LIGHT, 4);
 
-	bird = new CBIRD(4, 0, _left, _top, 50);
-	lightBird = new CTRAFFICLIGHT(4, 0, _left, _top, 4, GREEN_LIGHT, 4);
+	bird = new CBIRD(4, 0, _left, _top);
 
-	dino = new CDINAUSOR(5, 1, _left, _top, 500);
-	lightDino = new CTRAFFICLIGHT(5, 1, _left, _top, 4, RED_LIGHT, 4);
+	dino = new CDINAUSOR(5, 1, _left, _top);
 
 	people = new CPEOPLE(6, 1, _left, _top);
 }
@@ -26,9 +24,7 @@ CGAME::~CGAME()
 	delete car;
 	delete lightCar;
 	delete dino;
-	delete lightDino;
 	delete bird;
-	delete lightBird;
 	delete people;
 }
 
@@ -44,7 +40,30 @@ void CGAME::Create()
 
 void CGAME::Save()
 {
-	ofstream out("SaveList.txt");
+	string name;
+
+	mtx.lock();
+	Common::gotoXY(_left + LANE_LENGTH + 11 + 1, _top + 8);
+	cout << "                      ";
+	Common::gotoXY(_left + LANE_LENGTH + 11 + 1, _top + 10);
+	cout << "                      ";
+	Common::gotoXY(_left + LANE_LENGTH + 11 + 1, _top + 11);
+	cout << "                      ";
+	mtx.unlock();
+
+
+	mtx.lock();
+	Common::showCursor(1);
+	Common::gotoXY(_left + LANE_LENGTH + 11, _top + 7);
+	Common::setConsoleColor(BRIGHT_WHITE, BLUE);
+	cout << "    Enter your name:";
+	Common::gotoXY(_left + LANE_LENGTH + 11 + 1, _top + 8);
+	getline(cin, name, '\n');
+	mtx.unlock();
+
+	name = "data\\" + name + ".txt";
+	ofstream out(name);
+
 	out << people->getLevel() << '\n';
 	people->Save(out);
 	truck->SaveList(out);
@@ -52,15 +71,24 @@ void CGAME::Save()
 	car->SaveList(out);
 	lightCar->Save(out);
 	bird->SaveList(out);
-	lightBird->Save(out);
 	dino->SaveList(out);
-	lightDino->Save(out);
+
 	out.close();
+
+	mtx.lock();
+	Common::showCursor(0);
+	Common::gotoXY(_left + LANE_LENGTH + 11 + 3, _top + 10);
+	Common::setConsoleColor(BRIGHT_WHITE, BLUE);
+	cout << "Save successfully!";
+	Common::gotoXY(_left + LANE_LENGTH + 11 + 2, _top + 11);
+	Common::setConsoleColor(BRIGHT_WHITE, BLUE);
+	cout << "Press P to continue";
+	mtx.unlock();
 }
 
-void CGAME::Load()
+void CGAME::Load(string name)
 {
-	ifstream in("SaveList.txt");
+	ifstream in(name);
 	int level;
 	in >> level;
 	people->setLevel(level);
@@ -70,9 +98,7 @@ void CGAME::Load()
 	car->LoadList(in);
 	lightCar->Load(in);
 	bird->LoadList(in);
-	lightBird->Load(in);
 	dino->LoadList(in);
-	lightDino->Load(in);
 	in.close();
 }
 
@@ -82,7 +108,7 @@ void CGAME::DrawGame()
 {
 	Common::clearConsole();
 
-	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
+	Common::setConsoleColor(BRIGHT_WHITE, BLUE);
 	//Vẽ tiêu đề level
 	ifstream in("titles\\level.txt");
 	int i = 1;
@@ -94,6 +120,7 @@ void CGAME::DrawGame()
 	}
 	in.close();
 
+	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	//Vẽ biên trên
 	Common::gotoXY(_left + 1, _top);
 	putchar(201);
@@ -191,7 +218,7 @@ void CGAME::DrawLevelNumber(int x)
 	int i = 1;
 	while (!in.eof()) {
 		mtx.lock();
-		Common::setConsoleColor(BRIGHT_WHITE, BLACK);
+		Common::setConsoleColor(BRIGHT_WHITE, BLUE);
 		Common::gotoXY(_left + 35 + 32, _top + i++);
 		string tmp;
 		getline(in, tmp);
@@ -207,8 +234,6 @@ void CGAME::RenderGame()
 	DrawLevelNumber(people->getLevel());
 	lightTruck->Render();
 	lightCar->Render();
-	lightBird->Render();
-	lightDino->Render();
 }
 
 //--------------------------------------------------------------
@@ -255,22 +280,20 @@ void CGAME::DrawEndGame(string fileName)
 
 //--------------------------------------------------------------
 
-void handleTrafficLights(CTRAFFICLIGHT*& truck, CTRAFFICLIGHT*& car, CTRAFFICLIGHT*& dino, CTRAFFICLIGHT*& bird, CPEOPLE*& people, int& gameState)
+void handleTrafficLights(CTRAFFICLIGHT*& truck, CTRAFFICLIGHT*& car, CPEOPLE*& people, int& gameState)
 {
-	while (people->getState() && gameState != QUIT_AND_SAVE && gameState != QUIT_NOT_SAVE) {
+	while (people->getState() && gameState != QUIT && gameState != DONE_LEVEL) {
 		if (gameState == PLAYING) {
 			Sleep(1000);
 			truck->countDown();
 			car->countDown();
-			dino->countDown();
-			bird->countDown();
 		}
 	}
 }
 
 void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck, CTRAFFICLIGHT*& light, int& gameState) {
 	truck->Move();
-	while (people->getState() && gameState != QUIT_AND_SAVE && gameState != QUIT_NOT_SAVE) {
+	while (people->getState() && gameState != QUIT && gameState != DONE_LEVEL) {
 		if (gameState == PLAYING && light->getState() == GREEN_LIGHT) truck->Move();
 		if (people->IsImpact(truck)) {
 			people->setState(0);
@@ -286,7 +309,7 @@ void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck, CTRAFFIC
 
 void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& car, CTRAFFICLIGHT*& light, int& gameState) {
 	car->Move();
-	while (people->getState() && gameState != QUIT_AND_SAVE && gameState != QUIT_NOT_SAVE) {
+	while (people->getState() && gameState != QUIT && gameState != DONE_LEVEL) {
 		if (gameState == PLAYING && light->getState() == GREEN_LIGHT) car->Move();
 		if (people->IsImpact(car)) {
 			people->setState(0);
@@ -300,10 +323,10 @@ void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& car, CTRAFFICLIGHT*
 	}
 }
 
-void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird, CTRAFFICLIGHT*& light, int& gameState) {
+void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird, int& gameState) {
 	bird->Move();
-	while(people->getState() && gameState != QUIT_AND_SAVE && gameState != QUIT_NOT_SAVE){
-		if (gameState == PLAYING && light->getState() == GREEN_LIGHT) bird->Move();
+	while(people->getState() && gameState != QUIT && gameState != DONE_LEVEL){
+		if (gameState == PLAYING) bird->Move();
 		if (people->IsImpact(bird)) {
 			people->setState(0);
 			for (int i = 0; i < 6; i++) {
@@ -316,10 +339,10 @@ void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird, CTRAFFICLIG
 	}
 }
 
-void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& dino, CTRAFFICLIGHT*& light, int& gameState) {
+void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& dino, int& gameState) {
 	dino->Move();
-	while (people->getState() && gameState != QUIT_AND_SAVE && gameState != QUIT_NOT_SAVE) {
-		if (gameState == PLAYING && light->getState() == GREEN_LIGHT) dino->Move();
+	while (people->getState() && gameState != QUIT && gameState != DONE_LEVEL) {
+		if (gameState == PLAYING) dino->Move();
 		if (people->IsImpact(dino)) {
 			people->setState(0);
 			for (int i = 0; i < 6; i++) {
@@ -334,15 +357,41 @@ void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& dino, CTRAFFI
 
 //--------------------------------------------------------------
 
+void CGAME::togglePlaying()
+{
+	// toggle pausing - playing
+	_state = 1 - _state;				// because playing is 0 and pausing is 1
+	mtx.lock();
+	Common::setConsoleColor(BRIGHT_WHITE, BLUE);
+	Common::gotoXY(_left + LANE_LENGTH + 11 + 8, _top + 15);
+	if (_state != PLAYING)
+		cout << "PLAYING";
+	else
+		cout << "PAUSING";
+	mtx.unlock();
+}
+
+void CGAME::Start()
+{
+	while (people->getState() && _state != QUIT) {
+		RenderGame();
+		_state = PLAYING;
+		Move();
+		if (_state == DONE_LEVEL) {
+			UpLevel();
+		}
+	}
+}
+
 void CGAME::Move()
 {
 	people->RenderPeople(BLACK);
 	thread t2([&] {renderTruck(_left, _top, people, truck, lightTruck, _state); });
 	thread t3([&] {renderCar(_left, _top, people, car, lightCar, _state); });
-	thread t4([&] {renderBird(_left, _top, people, bird, lightBird, _state); });
-	thread t5([&] {renderDino(_left, _top, people, dino, lightDino, _state); });
-	thread trafficLight([&] {handleTrafficLights(lightTruck, lightCar, lightBird, lightDino, people, _state); });
-	while (people->getState() && _state != QUIT_AND_SAVE && _state != QUIT_NOT_SAVE) {
+	thread t4([&] {renderBird(_left, _top, people, bird, _state); });
+	thread t5([&] {renderDino(_left, _top, people, dino,  _state); });
+	thread trafficLight([&] {handleTrafficLights(lightTruck, lightCar, people, _state); });
+	while (people->getState() && _state != QUIT && _state != DONE_LEVEL) {
 		int tmp;
 		switch (tmp = Common::getConsoleInput()) {
 		case 2:
@@ -351,31 +400,20 @@ void CGAME::Move()
 		case 5:
 			if (_state == PLAYING) people->Move(tmp);
 			break;
-		case 9:									// toggle pausing - playing
-			_state = 1 - _state;				// because playing is 0 and pausing is 1
-			mtx.lock();
-			Common::setConsoleColor(BRIGHT_WHITE, BLUE);
-			Common::gotoXY(_left + LANE_LENGTH + 11 + 8, _top + 13);
-			if (_state != PLAYING)
-				cout << "PLAYING";
-			else
-				cout << "PAUSING";
-			mtx.unlock();
+		case 9:									
+			togglePlaying();
 			break;
-		case 10:								// quit without saving
-			_state = QUIT_NOT_SAVE;
+		case 10:								//Saving
+			togglePlaying();
+			Save();
 			break;
-		case 11:								// saving and quit game
-			_state = QUIT_AND_SAVE;
+		case 11:								// quit without saving
+			_state = QUIT;
 			break;
 		};
 
 		if (people->IsFinish()) {
-			people->UpLevel();
-			if (people->getLevel() == 6)
-				people->setState(0);	//Die
-			else
-				DrawLevelNumber(people->getLevel());
+			_state = DONE_LEVEL;
 		}
 	};
 	t2.join();
@@ -383,4 +421,22 @@ void CGAME::Move()
 	t4.join();
 	t5.join();
 	trafficLight.join();
+}
+
+void CGAME::UpLevel()
+{
+	Common::playSound(WIN_SOUND);
+	people->UpLevel();
+	if (people->getLevel() == 6)
+		people->setState(0);	//Die
+	else
+		DrawLevelNumber(people->getLevel());
+	truck->UpLevel(people->getLevel()-1);
+	truck->CreateList();
+	car->UpLevel(people->getLevel()-1);
+	car->CreateList();
+	dino->UpLevel(people->getLevel()-1);
+	dino->CreateList();
+	bird->UpLevel(people->getLevel()-1);
+	bird->CreateList();
 }

@@ -10,8 +10,8 @@
 
 #define PLAYING 0
 #define PAUSING 1
-#define QUIT_NOT_SAVE 2
-#define QUIT_AND_SAVE 3
+#define QUIT 2
+#define DONE_LEVEL 3
 
 #define LANE_LENGTH  112
 #define LANE_HEIGHT  6
