@@ -75,8 +75,6 @@ void CPEOPLE::Left() {
 			mtx.unlock();
 		}
 	}
-	else
-		Common::playSound(ERROR_SOUND);
 }
 
 void CPEOPLE::Right() {
@@ -90,8 +88,6 @@ void CPEOPLE::Right() {
 			mtx.unlock();
 		}
 	}
-	else
-		Common::playSound(ERROR_SOUND);
 }
 
 void CPEOPLE::Up() {
@@ -110,8 +106,6 @@ void CPEOPLE::Down() {
 		_numLane++;
 		RenderPeople(BLACK);
 	}
-	else
-		Common::playSound(ERROR_SOUND);
 }
 
 void CPEOPLE::Move(int type) {
@@ -161,7 +155,6 @@ bool CPEOPLE::IsImpact(CCAR* car)
 		if ((mX + _sizeX - 1 < curX[i]) || (mX > curX[i] + sizeX - 1))
 			continue;
 		else {
-			Common::playSound(OHOH_SOUND);
 			return 1;
 		}
 	return 0;
@@ -176,7 +169,6 @@ bool CPEOPLE::IsImpact(CTRUCK* truck)
 		if ((mX > curX[i]) || (mX + _sizeX - 1 < curX[i] - sizeX + 1))
 			continue;
 		else {
-			Common::playSound(OHOH_SOUND);
 			return 1;
 		}
 	return 0;
@@ -191,7 +183,6 @@ bool CPEOPLE::IsImpact(CBIRD* bird)
 		if ((mX > curX[i]) || (mX + _sizeX - 1 < curX[i] - sizeX + 1))
 			continue;
 		else {
-			Common::playSound(OHOH_SOUND);
 			return 1;
 		}
 	return 0;
@@ -206,7 +197,6 @@ bool CPEOPLE::IsImpact(CDINAUSOR* dino)
 		if ((mX + _sizeX - 1 < curX[i]) || (mX > curX[i] + sizeX - 1))
 			continue;
 		else {
-			Common::playSound(OHOH_SOUND);
 			return 1;
 		}
 	return 0; 

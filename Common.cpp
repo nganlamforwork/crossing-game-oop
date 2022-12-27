@@ -117,6 +117,10 @@ int Common::getConsoleInput()
 			return 10;
 		else if (c == 81 || c == 113) //Q, q
 			return 11;
+		else if (c == 78 || c == 110) //N, n
+			return 12;
+		else if (c == 70 || c == 102) //F, f
+			return 13;
 		else
 			return 0;                 //nút khác
 	}

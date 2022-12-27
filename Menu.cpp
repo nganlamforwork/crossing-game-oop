@@ -21,6 +21,9 @@ void Menu::startApp()
 	Common::setConsoleColor(BRIGHT_WHITE, AQUA);
 	Common::gotoXY(_left, _top);
 	std::cout << "Group 8 - 21CLC08 - HCMUS";
+	Common::setConsoleColor(BRIGHT_WHITE, GRAY);
+	Common::gotoXY(_left - 20, _top + 1);
+	std::cout << "Tran Binh Kha - Le Vu Ngan Lam - Nguyen Hong Hanh - Huynh Hiep Phat";
 	renderFlowers();
 	renderOptionsMenu();
 	renderOptionsText(_options, _optionsSize, _curOption);
@@ -42,12 +45,10 @@ void Menu::processMainInput()
 			changeOption(1, _options, _curOption, _optionsSize);
 			break;
 		case 6:									//Enter
-			if (_curOption !=2) loadMenu = 0;
-			else
-				Common::playSound(ERROR_SOUND);
+			loadMenu = 0;
 			break;
 		default:
-			Common::playSound(ERROR_SOUND);
+			if (_musicEffect) Common::playSound(ERROR_SOUND);
 		}
 	}
 
@@ -60,7 +61,7 @@ void Menu::processMainInput()
 		showTutorial();
 		break;
 	case 2:
-		Common::playSound(ERROR_SOUND);
+		showSettings();
 		break;
 	case 3:
 		exitGame();
@@ -236,7 +237,7 @@ void Menu::deleteOptionsText()
 
 void Menu::renderCurrentOption(const std::string optionsArr[], const int& size, const int& optionId)
 {
-	Common::playSound(MOVE_SOUND);
+	if (_musicEffect) Common::playSound(MOVE_SOUND);
 	int left = _xMenu + 12, top = _yMenu + 2;
 	Common::setConsoleColor(BRIGHT_WHITE, RED);
 
@@ -305,7 +306,7 @@ void Menu::changeOption(int direction, const std::string optionsArr[], int& opti
 {
 	int tmp = option + direction;
 	if (tmp < 0 || tmp >= size) {
-		Common::playSound(ERROR_SOUND);
+		if (_musicEffect) Common::playSound(ERROR_SOUND);
 		return;
 	}
 	offCurrentOption(optionsArr,size,option);
@@ -334,7 +335,7 @@ void Menu::subMenu()
 			loadSubMenu = 0;
 			break;
 		default:
-			Common::playSound(ERROR_SOUND);
+			if (_musicEffect) Common::playSound(ERROR_SOUND);
 		}
 	}
 
@@ -417,7 +418,7 @@ void Menu::loadGameScreen()
 
 void Menu::play(bool option, string name)
 {
-	CGAME newGame;
+	CGAME newGame(_musicEffect);
 	if (option == NEW_GAME)
 		newGame.Create();
 	else if (option == LOAD_GAME)
@@ -426,7 +427,6 @@ void Menu::play(bool option, string name)
 	newGame.Start();
 
 	if (newGame.getState() == QUIT) {
-		newGame.Save();
 		newGame.DrawEndGame("titles\\QuitNotSave.txt");
 	}
 	else
@@ -495,7 +495,73 @@ void Menu::showTutorial()
 			loop = 0;
 			break;
 		default:
-			Common::playSound(ERROR_SOUND);
+			if (_musicEffect) Common::playSound(ERROR_SOUND);
+		}
+	}
+	Common::clearConsole();
+	startApp();
+}
+
+void Menu::showSettings()
+{
+	Common::clearConsole();
+	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
+	int left = 38, top = 4;						//Left and top of title
+	int height = 15, width = 30;
+
+	ifstream in;
+	in.open("titles\\Settings.txt");
+	string s;
+	int i = 0;
+
+	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
+	while (getline(in, s)) {
+		Common::gotoXY(left, top + i);
+		cout << s;
+		i++;
+	}
+	in.close();
+
+	left = 83, top = 18;
+
+	in.open("images\\settingsMenu.txt");
+	i = 0;
+
+	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
+	while (getline(in, s)) {
+		Common::gotoXY(left, top + i);
+		cout << s;
+		i++;
+	}
+	in.close();
+
+	left = 24, top = 18;
+
+	in.open("images\\menuMonster.txt");
+	i = 0;
+
+	Common::setConsoleColor(BRIGHT_WHITE, AQUA);
+	while (getline(in, s)) {
+		Common::gotoXY(left, top + i);
+		cout << s;
+		i++;
+	}
+	in.close();
+
+	bool loop = 1;
+	while (loop) {
+		switch (Common::getConsoleInput()) {
+		case 8:
+			loop = 0;
+			break;
+		case 12:
+			_musicEffect = 1;
+			break;
+		case 13:
+			_musicEffect = 0;
+			break;
+		default:
+			if (_musicEffect) Common::playSound(ERROR_SOUND);
 		}
 	}
 	Common::clearConsole();

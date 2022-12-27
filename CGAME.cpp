@@ -1,6 +1,6 @@
 ﻿#include "CGAME.h"
 
-CGAME::CGAME()
+CGAME::CGAME(bool musicEffect)
 {
 	_state = PLAYING;
 
@@ -15,6 +15,8 @@ CGAME::CGAME()
 	dino = new CDINAUSOR(5, 1, _left, _top);
 
 	people = new CPEOPLE(6, 1, _left, _top);
+
+	_musicEffect = musicEffect;
 }
 
 CGAME::~CGAME()
@@ -291,11 +293,12 @@ void handleTrafficLights(CTRAFFICLIGHT*& truck, CTRAFFICLIGHT*& car, CPEOPLE*& p
 	}
 }
 
-void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck, CTRAFFICLIGHT*& light, int& gameState) {
+void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck, CTRAFFICLIGHT*& light, int& gameState, bool music) {
 	truck->Move();
 	while (people->getState() && gameState != QUIT && gameState != DONE_LEVEL) {
 		if (gameState == PLAYING && light->getState() == GREEN_LIGHT) truck->Move();
 		if (people->IsImpact(truck)) {
+			if (music) Common::playSound(OHOH_SOUND);
 			people->setState(0);
 			for (int i = 0; i < 6; i++) {
 				people->RenderPeople(RED);
@@ -307,11 +310,12 @@ void renderTruck(int _left, int _top, CPEOPLE*& people, CTRUCK*& truck, CTRAFFIC
 	}
 }
 
-void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& car, CTRAFFICLIGHT*& light, int& gameState) {
+void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& car, CTRAFFICLIGHT*& light, int& gameState, bool music) {
 	car->Move();
 	while (people->getState() && gameState != QUIT && gameState != DONE_LEVEL) {
 		if (gameState == PLAYING && light->getState() == GREEN_LIGHT) car->Move();
 		if (people->IsImpact(car)) {
+			if (music) Common::playSound(OHOH_SOUND);
 			people->setState(0);
 			for (int i = 0; i < 6; i++) {
 				people->RenderPeople(RED);
@@ -323,11 +327,12 @@ void renderCar(int _left, int _top, CPEOPLE*& people, CCAR*& car, CTRAFFICLIGHT*
 	}
 }
 
-void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird, int& gameState) {
+void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird, int& gameState, bool music) {
 	bird->Move();
 	while(people->getState() && gameState != QUIT && gameState != DONE_LEVEL){
 		if (gameState == PLAYING) bird->Move();
 		if (people->IsImpact(bird)) {
+			if (music) Common::playSound(OHOH_SOUND);
 			people->setState(0);
 			for (int i = 0; i < 6; i++) {
 				people->RenderPeople(RED);
@@ -339,11 +344,12 @@ void renderBird(int _left, int _top, CPEOPLE*& people, CBIRD*& bird, int& gameSt
 	}
 }
 
-void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& dino, int& gameState) {
+void renderDino(int _left, int _top, CPEOPLE*& people, CDINAUSOR*& dino, int& gameState, bool music) {
 	dino->Move();
 	while (people->getState() && gameState != QUIT && gameState != DONE_LEVEL) {
 		if (gameState == PLAYING) dino->Move();
 		if (people->IsImpact(dino)) {
+			if (music) Common::playSound(OHOH_SOUND);
 			people->setState(0);
 			for (int i = 0; i < 6; i++) {
 				people->RenderPeople(RED);
@@ -386,10 +392,10 @@ void CGAME::Start()
 void CGAME::Move()
 {
 	people->RenderPeople(BLACK);
-	thread t2([&] {renderTruck(_left, _top, people, truck, lightTruck, _state); });
-	thread t3([&] {renderCar(_left, _top, people, car, lightCar, _state); });
-	thread t4([&] {renderBird(_left, _top, people, bird, _state); });
-	thread t5([&] {renderDino(_left, _top, people, dino,  _state); });
+	thread t2([&] {renderTruck(_left, _top, people, truck, lightTruck, _state, _musicEffect); });
+	thread t3([&] {renderCar(_left, _top, people, car, lightCar, _state, _musicEffect); });
+	thread t4([&] {renderBird(_left, _top, people, bird, _state, _musicEffect); });
+	thread t5([&] {renderDino(_left, _top, people, dino,  _state, _musicEffect); });
 	thread trafficLight([&] {handleTrafficLights(lightTruck, lightCar, people, _state); });
 	while (people->getState() && _state != QUIT && _state != DONE_LEVEL) {
 		int tmp;
@@ -425,7 +431,7 @@ void CGAME::Move()
 
 void CGAME::UpLevel()
 {
-	Common::playSound(WIN_SOUND);
+	if (_musicEffect) if (_musicEffect) Common::playSound(WIN_SOUND);
 	people->UpLevel();
 	if (people->getLevel() == 6)
 		people->setState(0);	//Die

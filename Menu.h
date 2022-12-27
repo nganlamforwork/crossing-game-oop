@@ -25,6 +25,7 @@ class Menu
 	int _subOptionsSize, _curSubOption;
 	int _xMenu, _yMenu;
 	int _left = 60, _top = 1;
+	bool _musicEffect = 1;
 
 public:
 	Menu();
@@ -47,6 +48,7 @@ public:
 
 	void subMenu();
 	void showTutorial();
+	void showSettings();
 	void exitGame();
 
 	void loadGameScreen();

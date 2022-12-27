@@ -21,12 +21,12 @@ private:
 	int _left = 3, _top = 2;
 	int NUM_LANE = 6;
 	int _state;
-
+	bool _musicEffect = 1;
 
 	void UpLevel();
 
 public:
-	CGAME();
+	CGAME(bool);
 	~CGAME();
 
 	int getState() { return _state; };
