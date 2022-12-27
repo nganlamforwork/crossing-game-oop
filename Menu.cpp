@@ -403,14 +403,14 @@ void Menu::loadGameScreen()
 			Common::showCursor(0);
 			Common::setConsoleColor(BRIGHT_WHITE, RED);
 			Common::gotoXY(left + 46, top + 21);
-			cout << "Please re-enter! Your name does not exit in our database!";
+			cout << "Please re-enter! Your name does not exits in our database!";
 		}
 	} while (1);
 
 	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
 	Common::gotoXY(left + 46, top + 21);
 	Common::showCursor(0);
-	cout << "       Get data successfully! Please wait 1 second!      ";
+	cout << "       Get data successfully! Please wait a second!       ";
 	Sleep(1000);
 
 	play(LOAD_GAME, name);
