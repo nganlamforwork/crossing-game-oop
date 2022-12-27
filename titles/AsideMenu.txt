@@ -1,0 +1,31 @@
+
+     CROSSING GAME     
+_______________________
+
+   Press L: Save Game
+
+
+
+
+
+
+_______________________
+
+        Press P: 
+        PAUSING
+_______________________
+
+  Press Q: Quit Game
+
+  If you LOSE, please
+     PRESS ANY KEY
+   to quit the game.
+
+_______________________
+
+         wWWWw       
+   vVVVv (___) wWWWw 
+   (___)  ~Y~  (___) 
+    ~Y~   \|/   ~Y~  
+    \|/   \|/   \|/  
+   \\|// \\|// \\|// 
