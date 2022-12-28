@@ -3,30 +3,35 @@
 
 CTRAFFICLIGHT::CTRAFFICLIGHT(int numLane, int direction, int left, int top, int timing, bool initialState, int curTime)
 {
-	_numLane = numLane; _direction = direction;
+	this->numLane = numLane; this->direction = direction;
 
-	mX = _left = left; mY = _top = top + (_numLane - 1) * 6;
+	mX = this->left = left; mY = this->top = top + (numLane - 1) * 6;
 
-	_borderLeft = _left + 1; _borderRight = LANE_LENGTH + _left + 1;
+	borderLeft = left + 1; borderRight = LANE_LENGTH + left + 1;
 
-	_state = initialState;
-	_timing = timing;
-	_countDown = curTime;
+	state = initialState;
+	this->timing = timing;
+	countDown = curTime;
 }
 
-void CTRAFFICLIGHT::toggleState()
+bool CTRAFFICLIGHT::GetState() 
 { 
-	_state ^= 1; 
-	_countDown = _timing; 
+	return state; 
+};
+
+void CTRAFFICLIGHT::ToggleState()
+{ 
+	state ^= 1; 
+	countDown = timing; 
 	Render();
 };
 
 void CTRAFFICLIGHT::Render()
 {
-	if (!_direction) {
+	if (!direction) {
 		mtx.lock();
-		Common::gotoXY(_borderLeft - 2, mY + 1);
-		if (_state == RED_LIGHT)
+		Common::gotoXY(borderLeft - 2, mY + 1);
+		if (state == RED_LIGHT)
 			Common::setConsoleColor(BRIGHT_WHITE, RED);
 		else
 			Common::setConsoleColor(BRIGHT_WHITE, BLACK);
@@ -34,8 +39,8 @@ void CTRAFFICLIGHT::Render()
 		mtx.unlock();
 
 		mtx.lock();
-		Common::gotoXY(_borderLeft - 2, mY + 2);
-		if (_state == GREEN_LIGHT)
+		Common::gotoXY(borderLeft - 2, mY + 2);
+		if (state == GREEN_LIGHT)
 			Common::setConsoleColor(BRIGHT_WHITE, LIGHT_GREEN);
 		else
 			Common::setConsoleColor(BRIGHT_WHITE, BLACK);
@@ -44,8 +49,8 @@ void CTRAFFICLIGHT::Render()
 	}
 	else {
 		mtx.lock();
-		Common::gotoXY(_borderRight + 2, mY + 1);
-		if (_state == RED_LIGHT)
+		Common::gotoXY(borderRight + 2, mY + 1);
+		if (state == RED_LIGHT)
 			Common::setConsoleColor(BRIGHT_WHITE, RED);
 		else
 			Common::setConsoleColor(BRIGHT_WHITE, BLACK);
@@ -53,8 +58,8 @@ void CTRAFFICLIGHT::Render()
 		mtx.unlock();
 
 		mtx.lock();
-		Common::gotoXY(_borderRight + 2, mY + 2);
-		if (_state == GREEN_LIGHT)
+		Common::gotoXY(borderRight + 2, mY + 2);
+		if (state == GREEN_LIGHT)
 			Common::setConsoleColor(BRIGHT_WHITE, LIGHT_GREEN);
 		else
 			Common::setConsoleColor(BRIGHT_WHITE, BLACK);
@@ -63,18 +68,18 @@ void CTRAFFICLIGHT::Render()
 	}
 }
 
-void CTRAFFICLIGHT::countDown()
+void CTRAFFICLIGHT::CountDown()
 {
-	_countDown--;
-	if (!_countDown) toggleState();
+	countDown--;
+	if (!countDown) ToggleState();
 }
 
 void CTRAFFICLIGHT::Save(ofstream& out)
 {
-	out << _state << ' ' << _countDown << '\n';
+	out << state << ' ' << countDown << '\n';
 }
 
 void CTRAFFICLIGHT::Load(ifstream& in)
 {
-	in >> _state >> _countDown;
+	in >> state >> countDown;
 }

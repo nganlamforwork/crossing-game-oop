@@ -1,244 +1,114 @@
 #include "MENU.h"
 
-//mutex mtx;
-
 Menu::Menu()
 {
-	_curOption = 0;
-	_optionsSize = 4;
-	_curSubOption = 0;
-	_subOptionsSize = 3;
-	_xMenu = 60;
-	_yMenu = 21;
+	curOption = 0;
+	optionsSize = 4;
+	curSubOption = 0;
+	subOptionsSize = 3;
+	xMenu = 60;
+	yMenu = 21;
 }
+
 Menu::~Menu()
 {
 }
 
 ////////////////////////////////////////////////////////////////////////////
-void Menu::startApp()
+void Menu::StartApp()
 {
 	Common::setConsoleColor(BRIGHT_WHITE, AQUA);
-	Common::gotoXY(_left, _top);
+	Common::gotoXY(left, top);
 	std::cout << "Group 8 - 21CLC08 - HCMUS";
+
 	Common::setConsoleColor(BRIGHT_WHITE, GRAY);
-	Common::gotoXY(_left - 20, _top + 1);
+	Common::gotoXY(left - 20, top + 1);
 	std::cout << "Tran Binh Kha - Le Vu Ngan Lam - Nguyen Hong Hanh - Huynh Hiep Phat";
-	renderFlowers();
-	renderOptionsMenu();
-	renderOptionsText(_options, _optionsSize, _curOption);
-	renderGameTitle();
+
+	GUI::MainTitle(left, top);
+
+	GUI::Image("images\\flower.txt",xMenu - 38, yMenu + 4, GREEN);
+	GUI::Image("images\\flower.txt",xMenu + 40, yMenu + 4, GREEN);
+
+	RenderOptionsMenu();
+	RenderOptionsText(options, optionsSize, curOption);
+
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	processMainInput();
+
+	ProcessMainInput();
 }
 
-void Menu::processMainInput()
+////////////////////////////////////////////////////////////////////////////
+
+void Menu::ProcessMainInput()
 {
 	bool loadMenu = 1;
 	while (true) {
 		if (!loadMenu) break;
 		switch (Common::getConsoleInput()) {
 		case 2:									//Up
-			changeOption(-1, _options, _curOption, _optionsSize);
+			ChangeOption(-1, options, curOption, optionsSize);
 			break;
 		case 5:									//Down
-			changeOption(1, _options, _curOption, _optionsSize);
+			ChangeOption(1, options, curOption, optionsSize);
 			break;
 		case 6:									//Enter
 			loadMenu = 0;
 			break;
 		default:
-			if (_musicEffect) Common::playSound(ERROR_SOUND);
+			if (musicEffect) Common::playSound(ERROR_SOUND);
 		}
 	}
 
-	switch (_curOption) {
+	switch (curOption) {
 	case 0:
-		_curSubOption = 0;
-		subMenu();
+		curSubOption = 0;
+		SubMenu();
 		break;
 	case 1:
-		showTutorial();
+		ShowTutorial();
 		break;
 	case 2:
-		showSettings();
+		ShowSettings();
 		break;
 	case 3:
-		exitGame();
+		ExitGame();
 		break;
 	}
 }
 
-void Menu::renderGameTitle()
+void Menu::RenderOptionsMenu()
 {
-	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	unsigned char M[] = {
-						' ', '_', '_', ' ',' ', ' ',' ','_','_', ' ', ' ', ' ',
-						'/', '\\',' ', '"','-', '.','/',' ',' ', '\\',' ', ' ',
-						'\\',' ', '\\',' ','\\','-','.','/','\\',' ', '\\',' ',
-						' ','\\',' ','\\','_','\\',' ','\\',' ','\\','_','\\',
-						' ',' ','\\','/','_','/',' ',' ','\\','/','_','/'
-	};
-	unsigned char A[] = {
-						' ','_','_','_','_','_','_',' ',' ',' ',
-						'/','\\',' ',' ','_','_',' ','\\',' ',' ',
-						'\\',' ','\\',' ',' ','_','_',' ','\\',' ',
-						' ','\\',' ','\\','_','\\',' ','\\','_','\\',
-						' ',' ','\\','/','_','/','\\','/','_','/'
-	};
-	unsigned char T[] = {
-						' ','_','_','_','_','_','_',' ',
-						'/','\\','_','_',' ',' ','_','\\',
-						'\\','/','_','/','\\',' ','\\','/',
-						' ',' ',' ','\\',' ','\\','_','\\',
-						' ',' ',' ',' ','\\','/','_','/'
-	};
-	unsigned char C[] = {
-						' ','_','_','_','_','_','_',' ',' ',' ',
-						'/','\\',' ',' ','_','_','_','\\',' ',' ',
-						'\\',' ','\\',' ','\\','_','_','_','_',' ',
-						' ','\\',' ','\\','_','_','_','_','_','\\',
-						' ',' ','\\','/','_','_','_','_','_','/',
-	};
-	unsigned char H[] = {
-						' ','_','_',' ',' ','_','_',' ',' ',' ',
-						'/','\\',' ','\\','_','\\',' ','\\',' ',' ',
-						'\\',' ','\\',' ',' ','_','_',' ','\\',' ',
-						' ','\\',' ','\\','_','\\',' ','\\','_','\\',
-						' ',' ','\\','/','_','/','\\','/','_','/',
-	};
-	unsigned char I[] = {
-						' ','_','_',' ',' ',' ',
-						'/','\\',' ','\\',' ',' ',
-						'\\',' ','\\',' ','\\',' ',
-						' ','\\',' ','\\','_','\\',
-						' ',' ','\\','/','_','/',
-	};
-	unsigned char N[] = {
-						' ','_','_',' ',' ',' ','_','_',' ',' ',' ',
-						'/','\\',' ','"','-','.','\\',' ','\\',' ',' ',
-						'\\',' ','\\',' ','\\','-','.',' ',' ','\\',' ',
-						' ','\\',' ','\\','_','\\','\\','"','\\','_','\\',
-						' ',' ','\\','/','_','/',' ','\\','/','_','/',
-	};
-	unsigned char G[] = {
-						' ','_','_','_','_','_','_',' ',' ',' ',
-						'/','\\',' ',' ','_','_','_','\\',' ',' ',
-						'\\',' ','\\',' ','\\','_','_',' ','\\',' ',
-						' ','\\',' ','\\','_','_','_','_','_','\\',
-						' ',' ','\\','/','_','_','_','_','_','/',
-	};
-	unsigned char E[] = {
-						' ','_','_','_','_','_','_',' ',' ',' ',
-						'/','\\',' ',' ','_','_','_','\\',' ',' ',
-						'\\',' ','\\',' ',' ','_','_','\\',' ',' ',
-						' ','\\',' ','\\','_','_','_','_','_','\\',
-						' ',' ','\\','/','_','_','_','_','_','/',
-	};
-	unsigned char R[] = {
-						' ','_','_','_','_','_','_',' ',' ',' ',
-						'/','\\',' ',' ','=','=',' ','\\',' ',' ',
-						'\\',' ','\\',' ',' ','_','_','<',' ',' ',
-						' ','\\',' ','\\','_','\\',' ','\\','_','\\',
-						' ',' ','\\','/','_','/','/',' ','_','/',
-	};
-	unsigned char O[] = {
-						' ','_','_','_','_','_','_',' ',' ',' ',' ',
-						'/','\\',' ',' ','_','_',' ','\\',' ',' ',
-						' ','\\',' ','\\',' ','\\','/','\\',' ','\\',' ',
-						' ',' ','\\',' ','\\','_','_','_','_','_','\\',
-						' ',' ',' ','\\','/','_','_','_','_','_','/',' '
-	};
-	unsigned char S[] = {
-						' ','_','_','_','_','_','_',' ',' ',' ',
-						'/','\\',' ',' ','_','_','_','\\',' ',' ',
-						'\\',' ','\\','_','_','_',' ',' ','\\',' ',
-						' ','\\','/','\\','_','_','_','_','_','\\',
-						' ',' ','\\','/','_','_','_','_','_','/'
-	};
-	unsigned char space[] = {
-						' ',' ',' ',' ',
-						' ',' ',' ',' ',
-						' ',' ',' ',' ',
-						' ',' ',' ',' ',
-						' ',' ',' ',' '
-	};
+	int left = xMenu, top = yMenu;
+	int length = 35, height = optionsSize * 2;
 
-
-	unsigned char* word[] = { C, R, O, S, S, I, N, G, G, A, M, E };
-	int sizeOfWord = (sizeof(word) / sizeof(word[0]));
-	int wide[] = { 10, 10, 11, 10, 10, 6, 11, 10, 10, 10, 12, 10 };
-	int color[] = { AQUA, LIGHT_AQUA, LIGHT_BLUE, BLUE, LIGHT_PURPLE, PURPLE };
-
-	int colorCount = 0, left = 0;
-	int loop = 1;
-	while (loop--) {
-
-		left = _left - 26;
-		for (int i = 0; i < sizeOfWord; i++) {
-			for (int j = 0; j < 5; j++) {
-				for (int k = 0; k < wide[i]; k++) {
-					mtx.lock();
-					Common::setConsoleColor(BRIGHT_WHITE, color[colorCount % 6]);
-					if (i > 7) Common::gotoXY(left + k, _top + 11 + j);
-					else Common::gotoXY(left + k, _top + 5 + j);
-					putchar(word[i][j * wide[i] + k]);
-					mtx.unlock();
-				}
-			}
-			left += wide[i] + 1;
-			if (i == 7) left = _left - 8;
-		}
-		Sleep(200);
-		colorCount++;
-	}
+	GUI::Image("images\\borderMenu.txt", left, top, BLACK);
 }
 
-void Menu::renderOptionsMenu()
-{
-	int left = _xMenu, top = _yMenu;
-	int length = 35, height = _optionsSize * 2;
-
-	std::ifstream bg;
-	bg.open("images\\borderMenu.txt");
-
-	int i = 0;
-	std::string line;
-	while (!bg.eof()) {
-		getline(bg, line);
-		Common::gotoXY(left, top + i);
-		Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-		cout << line << '\n';
-		i++;
-	}
-	bg.close();
-
-}
-
-void Menu::renderOptionsText(const std::string optionsArr[], const int& size, const int& optionId)
+void Menu::RenderOptionsText(const std::string optionsArr[], const int& size, const int& optionId)
 {
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	int left = _xMenu + 12, top = _yMenu + 2;
+	int left = xMenu + 12, top = yMenu + 2;
 	for (int i = 0; i < size; i++) {
 		Common::gotoXY(left, top + i * 2);
 		cout << optionsArr[i];
 	}
-	renderCurrentOption(optionsArr, size, optionId);
+	RenderCurrentOption(optionsArr, size, optionId);
 }
 
-void Menu::deleteOptionsText()
+void Menu::DeleteOptionsText()
 {
-	int left = _xMenu + 12, top = _yMenu + 2;
-	for (int i = 0; i < _optionsSize; i++) {
+	int left = xMenu + 12, top = yMenu + 2;
+	for (int i = 0; i < optionsSize; i++) {
 		Common::gotoXY(left, top + i * 2);
 		cout << "           ";
 	}
 }
 
-void Menu::renderCurrentOption(const std::string optionsArr[], const int& size, const int& optionId)
+void Menu::RenderCurrentOption(const std::string optionsArr[], const int& size, const int& optionId)
 {
-	if (_musicEffect) Common::playSound(MOVE_SOUND);
-	int left = _xMenu + 12, top = _yMenu + 2;
+	if (musicEffect) Common::playSound(MOVE_SOUND);
+	int left = xMenu + 12, top = yMenu + 2;
 	Common::setConsoleColor(BRIGHT_WHITE, RED);
 
 	mtx.lock();
@@ -252,43 +122,21 @@ void Menu::renderCurrentOption(const std::string optionsArr[], const int& size, 
 	mtx.unlock();
 }
 
-void Menu::renderFlowers()
-{
-	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
-	std::ifstream bg;
-	bg.open("images\\flower.txt");
-
-	int i = 0;
-	std::string line;
-	while (!bg.eof()) {
-		getline(bg, line);
-
-		Common::gotoXY(_xMenu - 38, _yMenu + 4 + i);
-		cout << line << '\n';
-
-		Common::gotoXY(_xMenu + 40, _yMenu + 4 + i);
-		cout << line << '\n';
-
-		i++;
-	}
-	bg.close();
-}
-
 ////////////////////////////////////////////////////////////////////////////
 
-int Menu::getCurrentOption()
+int Menu::GetCurrentOption()
 {
-	return _curOption;
+	return curOption;
 }
 
-void Menu::setCurrentOption(int opt)
+void Menu::SetCurrentOption(int opt)
 {
-	_curOption = opt;
+	curOption = opt;
 }
 
-void Menu::offCurrentOption(const std::string optionsArr[], const int& size, const int& optionId)
+void Menu::OffCurrentOption(const std::string optionsArr[], const int& size, const int& optionId)
 {
-	int left = _xMenu + 12, top = _yMenu + 2;
+	int left = xMenu + 12, top = yMenu + 2;
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 
 	mtx.lock();
@@ -302,86 +150,63 @@ void Menu::offCurrentOption(const std::string optionsArr[], const int& size, con
 	mtx.unlock();
 }
 
-void Menu::changeOption(int direction, const std::string optionsArr[], int& option, const int& size) //-1: Up - 1: Down
+void Menu::ChangeOption(int direction, const std::string optionsArr[], int& option, const int& size) //-1: Up - 1: Down
 {
 	int tmp = option + direction;
 	if (tmp < 0 || tmp >= size) {
-		if (_musicEffect) Common::playSound(ERROR_SOUND);
+		if (musicEffect) Common::playSound(ERROR_SOUND);
 		return;
 	}
-	offCurrentOption(optionsArr,size,option);
+	OffCurrentOption(optionsArr,size,option);
 	option = tmp;
-	renderCurrentOption(optionsArr,size,option);
+	RenderCurrentOption(optionsArr,size,option);
 }
 
 ////////////////////////////////////////////////////////////////////////////
 
-void Menu::subMenu()
+void Menu::SubMenu()
 {
-	deleteOptionsText();
-	renderOptionsText(_subOptions, _subOptionsSize, _curSubOption);
+	DeleteOptionsText();
+	RenderOptionsText(subOptions, subOptionsSize, curSubOption);
 
 	bool loadSubMenu = 1;
 	while (true) {
 		if (!loadSubMenu) break;
 		switch (Common::getConsoleInput()) {
 		case 2:									//Up
-			changeOption(-1, _subOptions, _curSubOption, _subOptionsSize);
+			ChangeOption(-1, subOptions, curSubOption, subOptionsSize);
 			break;
 		case 5:									//Down
-			changeOption(1, _subOptions, _curSubOption, _subOptionsSize);
+			ChangeOption(1, subOptions, curSubOption, subOptionsSize);
 			break;
 		case 6:									//Enter
 			loadSubMenu = 0;
 			break;
 		default:
-			if (_musicEffect) Common::playSound(ERROR_SOUND);
+			if (musicEffect) Common::playSound(ERROR_SOUND);
 		}
 	}
 
-	switch (_curSubOption) {
+	switch (curSubOption) {
 	case 0:
-		play(NEW_GAME);
+		Play(NEW_GAME);
 		break;
 	case 1:
-		loadGameScreen();
+		LoadGameScreen();
 		break;
 	case 2:
-		startApp();
+		StartApp();
 		break;
 	}
 }
 
-void Menu::loadGameScreen()
+void Menu::LoadGameScreen()
 {
 	int left = 0, top = 0;
 	Common::clearConsole();
-	ifstream endgame("titles\\LoadGame.txt");
-	string s;
-	int i = 0;
 
-	Common::setConsoleColor(BRIGHT_WHITE, RED);
-	while (!endgame.eof()) {
-		Common::gotoXY(left + 45, top + 8 + i);
-		getline(endgame, s);
-		cout << s;
-		i++;
-	}
-	endgame.close();
-
-	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
-	ifstream bg;
-	bg.open("images\\flowers.txt");
-
-	i = 0;
-	string line;
-	while (!bg.eof()) {
-		Common::gotoXY(left + 26, top + 25 + i);
-		getline(bg, line);
-		cout << line << '\n';
-		i++;
-	}
-	bg.close();
+	GUI::Image("titles\\LoadGame.txt", 45, 8, RED);
+	GUI::Image("images\\flowers.txt", 26, 25, GREEN);
 
 	Common::gotoXY(left + 70, top + 18);
 	cout << "Enter your name: ";
@@ -403,22 +228,22 @@ void Menu::loadGameScreen()
 			Common::showCursor(0);
 			Common::setConsoleColor(BRIGHT_WHITE, RED);
 			Common::gotoXY(left + 46, top + 21);
-			cout << "Please re-enter! Your name does not exit in our database!";
+			cout << "Please re-enter! Your name does not exits in our database!";
 		}
 	} while (1);
 
 	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
 	Common::gotoXY(left + 46, top + 21);
 	Common::showCursor(0);
-	cout << "       Get data successfully! Please wait 1 second!      ";
+	cout << "       Get data successfully! Please wait a second!       ";
 	Sleep(1000);
 
-	play(LOAD_GAME, name);
+	Play(LOAD_GAME, name);
 }
 
-void Menu::play(bool option, string name)
+void Menu::Play(bool option, string name)
 {
-	CGAME newGame(_musicEffect);
+	CGAME newGame(musicEffect);
 	if (option == NEW_GAME)
 		newGame.Create();
 	else if (option == LOAD_GAME)
@@ -426,67 +251,32 @@ void Menu::play(bool option, string name)
 
 	newGame.Start();
 
-	if (newGame.getState() == QUIT) {
+	if (newGame.GetState() == QUIT) {
 		newGame.DrawEndGame("titles\\QuitNotSave.txt");
 	}
 	else
-		if (newGame.isWin())
+		if (newGame.IsWin())
 			newGame.DrawEndGame("titles\\YouWin.txt");
 		else
 			newGame.DrawEndGame("titles\\YouLose.txt");
 	Sleep(100);
 }
 
-void Menu::play(bool option)
+void Menu::Play(bool option)
 {
-	play(option, "");
+	Play(option, "");
 }
 
-void Menu::showTutorial()
+void Menu::ShowTutorial()
 {
 	Common::clearConsole();
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
 	int left = 22, top = 4;						//Left and top of title
 	int height = 15, width = 30;
 
-	ifstream in;
-	in.open("titles\\HowToPlay.txt");
-	string s;
-	int i = 0;
-
-	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
-	while (getline(in, s)) {
-		Common::gotoXY(left, top + i);
-		cout << s;
-		i++;
-	}
-	in.close();
-
-	left = 56, top = 14;
-
-	in.open("titles\\tutorial.txt");
-	i = 0;
-
-	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	while (getline(in, s)) {
-		Common::gotoXY(left, top + i);
-		cout << s;
-		i++;
-	}
-	in.close();
-
-	left = 4, top = 18;
-
-	in.open("images\\menuMonster.txt");
-	i = 0;
-
-	Common::setConsoleColor(BRIGHT_WHITE, AQUA);
-	while (getline(in, s)) {
-		Common::gotoXY(left, top + i);
-		cout << s;
-		i++;
-	}
-	in.close();
+	GUI::Image("titles\\HowToPlay.txt", 22, 4, GREEN);
+	GUI::Image("titles\\tutorial.txt", 56, 14, BLACK);
+	GUI::Image("images\\menuMonster.txt", 4, 18, AQUA);
 
 	bool loop = 1;
 	while (loop) {
@@ -495,58 +285,24 @@ void Menu::showTutorial()
 			loop = 0;
 			break;
 		default:
-			if (_musicEffect) Common::playSound(ERROR_SOUND);
+			if (musicEffect) Common::playSound(ERROR_SOUND);
 		}
 	}
 	Common::clearConsole();
-	startApp();
+	StartApp();
 }
 
-void Menu::showSettings()
+void Menu::ShowSettings()
 {
 	Common::clearConsole();
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
+
 	int left = 38, top = 4;						//Left and top of title
-	int height = 15, width = 30;
-
-	ifstream in;
-	in.open("titles\\Settings.txt");
-	string s;
-	int i = 0;
-
-	Common::setConsoleColor(BRIGHT_WHITE, GREEN);
-	while (getline(in, s)) {
-		Common::gotoXY(left, top + i);
-		cout << s;
-		i++;
-	}
-	in.close();
-
+	GUI::Image("titles\\Settings.txt", left, top, GREEN);
 	left = 83, top = 18;
-
-	in.open("images\\settingsMenu.txt");
-	i = 0;
-
-	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
-	while (getline(in, s)) {
-		Common::gotoXY(left, top + i);
-		cout << s;
-		i++;
-	}
-	in.close();
-
+	GUI::Image("images\\settingsMenu.txt", left, top, BLACK);
 	left = 24, top = 18;
-
-	in.open("images\\menuMonster.txt");
-	i = 0;
-
-	Common::setConsoleColor(BRIGHT_WHITE, AQUA);
-	while (getline(in, s)) {
-		Common::gotoXY(left, top + i);
-		cout << s;
-		i++;
-	}
-	in.close();
+	GUI::Image("images\\menuMonster.txt", left, top, AQUA);
 
 	bool loop = 1;
 	while (loop) {
@@ -555,20 +311,20 @@ void Menu::showSettings()
 			loop = 0;
 			break;
 		case 12:
-			_musicEffect = 1;
+			musicEffect = 1;
 			break;
 		case 13:
-			_musicEffect = 0;
+			musicEffect = 0;
 			break;
 		default:
-			if (_musicEffect) Common::playSound(ERROR_SOUND);
+			if (musicEffect) Common::playSound(ERROR_SOUND);
 		}
 	}
 	Common::clearConsole();
-	startApp();
+	StartApp();
 }
 
-void Menu::exitGame()
+void Menu::ExitGame()
 {
 	Common::clearConsole();
 	exit(0);

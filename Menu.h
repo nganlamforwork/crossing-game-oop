@@ -9,50 +9,46 @@
 
 #include "COMMON.h"
 #include "CGAME.h"
-
-#define EASY 4
-#define MEDIUM 6
-#define HARD 8
+#include "GUI.h"
 
 #define NEW_GAME 0
 #define LOAD_GAME 1
 
 class Menu
 {
-	const std::string _options[4] = { "Play","Tutorial", "Settings", "Exit" };
-	const std::string _subOptions[3] = { "New Game","Load Game", "Back" };
-	int _optionsSize, _curOption;
-	int _subOptionsSize, _curSubOption;
-	int _xMenu, _yMenu;
-	int _left = 60, _top = 1;
-	bool _musicEffect = 1;
+	const std::string options[4] = { "Play","Tutorial", "Settings", "Exit" };
+	const std::string subOptions[3] = { "New Game","Load Game", "Back" };
+	int optionsSize, curOption;
+	int subOptionsSize, curSubOption;
+	int xMenu, yMenu;
+	int left = 60, top = 1;
+	bool musicEffect = 1;
 
 public:
 	Menu();
 	~Menu();
 
-	void startApp();
-	void processMainInput();
-	void renderGameTitle();
-	void renderOptionsMenu();
-	void renderOptionsText(const std::string[], const int&, const int&);
-	void deleteOptionsText();
-	void renderCurrentOption(const std::string[], const int&, const int&);
+	void StartApp();
 
-	void renderFlowers();
+private: 
+	void ProcessMainInput();
+	void RenderOptionsMenu();
+	void RenderOptionsText(const std::string[], const int&, const int&);
+	void DeleteOptionsText();
+	void RenderCurrentOption(const std::string[], const int&, const int&);
 
-	int getCurrentOption();
-	void setCurrentOption(int opt);
-	void offCurrentOption(const std::string[], const int&, const int&);
-	void changeOption(int direction, const std::string[], int&, const int&);
+	int GetCurrentOption();
+	void SetCurrentOption(int opt);
+	void OffCurrentOption(const std::string[], const int&, const int&);
+	void ChangeOption(int direction, const std::string[], int&, const int&);
 
-	void subMenu();
-	void showTutorial();
-	void showSettings();
-	void exitGame();
+	void SubMenu();
+	void ShowTutorial();
+	void ShowSettings();
+	void ExitGame();
 
-	void loadGameScreen();
+	void LoadGameScreen();
 
-	void play(bool, string);
-	void play(bool);
+	void Play(bool, string);
+	void Play(bool);
 };

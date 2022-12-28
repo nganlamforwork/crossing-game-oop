@@ -10,7 +10,7 @@ int main()
 	Common::setUpConsole(16);
 
 	Menu menu;
-	menu.startApp();
+	menu.StartApp();
 
 	Common::clearConsole();
 }
