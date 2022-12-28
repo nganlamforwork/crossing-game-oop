@@ -46,8 +46,9 @@ using namespace std;
 
 extern mutex mtx;
 
-struct Common
+class Common
 {
+public:
 	static HWND consoleWindow;    //Con trỏ xử lí cửa sổ console
 	static HANDLE consoleOutput;  //Con trỏ xử lí output console
 
