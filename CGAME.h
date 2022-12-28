@@ -10,6 +10,7 @@
 #include "CPEOPLE.h"
 #include "CVEHICLE.h"
 #include "CTRAFFICLIGHT.h"
+#include "GUI.h"
 
 class CGAME {
 private:
@@ -18,32 +19,33 @@ private:
 	CBIRD* bird;
 	CTRUCK* truck;		CTRAFFICLIGHT* lightTruck;
 	CPEOPLE* people;
-	int _left = 3, _top = 2;
+	int left = 3, top = 2;
 	int NUM_LANE = 6;
-	int _state;
-	bool _musicEffect = 1;
-
-	void UpLevel();
+	int state;
+	bool musicEffect = 1;
 
 public:
 	CGAME(bool);
 	~CGAME();
 
-	int getState() { return _state; };
-	bool isWin() { return people->getLevel() == 6; };
+	int GetState();
+	bool IsWin();
 
 	void Create();
 	void Load(string);
 	void Save();
-	void togglePlaying();
+	void TogglePlaying();
 
-	void DrawGame();
-	void DrawAsideMenu();
-	void DrawLevelNumber(int);
 	void RenderGame();
 
 	void DrawEndGame(string);
 
 	void Start();
 	void Move();
+
+private:
+	void DrawGame();
+	void DrawAsideMenu();
+	void DrawLevelNumber(int);
+	void UpLevel();
 };

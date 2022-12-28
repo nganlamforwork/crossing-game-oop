@@ -5,10 +5,10 @@
 #include "CANIMAL.h"
 
 class CPEOPLE {
-	int _numLane, _direction, _left, _top;
-	int _borderLeft, _borderRight;
-	int _sizeX, _sizeY;
-	int _level;
+	int numLane, direction, left, top;
+	int borderLeft, borderRight;
+	int sizeX, sizeY;
+	int level;
 
 	int mX, mY;
 	bool mState; //Trạng thái sống chết
@@ -20,19 +20,16 @@ class CPEOPLE {
 		{' ','/',' ','\\',' '}
 	};
 
-private:
-	bool IsInBoard(int, int);
-
 public:
 	CPEOPLE();
 	CPEOPLE(int, int, int, int);
 	~CPEOPLE() {};
 
-	int getLevel() { return _level; };
-	void setLevel(int x) { _level = x; };
-	bool getLane() { return _numLane; };
-	bool getState() { return mState; };
-	void setState(int x) { mState = x; };
+	int GetLevel() { return level; };
+	void SetLevel(int x) { level = x; };
+	bool GetLane() { return numLane; };
+	bool GetState() { return mState; };
+	void SetState(int x) { mState = x; };
 
 	void Up();
 	void Left();
@@ -55,4 +52,7 @@ public:
 	bool IsDead();
 
 	void UpLevel();
+
+private:
+	bool IsInBoard(int, int);
 };

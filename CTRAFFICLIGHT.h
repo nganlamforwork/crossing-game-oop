@@ -6,19 +6,22 @@
 using namespace std;
 
 class CTRAFFICLIGHT {
-	int _direction;
+	int direction;
 	int mX, mY;
-	int _borderLeft, _borderRight, _left, _top;
-	int _numLane, _timing, _countDown;
-	bool _state;
+	int borderLeft, borderRight, left, top;
+	int numLane, timing, countDown;
+	bool state;
 public:
 	CTRAFFICLIGHT(int, int, int, int, int, bool, int);
 	~CTRAFFICLIGHT() {};
 
-	bool getState() { return _state; };
-	void toggleState();
+	bool GetState();
+	void ToggleState();
+
 	void Render();
-	void countDown();
+
+	void CountDown();
+
 	void Save(ofstream&);
 	void Load(ifstream&);
 };
