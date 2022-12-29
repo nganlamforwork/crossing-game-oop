@@ -32,7 +32,6 @@ public:
 
 private: 
 	void ProcessMainInput();
-	void RenderOptionsMenu();
 	void RenderOptionsText(const std::string[], const int&, const int&);
 	void DeleteOptionsText();
 	void RenderCurrentOption(const std::string[], const int&, const int&);

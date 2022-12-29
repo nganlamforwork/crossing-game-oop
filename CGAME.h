@@ -15,9 +15,11 @@
 class CGAME {
 private:
 	CDINAUSOR* dino;
-	CCAR* car;			CTRAFFICLIGHT* lightCar;
+	CCAR* car;			
+	CTRAFFICLIGHT* lightCar;
 	CBIRD* bird;
-	CTRUCK* truck;		CTRAFFICLIGHT* lightTruck;
+	CTRUCK* truck;		
+	CTRAFFICLIGHT* lightTruck;
 	CPEOPLE* people;
 	int left = 3, top = 2;
 	int NUM_LANE = 6;

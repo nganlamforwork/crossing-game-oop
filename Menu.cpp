@@ -29,8 +29,8 @@ void Menu::StartApp()
 
 	GUI::Image("images\\flower.txt",xMenu - 38, yMenu + 4, GREEN);
 	GUI::Image("images\\flower.txt",xMenu + 40, yMenu + 4, GREEN);
+	GUI::Image("images\\borderMenu.txt", xMenu, yMenu, BLACK);
 
-	RenderOptionsMenu();
 	RenderOptionsText(options, optionsSize, curOption);
 
 	Common::setConsoleColor(BRIGHT_WHITE, BLACK);
@@ -75,14 +75,6 @@ void Menu::ProcessMainInput()
 		ExitGame();
 		break;
 	}
-}
-
-void Menu::RenderOptionsMenu()
-{
-	int left = xMenu, top = yMenu;
-	int length = 35, height = optionsSize * 2;
-
-	GUI::Image("images\\borderMenu.txt", left, top, BLACK);
 }
 
 void Menu::RenderOptionsText(const std::string optionsArr[], const int& size, const int& optionId)
