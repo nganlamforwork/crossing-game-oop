@@ -85,7 +85,7 @@ void Menu::RenderOptionsText(const std::string optionsArr[], const int& size, co
 		Common::gotoXY(left, top + i * 2);
 		cout << optionsArr[i];
 	}
-	RenderCurrentOption(optionsArr, size, optionId);
+	OnCurrentOption(optionsArr, size, optionId);
 }
 
 void Menu::DeleteOptionsText()
@@ -97,7 +97,19 @@ void Menu::DeleteOptionsText()
 	}
 }
 
-void Menu::RenderCurrentOption(const std::string optionsArr[], const int& size, const int& optionId)
+////////////////////////////////////////////////////////////////////////////
+
+int Menu::GetCurrentOption()
+{
+	return curOption;
+}
+
+void Menu::SetCurrentOption(int opt)
+{
+	curOption = opt;
+}
+
+void Menu::OnCurrentOption(const std::string optionsArr[], const int& size, const int& optionId)
 {
 	if (musicEffect) Common::playSound(MOVE_SOUND);
 	int left = xMenu + 12, top = yMenu + 2;
@@ -112,18 +124,6 @@ void Menu::RenderCurrentOption(const std::string optionsArr[], const int& size, 
 	Common::gotoXY(left + 13, top + optionId * 2);
 	putchar(174);
 	mtx.unlock();
-}
-
-////////////////////////////////////////////////////////////////////////////
-
-int Menu::GetCurrentOption()
-{
-	return curOption;
-}
-
-void Menu::SetCurrentOption(int opt)
-{
-	curOption = opt;
 }
 
 void Menu::OffCurrentOption(const std::string optionsArr[], const int& size, const int& optionId)
@@ -151,7 +151,7 @@ void Menu::ChangeOption(int direction, const std::string optionsArr[], int& opti
 	}
 	OffCurrentOption(optionsArr,size,option);
 	option = tmp;
-	RenderCurrentOption(optionsArr,size,option);
+	OnCurrentOption(optionsArr,size,option);
 }
 
 ////////////////////////////////////////////////////////////////////////////
