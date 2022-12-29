@@ -32,13 +32,13 @@ public:
 
 private: 
 	void ProcessMainInput();
-	void RenderOptionsMenu();
 	void RenderOptionsText(const std::string[], const int&, const int&);
 	void DeleteOptionsText();
-	void RenderCurrentOption(const std::string[], const int&, const int&);
 
 	int GetCurrentOption();
 	void SetCurrentOption(int opt);
+
+	void OnCurrentOption(const std::string[], const int&, const int&);
 	void OffCurrentOption(const std::string[], const int&, const int&);
 	void ChangeOption(int direction, const std::string[], int&, const int&);
 
